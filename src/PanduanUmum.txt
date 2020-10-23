@@ -1,0 +1,15 @@
+**** PANDUAN UMUM PENGERJAAN ***
+1. Pull dulu dari master (ini dilakukan di awal pada saat ingin menambahkan branch baru)
+2. Buat branch dengan perintah "git checkout -b 'namaBranch'," nanti akan langsung berpindah ke 
+   "namaBranch" yang ada di perintah. Usahakan penamaan "namaBranch" representatif dan sesuai dengan 
+   fitur yang dikerjakan, contoh: ADTMatriks, ADTList
+3. Ngoding seperti sediakala
+4. Jika sudah, add, commit lalu jalankan perintah "git push --set-upstream origin 'namaBranch'". Usahakan message 
+   commit juga memaparkan secara jelas apa yang telah diubah / dibuat, 
+   contoh: "Menambahkan fungsi IsEmpty di ADT Matriks", "Menambahkan fitur REPAIR di main.c",
+   "Memperbaiki bug fitur BELI di main.c", "Memperbaiki bug fungsi IsEmpty di main.c",
+   "Menambahkan ADT List" 
+5. Setelah push, lakukan pull request dengan masuk ke link 
+   https://github.com/Aphostrophy/alstrokedead/branches, lalu tekan tombol "new pull request"
+6. Nanti kode akan dimerge dengan branch master setelah di-review dan di-approve
+7. HAPPY CODING GAES!!! TETAP SEMANGAT!!!
