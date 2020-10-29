@@ -99,55 +99,10 @@ JAM DetikToJAM (long N)
     return (MakeJAM(H, M, S));
 }
 
-/* ***************************************************************** */
-/* KELOMPOK OPERASI TERHADAP TYPE                                    */
-/* ***************************************************************** */
-/* *** Kelompok Operator Relational *** */
-boolean JEQ (JAM J1, JAM J2)
-/* Mengirimkan true jika J1=J2, false jika tidak */
-{
-    return ((Hour(J1) == Hour(J2)) && (Minute(J1) == Minute(J2)) && (Second(J1) == Second(J2)));
-}
-
-boolean JNEQ (JAM J1, JAM J2)
-/* Mengirimkan true jika J1 tidak sama dengan J2 */
-{
-    return ((Hour(J1) != Hour(J2)) || (Minute(J1) != Minute(J2)) || (Second(J1) != Second(J2)));
-}
-
-boolean JLT (JAM J1, JAM J2)
-/* Mengirimkan true jika J1<J2, false jika tidak */
-{
-    return (JAMToDetik(J1) < JAMToDetik(J2));
-}
-
-boolean JGT (JAM J1, JAM J2)
-/* Mengirimkan true jika J1>J2, false jika tidak */
-{
-    return (JAMToDetik(J1) > JAMToDetik(J2));
-}
-
-/* *** Operator aritmatika JAM *** */
-JAM NextDetik (JAM J)
-/* Mengirim 1 detik setelah J dalam bentuk JAM */
-{
-    return (DetikToJAM(JAMToDetik(J) + 1));
-}
-
 JAM NextNDetik (JAM J, int N)
 /* Mengirim N detik setelah J dalam bentuk JAM */
 {
     return (DetikToJAM(JAMToDetik(J) + N));
-}
-
-JAM PrevDetik (JAM J)
-/* Mengirim 1 detik sebelum J dalam bentuk JAM */
-{
-    if (JAMToDetik(J) < 1) {
-        return (DetikToJAM(JAMToDetik(J) + 86400 - 1));
-    } else {
-        return (DetikToJAM(JAMToDetik(J) - 1));
-    }
 }
 
 JAM PrevNDetik (JAM J, int N)
