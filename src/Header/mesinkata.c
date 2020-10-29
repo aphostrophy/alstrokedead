@@ -19,9 +19,9 @@ void IgnoreBlank()
    I.S. : CC sembarang 
    F.S. : CC ≠ BLANK atau CC = MARK */
 
-void STARTKATA()
+void STARTKATA(char *namafile)
 {
-    START();
+    START(namafile);
     IgnoreBlank();
     if (CC == MARK)
     {

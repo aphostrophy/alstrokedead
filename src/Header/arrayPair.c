@@ -21,8 +21,8 @@ boolean IsKataSama (Kata K1, Kata K2) {
 void MakeEmpty (TabInt * T){
     int i;
     for(i=IdxMin; i<=IdxMax;i++){
-        ItemLength(*T,i) = 0;
-        Cost(*T,i) = -1;
+        ItemLength(*T,i) = ItemLengthUndef;
+        Cost(*T,i) = CostUndef;
     }
 }
 /* I.S. T sembarang */
@@ -99,7 +99,38 @@ boolean IsFull (TabInt T){
 /* ********** BACA dan TULIS dengan INPUT/OUTPUT device ********** */
 /* *** Mendefinisikan isi tabel dari pembacaan *** */
 void BacaIsi (TabInt * T, char * namafile){
-    int el,i,N;
+    int even=0; //Baris teks dihitung dari 0
+    int i=0;
+    int j=0;
+    START(namafile);
+    while(!EOP){
+        IgnoreBlank();
+        EOP= true;
+        if(EOL){
+            even = (even+1)%2;
+            j++;
+            ADV();
+        } else if(even==0){
+            i = 0;
+            while ((CC != MARK) && (CC != BLANK) && (i < NMax) && !EOL)
+            {
+                Item(*T, j/2).TabKata[i] = CC;
+                ADV();
+                i++;
+            } /* CC = MARK or CC = BLANK */
+            IgnoreBlank();
+            ItemLength(*T, j/2) = i;
+        } else if(even==1){
+            i = 0;
+            Cost(*T, j/2) = 0;
+            do {
+                Cost(*T, j/2) *= 10;
+                Cost(*T, j/2) = Cost(*T, j/2) + (int)CC-48;
+                ADV();
+            }while(CC!=MARK && CC!=BLANK && !EOL);
+            IgnoreBlank();
+        }
+    }
 }
 /* I.S. T sembarang */
 /* F.S. Tabel T terdefinisi */
@@ -119,7 +150,7 @@ void TulisIsiTab (TabInt T){
             for(j=IdxMin;j<ItemLength(T,i);j++){
                 printf("%c", Item(T,i).TabKata[j]);
             }
-            printf(": %d,", Elmt(T,i));
+            printf(": %d\n", Cost(T,i));
         }
     }
 }

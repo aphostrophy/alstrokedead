@@ -10,7 +10,7 @@ typedef struct{
     int cost;
 } Pair;
 
-Pair MakePair(Kata item);
+Pair MakePair(Kata item, int cost);
 
 
 #endif

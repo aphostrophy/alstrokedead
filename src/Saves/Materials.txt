@@ -1,3 +1,7 @@
-Kayu 400
-Batu 700
-Besi 1500
+Kayu
+400
+Batu
+700
+Besi
+1500
+.
