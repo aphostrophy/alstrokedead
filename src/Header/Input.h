@@ -8,6 +8,7 @@
 
 #include <conio.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define clrscr() system("cls")
 #define INPUT_ENTER 13
