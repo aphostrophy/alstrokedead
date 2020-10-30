@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "pair.h"
-#include "boolean.h"
+#include "../Header/pair.h"
+#include "../Header/boolean.h"
 
 Pair MakePair(Kata item, int cost){
     Pair P;

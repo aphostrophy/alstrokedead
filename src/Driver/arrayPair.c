@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include "arrayPair.h"
-#include "boolean.h"
-#include "pair.h"
-#include "mesinkata.h"
+#include "../Header/arrayPair.h"
+#include "../Header/boolean.h"
+#include "../Header/pair.h"
+#include "../Header/mesinkata.h"
 
 boolean IsKataSama (Kata K1, Kata K2) {
     if(K1.Length != K2.Length) {

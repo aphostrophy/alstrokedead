@@ -1,6 +1,6 @@
-#include "boolean.h"
-#include "mesinkar.h"
-#include "mesinkata.h"
+#include "../Header/boolean.h"
+#include "../Header/mesinkar.h"
+#include "../Header/mesinkata.h"
 
 #define NMax 50
 #define BLANK ' '
