@@ -4,7 +4,7 @@
 
 /* *** DEFINISI PROTOTIPE PRIMITIF *** */
 /* *** Konstruktor membentuk POINT *** */
-POINT MakePOINT (float X, float Y){
+POINT MakePOINT (int X, int Y){
 /* Membentuk sebuah POINT dari komponen-komponennya */
     POINT P;
     Absis(P) = X;
@@ -21,7 +21,7 @@ void BacaPOINT (POINT * P){
    akan membentuk POINT <1,2> */
 /* I.S. Sembarang */
 /* F.S. P terdefinisi */
-    float X, Y;
+    int X, Y;
     scanf("%f %f", &X, &Y);
     Absis(*P) = X;
     Ordinat(*P) = Y;
@@ -90,7 +90,7 @@ POINT NextY (POINT P){
     POINT Y = MakePOINT(Absis(P), Ordinat(P) + 1);
     return Y;
 }
-POINT PlusDelta (POINT P, float deltaX, float deltaY){
+POINT PlusDelta (POINT P, int deltaX, int deltaY){
 /* Mengirim salinan P yang absisnya adalah Absis(P) + deltaX dan ordinatnya adalah Ordinat(P) + deltaY */
     POINT Z = MakePOINT(Absis(P) + deltaX, Ordinat(P) + deltaY);
     return Z;
@@ -108,21 +108,13 @@ POINT MirrorOf (POINT P, boolean SbX){
     }
     return M;
 }
-float Jarak0 (POINT P){
+int Jarak0 (POINT P){
 /* Menghitung jarak P ke (0,0) */
-    float a = Absis(P) * Absis(P);
-    float b = Ordinat(P) * Ordinat(P);
+    int a = Absis(P) * Absis(P);
+    int b = Ordinat(P) * Ordinat(P);
     return sqrt(a + b);
 }
-float Panjang (POINT P1, POINT P2){
-/* Menghitung panjang garis yang dibentuk P1 dan P2 */
-/* Perhatikanlah bahwa di sini spec fungsi kurang baik sebab menyangkut ADT Garis. */
-/* Tuliskan spec fungsi yang lebih tepat. */
-    float a = Absis(P2) - Absis(P1);
-    float b = Ordinat(P2) - Ordinat(P2);
-    return sqrt(a * a + b * b);
-}
-void Geser (POINT *P, float deltaX, float deltaY){
+void Geser (POINT *P, int deltaX, int deltaY){
 /* I.S. P terdefinisi */
 /* F.S. P digeser, absisnya sebesar deltaX dan ordinatnya sebesar deltaY */
     Absis(*P) += deltaX;
@@ -153,13 +145,4 @@ void Mirror (POINT *P, boolean SbX){
     else {
         Absis(*P) *= (-1);
     }
-}
-void Putar (POINT *P, float Sudut){
-/* I.S. P terdefinisi */
-/* F.S. P digeser sebesar Sudut derajat dengan sumbu titik (0,0) searah jarum jam*/
-    float radian = Sudut * (M_PI / 180.0);
-    float a = (Absis(*P) * cos(radian)) - (Ordinat(*P) * sin(radian));
-    float b = (Absis(*P) * sin(radian)) + (Ordinat(*P) * cos(radian));
-    Absis(*P) = a;
-    Ordinat(*P) = b;
 }

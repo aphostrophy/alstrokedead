@@ -111,6 +111,8 @@ void TulisMATRIKS(MATRIKS M, indeks x, indeks y) {
 				printf("%c\n", Elmt(M, i, j));
 			}else if ( (i==x) && (j==y)){
 				printf("%c",'P');
+			} else if ( j == 0) {
+				printf("			%c", Elmt(M, i, j));
 			} else {
 				printf("%c", Elmt(M, i, j));
 			}
