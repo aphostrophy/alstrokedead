@@ -88,7 +88,6 @@ void BacaMATRIKS (MATRIKS * M, char* namafile) {
 			NK = NK + 1;
 		}
 	}
-	// if (EOP){ printf("%c",'X');}
 	NKolEff(*M) = NK;
 	NBrsEff(*M) = NB+1;
 }

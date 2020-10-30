@@ -3,7 +3,7 @@
 // Input lain yang berupa string akan memanfaatkan mesinkar dan mesinkata
 
 
-#include "../Header/Input.h"
+#include "../Header/input.h"
 #include <conio.h>
 #include <stdio.h>
 
