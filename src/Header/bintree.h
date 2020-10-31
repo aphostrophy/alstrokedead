@@ -4,13 +4,12 @@
 #define _TREE_
 
 #include <string.h>
-#include "../boolean/boolean.h"
-#include "../stack/stack.h"
-
+#include "../Header/boolean.h"
 
 #define Nil NULL
 
-typedef Wahana infotype;
+typedef char nama[100];
+typedef int infotype;
 
 typedef struct tNode *addrNode;
 typedef struct tNode{
@@ -21,9 +20,11 @@ typedef struct tNode{
 
 typedef addrNode BinTree;
 
-extern BinTree temptree[30];
+extern BinTree tempTreeWahana[10];
+extern BinTree tempTreeKlasifikasi[10];
 extern BinTree treeWahana;
-extern BinTree arrWahana[30];
+extern BinTree treeKlasifikasi;
+extern BinTree arrWahana[10];
 
 #define Akar(P) (P)->info
 #define Left(P) (P)->left
@@ -61,25 +62,14 @@ boolean IsBiner(BinTree P);
 /* Mengirimkan true jika pohon biner tidak kosong P adalah pohon biner: mempunyai subpohon kiri dan subpohon kanan*/
 
 /*fungsi untuk mencari bahan makanan*/
-int cariIndeks(Infotype bahanmakanan);
-
-/*fungsi untuk mencari keuntungan dari makanan yang dihasilkan */
-int keuntungan(BinTree Pohon, Infotype bahanmakanan);
+int cariIndeks(char* namaWahana);
 
 /*fungsi untuk mengecek apakah ada suatu elemen x pada sebuah binary tree P*/
-boolean isada(BinTree P, infotype X);
-
-/*fungsi untuk mencari kedalaman makanan dari tree */
-int carikedalaman(BinTree Pohon, int depth, int indeks);
+boolean isElement(BinTree P, infotype X);
 
 /*fungsi untuk mengecek apakah X parent dari Y atau bukan */
-boolean isparent(BinTree Now, BinTree X, BinTree Y);
-
-/*fungsi untuk mengecek apakah suatu makanan adalah leave dari tree atau bukan */
-boolean isjadimakanan(Infotype bahan);
+boolean isParent(BinTree Now, BinTree X, BinTree Y);
 
 void PrintTree(BinTree P, int h);
-
-void DummyPrintTree(BinTree P, int h, int hc);
 
 #endif
