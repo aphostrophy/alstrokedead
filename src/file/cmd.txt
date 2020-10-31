@@ -1,1 +1,1 @@
-gcc mesinkar.c matriks.c peta.c input.c
+gcc input.c matriks.c mesinkar.c stackt.c point.c peta.c
