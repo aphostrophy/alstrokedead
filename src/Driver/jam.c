@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "-I../Header/boolean.h"
-#include "-I../Header/jam.h"
+#include "../Header/boolean.h"
+#include "../Header/jam.h"
 
 /* ***************************************************************** */
 /* DEFINISI PRIMITIF                                                 */
