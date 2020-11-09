@@ -1,0 +1,141 @@
+#include <stdio.h>
+#include <string.h>
+#include "../Header/boolean.h"
+#include "../Header/wahana.h"
+
+string arrNamaWahana[10] = {"Sky Coaster", "Pirate Ship", "Tornado", "Carousel", "Haunted House", "Ferris Wheel", "Giant Swings", "Gyro Drop"};
+char idWahana[8] = {'S', 'P', 'T', 'C', 'H', 'F','G','Y'};
+int arrHargaWahana[8] = {10000, 15000, 50000, 40000, 5000, 10000, 75000, 50000};
+int durasiWahana[8] = {20, 15, 10, 10, 25, 20, 15, 10};
+int arrKapasitas[8] = {8, 6, 4, 8, 2, 6, 4, 8};
+string arrDeskripsi[8] = {"Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi"};
+
+/* KONSTUKTOR */
+Wahana makeListWahana(Wahana *W) {
+    int i;
+    for(i = 0; i < 8; i++) {
+        (*W).TI[i].id = idWahana[i];
+        strcpy((*W).TI[i].nama, arrNamaWahana[i]);
+        (*W).TI[i].harga = arrHargaWahana[i];
+        (*W).TI[i].durasi = durasiWahana[i];
+        (*W).TI[i].kapasitas = arrKapasitas[i];
+        (*W).TI[i].status = 'N'; //inisiasi dengan not build
+        strcpy((*W).TI[i].deskripsi, arrDeskripsi[i]);
+
+        //inisiasi jumlah pengunjung dan penghasilan dengan 0
+        (*W).TI[i].inside = 0;
+        (*W).TI[i].pengunjung = 0;
+        (*W).TI[i].total_pengunjung = 0;
+        (*W).TI[i].penghasilan = 0;
+        (*W).TI[i].total_penghasilan = 0;
+    }
+}
+
+/* SELEKTOR */
+char* getNama(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].nama;
+        }
+    }
+}
+
+int getHarga(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].harga;
+        }
+    }
+}
+
+int getDurasi(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].durasi;
+        }
+    }
+}
+
+int getKapasitas(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].kapasitas;
+        }
+    }
+}
+
+char getStatus(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].status;
+        }
+    }
+}
+
+char* getDeskripsi(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].deskripsi;
+        }
+    }
+}
+
+int getInside(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].inside;
+        }
+    }
+}
+
+int getPengunjung(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].pengunjung;
+        }
+    }
+}
+
+int getPenghasilan(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].penghasilan;
+        }
+    }
+}
+
+int getTotalPengunjung(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].total_pengunjung;
+        }
+    }
+}
+
+int getTotalPenghasilan(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            return (*W).TI[i].total_penghasilan;
+        }
+    }
+}
+
+void printInfo(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
+            printf("Wahana ID : %c\n", (*W).TI[i].id);
+            printf("Nama Wahana : %s\n", (*W).TI[i].nama);
+            printf("Harga Wahana : %d\n", (*W).TI[i].harga);
+            printf("Durasi Wahana : %d\n", (*W).TI[i].durasi);
+            printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
+            printf("Status Wahana : %c\n", (*W).TI[i].status);
+            printf("Deskripsi Wahana : %s\n", (*W).TI[i].deskripsi);
+            printf("Penumpang yang sedang menaiki wahana : %d\n", (*W).TI[i].inside);
+            printf("Jumlah Pengunjung Wahana hari ini : %d\n", (*W).TI[i].pengunjung);
+            printf("Jumlah Penghasilan Wahana hari ini : %d\n", (*W).TI[i].penghasilan);
+            printf("Jumlah Total Pengunjung Wahana : %d\n", (*W).TI[i].total_pengunjung);
+            printf("Jumlah Total Pengunjung Wahana : %d\n", (*W).TI[i].total_penghasilan);
+            break;
+        }
+    }
+}
