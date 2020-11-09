@@ -1,1 +1,5 @@
+// Windows
 gcc input.c matriks.c mesinkar.c stackt.c point.c peta.c
+
+// Untuk linux
+gcc Input.c matriks.c mesinkar.c stackt.c point.c peta.c -lm -lncurses
