@@ -5,6 +5,7 @@
 #include "../Header/mesinkar.h"
 #include "../Header/stackt.h"
 #include "../Header/point.h"
+#include "../Header/arrayPair.h"
 #include <stdio.h>
 #include <string.h>
 // =======================================================================================================
@@ -29,6 +30,7 @@ POINT playerpos ;
 int pmoney;
 Stack aksi;
 int count_aksi, need_money;
+TabInt Materials, Inventory;
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
 
@@ -101,7 +103,18 @@ void PrintMainDay() {
 
 // ========================================Fungsi Preparation Day=========================================
 void HandleBuy() {
-
+	int action, total;
+	printf("Selamat Datang ke Menu Pembelian\n");
+	printf("Daftar Aksi: \n");
+    printf("0. Exit ");ArrayPair_TulisIsiTabNumbering(Materials);printf("\n");
+	printf("Inventory Anda\n");
+	ArrayPair_TulisIsiTab(Inventory);printf("\n");
+	printf("Aksi Anda:");
+	scanf("%d",&action); // buy jumlah nama_barang
+	if(action!=0){
+		printf("Jumlah")
+		scanf("%d",&total);
+	}
 }
 
 
@@ -118,7 +131,12 @@ void InputPreparationDay (int inpt) {
 	} else if (inpt == INPUT_i){
 		state = MAIN_DAY;
 	} else if (inpt == INPUT_b){
+		int limit;
 		HandleBuy();
+		printf("Hayoloh");
+		scanf("%d",&limit);
+	} else{
+
 	}
 }
 
@@ -161,7 +179,7 @@ void PrintPreparationDay() {
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
 	printf("Nama : %s		Uang: %d		Waktu tersisa: %d\n", "stranger", pmoney, 0);
-	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkah: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, 0);
+	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, 0);
 	// Masih harus ngeprint data data seperti stack dll
 }
 
@@ -172,10 +190,14 @@ void PrintPreparationDay() {
 void GameSetup (){
 	// Setup awal untuk memulai game
 	cmap = 0;
+	ArrayPair_MakeEmpty(&Materials);
+	ArrayPair_MakeEmpty(&Inventory);
 	BacaMATRIKS(&map[1], "../file/1.txt");
 	BacaMATRIKS(&map[0], "../file/0.txt");
 	BacaMATRIKS(&map[2], "../file/2.txt");
 	BacaMATRIKS(&map[3], "../file/3.txt");
+	ArrayPair_BacaIsi(&Materials, "../Saves/Materials.txt");
+	ArrayPair_BacaIsi(&Inventory, "../Saves/Inventory.txt");
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
 	state = MAIN_DAY;

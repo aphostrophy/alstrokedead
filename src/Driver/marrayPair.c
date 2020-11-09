@@ -4,11 +4,11 @@
 
 int main(){
     TabInt Action, Barang;
-    MakeEmpty(&Action);
-    MakeEmpty(&Barang);
-    BacaIsi(&Action, "../Saves/Actions.txt");
-    TulisIsiTab(Action);printf("\n");
-    BacaIsi(&Barang, "../Saves/Materials.txt");
-    TulisIsiTab(Barang);printf("\n");
+    ArrayPair_MakeEmpty(&Action);
+    ArrayPair_MakeEmpty(&Barang);
+    ArrayPair_BacaIsi(&Action, "../Saves/Actions.txt");
+    ArrayPair_TulisIsiTab(Action);printf("\n");
+    ArrayPair_BacaIsi(&Barang, "../Saves/Materials.txt");
+    ArrayPair_TulisIsiTab(Barang);printf("\n");
     return 0;
 }

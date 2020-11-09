@@ -2,4 +2,4 @@
 gcc input.c matriks.c mesinkar.c stackt.c point.c peta.c
 
 // Untuk linux
-gcc Input.c matriks.c mesinkar.c stackt.c point.c peta.c -lm -lncurses
+gcc Input.c matriks.c mesinkar.c mesinkata.c stackt.c point.c peta.c arrayPair.c pair.c -lm -lncurses

@@ -38,6 +38,21 @@ void STARTKATA(char *namafile)
           atau EndKata = false, CKata adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 
+void STARTKATAHANDLEBUY(char *namafile)
+{
+    START(namafile);
+    IgnoreBlank();
+    if (CC == MARK)
+    {
+        EndKata = true;
+    }
+    else /* CC != MARK */
+    {
+        EndKata = false;
+        SalinKata();
+    }
+}
+
 void ADVKATA()
 {
     IgnoreBlank();
