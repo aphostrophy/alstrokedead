@@ -1,5 +1,5 @@
 // ======================================Include Kebutuhan ADT============================================
-#include "../Header/input.h"
+#include "../Header/Input.h"
 #include "../Header/matriks.h"
 #include "../Header/boolean.h"
 #include "../Header/mesinkar.h"
