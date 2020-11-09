@@ -4,7 +4,8 @@
 
 
 #include "../Header/Input.h"
-#include <conio.h>
+// #include <conio.h>
+#include <curses.h>
 #include <stdio.h>
 
 int GetInput(){

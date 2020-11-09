@@ -6,7 +6,8 @@
 #ifndef input_H
 #define input_H
 
-#include <conio.h>
+// #include <conio.h>
+#include <curses.h>
 #include <stdio.h>
 #include <stdlib.h>
 

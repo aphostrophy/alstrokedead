@@ -1,2 +1,5 @@
-src/Driver/a.out
+src/Driver/*.out
+src/Driver/*.exe
 *.rar
+*.exe
+*.out
