@@ -52,6 +52,7 @@
 #define INPUT_ENTER 13
 #define INPUT_SPACE 32
 #define INPUT_BACKSPACE 32
+#define INPUT_b 98
 
 
 int GetInput();

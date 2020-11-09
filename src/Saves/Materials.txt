@@ -1,7 +1,9 @@
-Kayu
-400
-Batu
-700
-Besi
-1500
+Diamond
+200
+Emerald
+200
+Ruby
+200
+Amber
+250
 .

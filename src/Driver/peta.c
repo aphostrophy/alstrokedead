@@ -100,6 +100,11 @@ void PrintMainDay() {
 // =======================================================================================================
 
 // ========================================Fungsi Preparation Day=========================================
+void HandleBuy() {
+
+}
+
+
 void InputPreparationDay (int inpt) {
 	// Mengelola input yang diterima konsol saat main day dan tindakan yang dilakukan setelah input itu
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
@@ -112,8 +117,8 @@ void InputPreparationDay (int inpt) {
 		Ordinat(playerpos) = Ordinat(playerpos) +1 ;
 	} else if (inpt == INPUT_i){
 		state = MAIN_DAY;
-	} else {
-
+	} else if (inpt == INPUT_b){
+		HandleBuy();
 	}
 }
 
@@ -286,6 +291,7 @@ void PrintFooter(){
 	case PREPARATION_DAY:
 		printf("%s\n","	Preparation Day");
 		printf("%s\n","	w : atas a : kiri  s : bawah  d: kanan i: masuk ke main day");
+		printf("%s\n"," b: buy l : build u : upgrade z : undo r : execute");
 		break;
 	case NEW_GAME:
 		printf("%s\n","					       Masukkan Nama 						 ");
