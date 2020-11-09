@@ -7,15 +7,14 @@
 /* ***************************************************************** */
 /* KELOMPOK VALIDASI TERHADAP TYPE                                   */
 /* ***************************************************************** */
-boolean IsJAMValid (int H, int M, int S)
+boolean IsJAMValid (int H, int M)
 /* Mengirim true  jika H,M,S dapat membentuk J yang valid */
 /* dipakai untuk mentest SEBELUM membentuk sebuah Jam */
 {
-    return ((H >= 0 && H <= 23) && (M >= 0 && M <= 59) && (S >= 0 && S <= 59));
-}
+    return ((H >= 0 && H <= 23) && (M >= 0 && M <= 59));
 
 /* *** Konstruktor: Membentuk sebuah JAM dari komponen-komponennya *** */
-JAM MakeJAM (int HH, int MM, int SS)
+JAM MakeJAM (int HH, int MM)
 /* Membentuk sebuah JAM dari komponen-komponennya yang valid */
 /* Prekondisi : HH, MM, SS valid untuk membentuk JAM */
 {
@@ -23,7 +22,6 @@ JAM MakeJAM (int HH, int MM, int SS)
 
     Hour(J) = HH;
     Minute(J) = MM;
-    Second(J) = SS;
     return J;
 }
 
@@ -45,20 +43,20 @@ void BacaJAM (JAM * J)
    1 3 4
    --> akan terbentuk JAM <1,3,4> */
 {
-    int H, M, S;
+    int H, M;
     boolean done;
 
     done = false;
 
     while(!done) {
         scanf("%d %d %d", &H, &M, &S);
-        if (!IsJAMValid(H, M, S)) {
+        if (!IsJAMValid(H, M)) {
             printf("Jam tidak valid\n");
         } else {
             done = true;
         }
     }
-    *J = MakeJAM(H, M, S);
+    *J = MakeJAM(H, M);
 
 }
 
@@ -69,7 +67,7 @@ void TulisJAM (JAM J)
    tanpa karakter apa pun di depan atau belakangnya, termasuk spasi, enter, dll.
    Jika jam / menit / detik hanya satu digit, tuliskan satu digit tanpa 0 di depannya. */
 {
-    printf("%d:%d:%d", Hour(J), Minute(J), Second(J));
+    printf("%d:%d", Hour(J), Minute(J));
 }
 
 /* ***************************************************************** */
@@ -80,38 +78,37 @@ long JAMToMenit (JAM J)
 /* Rumus : detik = 3600*HH + 60*MM + SS */
 /* Nilai maksimum = 3600*23+59*60+59 */
 {
-    return (Hour(J)*3600 + Minute(J)*60 + Second(J));
+    return (Hour(J)*60 + Minute(J));
 }
 
-JAM DetikToJAM (long N)
+JAM MenitToJAM (long N)
 /* Mengirim  konversi detik ke JAM */
-/* Catatan: Jika N >= 86400, maka harus dikonversi dulu menjadi jumlah detik yang
+/* Catatan: Jika N >= 1440, maka harus dikonversi dulu menjadi jumlah detik yang
    mewakili jumlah detik yang mungkin dalam 1 hari, yaitu dengan rumus:
-   N1 = N mod 86400, baru N1 dikonversi menjadi JAM */
+   N1 = N mod 1440, baru N1 dikonversi menjadi JAM */
 {
     long N1; 
-    int H, M, S;
+    int H, M;
 
-    N1 = N % 86400;
-    H = N1 / 3600;
-    M = (N1 % 3600) / 60;
-    S = (N1 % 3600) % 60;
-    return (MakeJAM(H, M, S));
+    N1 = N % 1440;
+    H = N1 / 60;
+    M = (N1 % 60);
+    return (MakeJAM(H, M);
 }
 
-JAM NextNDetik (JAM J, int N)
+JAM NextNMenit (JAM J, int N)
 /* Mengirim N detik setelah J dalam bentuk JAM */
 {
-    return (DetikToJAM(JAMToDetik(J) + N));
+    return (MenitToJAM(JAMToMenit(J) + N));
 }
 
-JAM PrevNDetik (JAM J, int N)
+JAM PrevNMenit (JAM J, int N)
 /* Mengirim N detik sebelum J dalam bentuk JAM */
 {
-    if (JAMToDetik(J) < N) {
-        return (DetikToJAM(JAMToDetik(J) + 86400 - N));
+    if (JAMToMenit(J) < N) {
+        return (MenitToJAM(JAMToMenit(J) + 1440 - N));
     } else {
-        return (DetikToJAM(JAMToDetik(J) - N));
+        return (MenitToJAM(JAMToMenit(J) - N));
     }
 }
 
@@ -120,9 +117,9 @@ long Durasi (JAM JAw, JAM JAkh)
 /* Mengirim JAkh-JAw dlm Detik, dengan kalkulasi */
 /* Jika JAw > JAkh, maka JAkh adalah 1 hari setelah JAw */
 {
-    if (JAMToDetik(JAw) > JAMToDetik(JAkh)) {
-        return (JAMToDetik(JAkh) + 86400 - JAMToDetik(JAw));
+    if (JAMToMenit(JAw) > JAMToMenit(JAkh)) {
+        return (JAMToMenit(JAkh) + 1440 - JAMToMenit(JAw));
     } else {
-        return (JAMToDetik(JAkh) - JAMToDetik(JAw));
+        return (JAMToMenit(JAkh) - JAMToMenit(JAw));
     }
 }
