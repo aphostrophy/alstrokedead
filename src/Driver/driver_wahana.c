@@ -6,7 +6,7 @@ int main() {
     char id;
     makeListWahana(&W);
 
-    printf("Masukkan ID wahana yang inging dicari : ");
+    printf("Masukkan ID wahana yang ingin dicari : ");
     scanf("%s", &id);
     printf("\n");
 
