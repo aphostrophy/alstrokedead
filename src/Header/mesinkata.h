@@ -6,6 +6,7 @@
 
 #include "boolean.h"
 #include "mesinkar.h"
+#include <stdlib.h>
 
 #define NMax 50
 #define BLANK ' '
@@ -44,5 +45,7 @@ void SalinKata();
           CC = BLANK atau CC = MARK; 
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+void AKUISISI_BUY(char *action, char* method, int* jumlah, char barang );
+// Mengakuisisi kata berbasis buy
 
 #endif
