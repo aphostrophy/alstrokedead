@@ -6,12 +6,22 @@
 #ifndef input_H
 #define input_H
 
+// WINDOWS / MS-DOS
 // #include <conio.h>
-#include <curses.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #define clrscr() system("cls")
+
+// UNCOMMENT ALL OF THE ABOVE IF YOU ARE IN MS-DOS BASED OS
+
+// LINUX (DEBIAN BASED)
+#include <termios.h>
 #include <stdio.h>
 #include <stdlib.h>
+#define clrscr() printf("\033c")
 
-#define clrscr() system("cls")
+// UNCOMMENT ALL OF THE ABOVE IF YOU ARE IN MS-DOS BASED OS
+
 #define INPUT_ENTER 13
 #define INPUT_SPACE 32
 #define INPUT_W 87
