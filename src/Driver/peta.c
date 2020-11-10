@@ -199,6 +199,56 @@ void HandleUpgrade(){
 
 }
 
+void HandleUndo(){
+	if(!IsEmptyStack(aksi)){
+		infotype x ;
+		Pop(&aksi,&x);
+		if (x[0] == 'b' && x[2] == 'y'){
+			char benda[100]; int n; 
+			AkuisisiBuy(x,&n,benda);
+			printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
+			// Karena input sudah bisa di parse maka sisanya mestinya mudah
+			// Kurangi waktu yang dibutuhkan dari buy
+			// Kurangi uang yang dibutuhkan dari buy material 'benda' ini sejumlah 'n'
+		} else if (x[0] == 'b' && x[2] == 'i') {
+			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100];
+			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);
+			printf("%d %d %d %c", PbuildX,PbuildY,PbuildMap,bangunan[0]); getchar(); // Ini gw tes dengan ngeprint wkwk
+			// Karena input sudah bisa di parse maka sisanya mestinya mudah
+			// Kurangi waktu yang dibutuhkan dari buy
+			// Kurangi uang yang dibutuhkan dari buy material 'benda' ini sejumlah 'n'
+		} else if (x[0] == 'u'){
+			printf("upgrade"); getchar();
+		}
+	}
+}
+
+void HandleExecution(){
+	infotype x;
+	// Tambah waktu sekarang dengan waktu dibutuhkan total
+	// Kurangi uang dengan uang yang dibutuhkan 
+	// Kurangi material dengan semua material dibutuhkan
+	Reverse(&aksi);
+	while(!IsEmptyStack(aksi)){
+		Pop(&aksi,&x);
+		if (x[0] == 'b' && x[2] == 'y'){
+			char benda[100]; int n; 
+			AkuisisiBuy(x,&n,benda);
+			printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
+			// Karena input sudah bisa di parse maka sisanya mestinya mudah
+			// Tambah material 'benda' di inventory sesuai jumlah 'n'
+		} else if (x[0] == 'b' && x[2] == 'i') {
+			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100];
+			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);
+			// Karena input sudah bisa di parse maka sisanya mestinya mudah
+			Elmt(map[PbuildMap],PbuildX,PbuildY) = bangunan[0];
+			// Set Status dari wahana yang dibabngun menjadi aktif
+		} else if (x[0] == 'u'){
+			printf("upgrade"); getchar();
+		}
+	}
+}
+
 void InputPreparationDay (int inpt) {
 	// Mengelola input yang diterima konsol saat main day dan tindakan yang dilakukan setelah input itu
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
@@ -218,7 +268,7 @@ void InputPreparationDay (int inpt) {
 		Hour(time) = 9 ;
 		Minute(time) = 0;
 		infotype x;
-		while(!IsEmpty(aksi)){
+		while(!IsEmptyStack(aksi)){
 			Pop(&aksi,&x);
 		}
 	} else if (inpt == INPUT_b){
@@ -229,8 +279,10 @@ void InputPreparationDay (int inpt) {
 		HandleBuild();
 	} else if(inpt == INPUT_k) { 
 		HandleUpgrade();
-	} else {
-
+	} else if (inpt == INPUT_j){
+		HandleUndo();
+	} else if (inpt == INPUT_2){
+		HandleExecution();
 	}
 }
 
@@ -426,7 +478,7 @@ void PrintFooter(){
 	case PREPARATION_DAY:
 		printf("%s\n","	Preparation Day");
 		printf("%s\n","	w : atas a : kiri  s : bawah  d: kanan i: masuk ke main day");
-		printf("%s\n"," b: buy l : build k : upgrade z : undo r : execute 1 : inventory" );
+		printf("%s\n"," b: buy l : build k : upgrade j : undo 2 : execute 1 : inventory" ); 
 		break;
 	case INVENTORY:
 		printf("%s\n","	Inventory ");

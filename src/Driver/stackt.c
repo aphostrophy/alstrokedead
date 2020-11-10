@@ -5,6 +5,7 @@
 #include "../Header/stackt.h"
 #include "../Header/boolean.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 
@@ -20,7 +21,7 @@ void CreateEmpty (Stack *S){
 
 
 /* ************ Predikat Untuk test keadaan KOLEKSI ************ */
-boolean IsEmpty (Stack S) {
+boolean IsEmptyStack (Stack S) {
   /* Mengirim true jika Stack kosong: lihat definisi di atas */
   return (Top(S)==Nil);
 }
@@ -58,19 +59,40 @@ void Reverse(Stack *S){
 	infotype X;
 	CreateEmpty(&Stemp);
 
-	while(!(IsEmpty(*S)))
+	while(!(IsEmptyStack(*S)))
 	{
 		Pop(S,&X);
 		Push(&Stemp,X);
 	}
 	(*S) = Stemp;
 }
+
 void PrintStack(Stack S){
   /*	I.S. S tidak kosong dan terdefinisi */
   /*	F.S. Seluruh isi S dicetak */
   char X[100];
-	while (!(IsEmpty(S))){
+	while (!(IsEmptyStack(S))){
 		Pop(&S,&X);
 		printf("%s\n", X);
 	}
+}
+
+void AkuisisiBuy(infotype S, int* N, char benda[100]){
+  char *token = strtok(S, " ");
+  token = strtok(NULL, " ");
+  *N = atoi(token);
+  token = strtok(NULL, " ");
+  strcpy(benda,token);
+}
+
+void AkuisisiBuild(infotype S, int* buildX, int* buildY, int* buildMap, char bangunan[100]){
+  char *token = strtok(S, " ");
+  token = strtok(NULL, " ");
+  strcpy(bangunan,token);
+  token = strtok(NULL, " ");
+  *buildX = atoi(token);
+  token = strtok(NULL, " ");
+  *buildY = atoi(token);
+  token = strtok(NULL, " ");
+  *buildMap = atoi(token);
 }
