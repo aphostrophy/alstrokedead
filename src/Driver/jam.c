@@ -12,7 +12,7 @@ boolean IsJAMValid (int H, int M)
 /* dipakai untuk mentest SEBELUM membentuk sebuah Jam */
 {
     return ((H >= 0 && H <= 23) && (M >= 0 && M <= 59));
-
+}
 /* *** Konstruktor: Membentuk sebuah JAM dari komponen-komponennya *** */
 JAM MakeJAM (int HH, int MM)
 /* Membentuk sebuah JAM dari komponen-komponennya yang valid */
@@ -49,7 +49,7 @@ void BacaJAM (JAM * J)
     done = false;
 
     while(!done) {
-        scanf("%d %d %d", &H, &M, &S);
+        scanf("%d %d ", &H, &M);
         if (!IsJAMValid(H, M)) {
             printf("Jam tidak valid\n");
         } else {
@@ -93,7 +93,7 @@ JAM MenitToJAM (long N)
     N1 = N % 1440;
     H = N1 / 60;
     M = (N1 % 60);
-    return (MakeJAM(H, M);
+    return (MakeJAM(H, M));
 }
 
 JAM NextNMenit (JAM J, int N)

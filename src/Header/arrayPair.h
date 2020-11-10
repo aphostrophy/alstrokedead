@@ -26,9 +26,9 @@
 
 /* Definisi elemen dan koleksi objek */
 typedef int IdxType;  /* type indeks */
-typedef Pair ElType;   /* type elemen tabel */
+typedef Pair Pair_ElType;   /* type elemen tabel */
 typedef struct { 
-  ElType TI[IdxMax+1]; /* memori tempat penyimpan elemen (container) */
+  Pair_ElType TI[IdxMax+1]; /* memori tempat penyimpan elemen (container) */
 } TabInt;
 /* Indeks yang digunakan [IdxMin..IdxMax] */
 /* Indeks ke-0 digunakan */
@@ -41,53 +41,53 @@ typedef struct {
    Definisi elemen pertama : T[i] dengan i=1 */
   
 /* ********** SELEKTOR ********** */
-#define Elmt(T,i) (T).TI[(i)] //Pair
-#define Cost(T,i) (T).TI[(i)].cost // Int
-#define Item(T,i) (T).TI[(i)].item // Kata
-#define ItemLength(T,i) (T).TI[(i)].item.Length // Int dari Kata
+#define Pair_Elmt(T,i) (T).TI[(i)] //Pair
+#define Pair_Cost(T,i) (T).TI[(i)].cost // Int
+#define Pair_Item(T,i) (T).TI[(i)].item // Kata
+#define Pair_ItemLength(T,i) (T).TI[(i)].item.Length // Int dari Kata
 
 /* ********** KONSTRUKTOR ********** */
 /* Konstruktor : create tabel kosong  */
-void MakeEmpty (TabInt * T);
+void ArrayPair_MakeEmpty (TabInt * T);
 /* I.S. T sembarang */
 /* F.S. Terbentuk tabel T kosong dengan kapasitas IdxMax-IdxMin+1 */
 /* Proses: Inisialisasi semua elemen tabel T dengan ValUndef */
 
 /* ********** SELEKTOR (TAMBAHAN) ********** */
 /* *** Banyaknya elemen *** */
-int NbElmt (TabInt T);
+int ArrayPair_NbElmt (TabInt T);
 /* Mengirimkan banyaknya elemen efektif tabel */
 /* Mengirimkan nol jika tabel kosong */
 /* *** Daya tampung container *** */
-int MaxNbEl (TabInt T);
+int ArrayPair_MaxNbEl (TabInt T);
 /* Mengirimkan maksimum elemen yang dapat ditampung oleh tabel */
 /* *** Selektor INDEKS *** */
-IdxType GetFirstIdx (TabInt T);
+IdxType ArrayPair_GetFirstIdx (TabInt T);
 /* Prekondisi : Tabel T tidak kosong */
 /* Mengirimkan indeks elemen T pertama */
-IdxType GetLastIdx (TabInt T);
+IdxType ArrayPair_GetLastIdx (TabInt T);
 /* Prekondisi : Tabel T tidak kosong */
 /* Mengirimkan indeks elemen T terakhir */
 
 /* ********** Test Indeks yang valid ********** */
-boolean IsIdxValid (TabInt T, IdxType i);
+boolean ArrayPair_IsIdxValid (TabInt T, IdxType i);
 /* Mengirimkan true jika i adalah indeks yang valid utk ukuran tabel */
 /* yaitu antara indeks yang terdefinisi utk container*/
-boolean IsIdxEff (TabInt T, IdxType i);
+boolean ArrayPair_IsIdxEff (TabInt T, IdxType i);
 /* Mengirimkan true jika i adalah indeks yang terdefinisi utk tabel */
 /* yaitu antara FirstIdx(T)..LastIdx(T) */
 
 /* ********** TEST KOSONG/PENUH ********** */
 /* *** Test tabel kosong *** */
-boolean IsEmpty (TabInt T);
+boolean ArrayPair_IsEmpty (TabInt T);
 /* Mengirimkan true jika tabel T kosong, mengirimkan false jika tidak */
 /* *** Test tabel penuh *** */
-boolean IsFull (TabInt T);
+boolean ArrayPair_IsFull (TabInt T);
 /* Mengirimkan true jika tabel T penuh, mengirimkan false jika tidak */
 
 /* ********** BACA dan TULIS dengan INPUT/OUTPUT device ********** */
 /* *** Mendefinisikan isi tabel dari pembacaan *** */
-void BacaIsi (TabInt * T ,char * namafile);
+void ArrayPair_BacaIsi (TabInt * T ,char * namafile);
 /* I.S. T sembarang */
 /* F.S. Tabel T terdefinisi */
 /* Proses : membaca banyaknya elemen T dan mengisi nilainya */
@@ -97,7 +97,8 @@ void BacaIsi (TabInt * T ,char * namafile);
 /* 2. Jika 0 < N <= MaxNbEl(T); Lakukan N kali: Baca elemen mulai dari indeks 
       IdxMin satu per satu diakhiri enter */
 /*    Jika N = 0; hanya terbentuk T kosong */
-void TulisIsiTab (TabInt T);
+void ArrayPair_TulisIsiTab (TabInt T);
+void ArrayPair_TulisIsiTabNumbering (TabInt T);
 /* Proses : Menuliskan isi tabel dengan traversal, tabel ditulis di antara kurung siku; 
    antara dua elemen dipisahkan dengan separator "koma", tanpa tambahan karakter di depan,
    di tengah, atau di belakang, termasuk spasi dan enter */
@@ -108,37 +109,37 @@ void TulisIsiTab (TabInt T);
 
 /* ********** OPERATOR ARITMATIKA ********** */
 /* *** Aritmatika tabel : Penjumlahan, pengurangan, perkalian, ... *** */
-TabInt PlusMinusTab (TabInt T1, TabInt T2, boolean plus);
+TabInt ArrayPair_PlusMinusTab (TabInt T1, TabInt T2, boolean plus);
 /* Prekondisi : T1 dan T2 berukuran sama dan tidak kosong */
 /* Jika plus = true, mengirimkan  T1+T2, yaitu setiap elemen T1 dan T2 pada indeks yang sama dijumlahkan */
 /* Jika plus = false, mengirimkan T1-T2, yaitu setiap elemen T1 dikurangi elemen T2 pada indeks yang sama */
 
 /* ********** OPERATOR RELASIONAL ********** */
 /* *** Operasi pembandingan tabel : < =, > *** */
-boolean IsEQ (TabInt T1, TabInt T2);
+boolean ArrayPair_IsEQ (TabInt T1, TabInt T2);
 /* Mengirimkan true jika T1 sama dengan T2 yaitu jika ukuran T1 = T2 dan semua elemennya sama */
 
 /* ********** SEARCHING ********** */
 /* ***  Perhatian : Tabel boleh kosong!! *** */
-IdxType SearchByItem (TabInt T, Kata X);
+IdxType ArrayPair_SearchByItem (TabInt T, Kata X);
 /* Search apakah ada elemen tabel T yang bernilai X */
 /* Jika ada, menghasilkan indeks i terkecil, dengan elemen ke-i = X */
 /* Jika tidak ada, mengirimkan IdxUndef */
 /* Menghasilkan indeks tak terdefinisi (IdxUndef) jika tabel T kosong */
 /* Skema Searching yang digunakan bebas */
-boolean SearchBooleanByItem (TabInt T, Kata X);
+boolean ArrayPair_SearchBooleanByItem (TabInt T, Kata X);
 /* Search apakah ada elemen tabel T yang bernilai X */
 /* Jika ada, menghasilkan true, jika tidak ada menghasilkan false */
 /* Skema searching yang digunakan bebas */
 
 /* ********** NILAI EKSTREM ********** */
-void MaxMin (TabInt T, ElType * Max, ElType * Min);
+void ArrayPair_MaxMin (TabInt T, Pair_ElType * Max, Pair_ElType * Min);
 /* I.S. Tabel T tidak kosong */
 /* F.S. Max berisi nilai maksimum T;
         Min berisi nilai minimum T */
 
 /* ********** SORTING ********** */
-void Sort (TabInt * T, boolean asc);
+void ArrayPair_Sort (TabInt * T, boolean asc);
 /* I.S. T boleh kosong */
 /* F.S. Jika asc = true, T terurut membesar */
 /*      Jika asc = false, T terurut mengecil */
@@ -147,12 +148,12 @@ void Sort (TabInt * T, boolean asc);
 
 /* ********** MENAMBAH DAN MENGHAPUS ELEMEN DI AKHIR ********** */
 /* *** Menambahkan elemen terakhir *** */
-void AddAsLastEl (TabInt * T, ElType X);
+void ArrayPair_AddAsLastEl (TabInt * T, Pair_ElType X);
 /* Proses: Menambahkan X sebagai elemen terakhir tabel */
 /* I.S. Tabel T boleh kosong, tetapi tidak penuh */
 /* F.S. X adalah elemen terakhir T yang baru */
 /* ********** MENGHAPUS ELEMEN ********** */
-void DelLastEl (TabInt * T, ElType * X);
+void ArrayPair_DelLastEl (TabInt * T, Pair_ElType * X);
 /* Proses : Menghapus elemen terakhir tabel */
 /* I.S. Tabel tidak kosong */
 /* F.S. X adalah nilai elemen terakhir T sebelum penghapusan, */

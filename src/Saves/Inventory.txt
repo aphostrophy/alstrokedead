@@ -1,9 +1,9 @@
 Diamond
-200
+0
 Emerald
-200
+0
 Ruby
-200
+0
 Amber
-250
+0
 .

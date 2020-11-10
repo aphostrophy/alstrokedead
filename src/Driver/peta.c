@@ -3,8 +3,12 @@
 #include "../Header/matriks.h"
 #include "../Header/boolean.h"
 #include "../Header/mesinkar.h"
+#include "../Header/mesinkata.h"
 #include "../Header/stackt.h"
 #include "../Header/point.h"
+#include "../Header/arrayPair.h"
+#include "../Header/jam.h"
+#include "../Header/wahana.h"
 #include <stdio.h>
 #include <string.h>
 // =======================================================================================================
@@ -19,6 +23,7 @@
 #define OFFICE_DETAIL 6
 #define OFFICE_REPORT 7
 #define DETAIL_WAHANA 8
+#define INVENTORY 9
 // =======================================================================================================
 
 // =========================Pendefinisian global variabel yang akan dipakai===============================
@@ -29,10 +34,23 @@ POINT playerpos ;
 int pmoney;
 Stack aksi;
 int count_aksi, need_money;
+TabInt Materials, Inventory;
+JAM time ;
+Wahana wahana;
+
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
 
 // =========================================Fungsi MainDay================================================
+
+void UpdateWaktu(int n){
+	time = NextNMenit(time,n);
+	if (state == MAIN_DAY && JAMToMenit(time) >= 1260) {
+		state = PREPARATION_DAY;
+	} else if (state == PREPARATION_DAY && JAMToMenit(time) >= 540 && JAMToMenit(time) <= 550){
+		state = MAIN_DAY;
+	}
+}
 
 boolean IsBisaDilewati(char c){
 	// Return true apabila c adalah karakter yang bisa ditindih player
@@ -43,14 +61,20 @@ void InputMainDay (int inpt) {
 	// Mengelola input yang diterima konsol saat main day dan tindakan yang dilakukan setelah input itu
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
 		Absis(playerpos) = Absis(playerpos) -1 ;
+		UpdateWaktu(1);
 	} else if (inpt == INPUT_a && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)-1))) {
 		Ordinat(playerpos) = Ordinat(playerpos) -1 ;
+		UpdateWaktu(1);
 	} else if (inpt == INPUT_s && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)+1,Ordinat(playerpos)))) {
 		Absis(playerpos) = Absis(playerpos) + 1 ;
+		UpdateWaktu(1);
 	} else if (inpt == INPUT_d && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)+1))) {
 		Ordinat(playerpos) = Ordinat(playerpos) +1 ;
+		UpdateWaktu(1);
 	} else if (inpt == INPUT_i){
 		state = PREPARATION_DAY;
+		Hour(time) = 21 ;
+		Minute(time) = 0;
 	} else {
 
 	}
@@ -94,25 +118,55 @@ void PrintMainDay() {
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
 	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d\n", "stranger", pmoney, 0);
+	printf("%s","Jam : ");
+	TulisJAM(time);
+	printf("%s\n","");
 	// Masih harus ngeprint data data seperti queue , broken wahana dll
 }
 
 // =======================================================================================================
 
 // ========================================Fungsi Preparation Day=========================================
+void HandleBuy() {
+	char action[100] ; char method[100] ; char barang[100]; char jumlah[100];
+	int jumlah2;
+	printf("Selamat Datang ke Menu Pembelian\n");
+	printf("Daftar Barang yang dapat dibeli: \n");
+    ArrayPair_TulisIsiTabNumbering(Materials);printf("\n");
+	printf("Masukkan Barang yang ingin dibeli: ");
+	scanf("%s",&method); scanf("%s",&jumlah); scanf("%s",&barang);
+	jumlah2 = atoi(jumlah);
+	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,jumlah); strcat(action," "); strcat(action,barang);
+	printf("%s", action);
+}
+
+
 void InputPreparationDay (int inpt) {
 	// Mengelola input yang diterima konsol saat main day dan tindakan yang dilakukan setelah input itu
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
 		Absis(playerpos) = Absis(playerpos) -1 ;
+		UpdateWaktu(1);
 	} else if (inpt == INPUT_a && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)-1))) {
 		Ordinat(playerpos) = Ordinat(playerpos) -1 ;
+		UpdateWaktu(1);
 	} else if (inpt == INPUT_s && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)+1,Ordinat(playerpos)))) {
 		Absis(playerpos) = Absis(playerpos) + 1 ;
+		UpdateWaktu(1);
 	} else if (inpt == INPUT_d && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)+1))) {
 		Ordinat(playerpos) = Ordinat(playerpos) +1 ;
+		UpdateWaktu(1);
 	} else if (inpt == INPUT_i){
 		state = MAIN_DAY;
-	} else {
+		Hour(time) = 9 ;
+		Minute(time) = 0;
+	} else if (inpt == INPUT_b){
+		int limit;
+		HandleBuy();
+		printf("Hayoloh");
+		scanf("%d",&limit);
+	} else if (inpt == INPUT_1){
+		state = INVENTORY;
+	} else{
 
 	}
 }
@@ -156,7 +210,10 @@ void PrintPreparationDay() {
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
 	printf("Nama : %s		Uang: %d		Waktu tersisa: %d\n", "stranger", pmoney, 0);
-	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkah: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, 0);
+	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, 0);
+	printf("%s","Jam : ");
+	TulisJAM(time);
+	printf("%s\n","");
 	// Masih harus ngeprint data data seperti stack dll
 }
 
@@ -167,10 +224,14 @@ void PrintPreparationDay() {
 void GameSetup (){
 	// Setup awal untuk memulai game
 	cmap = 0;
+	ArrayPair_MakeEmpty(&Materials);
+	ArrayPair_MakeEmpty(&Inventory);
 	BacaMATRIKS(&map[1], "../file/1.txt");
 	BacaMATRIKS(&map[0], "../file/0.txt");
 	BacaMATRIKS(&map[2], "../file/2.txt");
 	BacaMATRIKS(&map[3], "../file/3.txt");
+	ArrayPair_BacaIsi(&Materials, "../Saves/Materials.txt");
+	ArrayPair_BacaIsi(&Inventory, "../Saves/Inventory.txt");
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
 	state = MAIN_DAY;
@@ -179,6 +240,9 @@ void GameSetup (){
 	count_aksi = 0 ;
 	need_money = 0 ;
 	pmoney = 10000 ;
+	Hour(time) = 20 ;
+	Minute(time) = 0 ;
+	makeListWahana(&wahana);
 }
 
 void PrintJudul (){
@@ -229,7 +293,10 @@ void PrintMain(){
 	case DETAIL_WAHANA:
 		// PrintPreparationDay();
 		break;
-	
+	case INVENTORY:
+		printf("Inventory Anda\n");
+		ArrayPair_TulisIsiTab(Inventory);printf("\n");
+		break;
 	default:
 	printf("%s","Bukan state game");
 		break;
@@ -267,6 +334,11 @@ void BacaInput(){
 	case DETAIL_WAHANA:
 		// Input saat menunjukan detail wahana
 		break;
+	case INVENTORY: 
+	if (inpt == INPUT_ENTER){
+		state = PREPARATION_DAY;
+	}
+		break ;
 	default:
 		printf("%s","Input tidak valid");
 		break;
@@ -286,6 +358,11 @@ void PrintFooter(){
 	case PREPARATION_DAY:
 		printf("%s\n","	Preparation Day");
 		printf("%s\n","	w : atas a : kiri  s : bawah  d: kanan i: masuk ke main day");
+		printf("%s\n"," b: buy l : build u : upgrade z : undo r : execute 1 : inventory" );
+		break;
+	case INVENTORY:
+		printf("%s\n","	Inventory ");
+		printf("%s\n","	Tekan Enter untuk kembali ke Preparation Phase");
 		break;
 	case NEW_GAME:
 		printf("%s\n","					       Masukkan Nama 						 ");

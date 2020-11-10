@@ -1,6 +1,9 @@
 #include "../Header/boolean.h"
 #include "../Header/mesinkar.h"
 #include "../Header/mesinkata.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #define NMax 50
 #define BLANK ' '
@@ -38,6 +41,21 @@ void STARTKATA(char *namafile)
           atau EndKata = false, CKata adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 
+void STARTKATAHANDLEBUY(char *namafile)
+{
+    START(namafile);
+    IgnoreBlank();
+    if (CC == MARK)
+    {
+        EndKata = true;
+    }
+    else /* CC != MARK */
+    {
+        EndKata = false;
+        SalinKata();
+    }
+}
+
 void ADVKATA()
 {
     IgnoreBlank();
@@ -63,6 +81,7 @@ void SalinKata()
     while ((CC != MARK) && (CC != BLANK) && (i < NMax))
     {
         CKata.TabKata[i] = CC;
+		printf("%c",CC);
         ADV();
         i++;
     } /* CC = MARK or CC = BLANK */
@@ -74,3 +93,18 @@ void SalinKata()
           CC = BLANK atau CC = MARK; 
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+
+void AKUISISI_BUY(char *action, char* method, int* jumlah, char barang )
+{
+	char action2[100];
+	strcpy(action2,action);
+	char * token = strtok(action2, " ");
+	strcpy(method,token);
+	printf("HH");
+	printf("%s",method);
+	token = strtok(NULL, " ");
+	*jumlah = atoi(token);
+	token = strtok(NULL, " ");
+	barang = token[0];
+
+}
