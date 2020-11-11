@@ -68,6 +68,20 @@ boolean IsBisaDilewati(char c){
 	return (c=='^' || c=='>' || c=='<' || c=='V' || c=='-'|| c=='P' || c=='O');
 }
 
+char getBangunanSekitar(){
+	if (Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='-'){
+		return Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos));
+	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='-'){
+		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1);
+	} else if (Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='-'){
+		return Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos));
+	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='-'){
+		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1);
+	} else {
+		return '*';
+	}
+}
+
 void InputMainDay (int inpt) {
 	// Mengelola input yang diterima konsol saat main day dan tindakan yang dilakukan setelah input itu
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
@@ -88,10 +102,16 @@ void InputMainDay (int inpt) {
 		Minute(time) = 0;
 	} else if (inpt == INPUT_1 && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)) == 'O') {
 		state = OFFICE;
+	} else if (inpt == INPUT_2 && getBangunanSekitar() != 'A' && getBangunanSekitar() != '*') {
+		printDetailWahana(&wahana, getBangunanSekitar());	
+		getchar();
 	}
 }
 
 void PrintMainDay() {
+	JAM tutup;
+	Hour(tutup) = 21;
+	Minute(tutup) = 0;
 	// Menampilkan informasi pada bagian inti game saat mainday
 	if (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '>' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '<' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '^' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == 'V' ) {
 		switch (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos))){
@@ -128,7 +148,7 @@ void PrintMainDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
-	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d\n", "stranger", pmoney, 0);
+	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", "stranger", pmoney, Durasi(time, tutup));
 	printf("%s","Jam : ");
 	TulisJAM(time);
 	printf("\n");
@@ -179,19 +199,6 @@ void HandleBuild(){
 	// itoa(PbuildY, SbuildY, 10); itoa(PbuildX, SbuildX, 10); itoa(PbuildMap, SbuildMap, 10);
 	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,bangunan); strcat(action," "); strcat(action,SbuildX);strcat(action," "); strcat(action,SbuildY);strcat(action," "); strcat(action,SbuildMap);
 	Push(&aksi,action);
-}
-char getBangunanSekitar(){
-	if (Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='-'){
-		return Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos));
-	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='-'){
-		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1);
-	} else if (Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='-'){
-		return Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos));
-	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='-'){
-		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1);
-	} else {
-		return '*';
-	}
 }
 
 void HandleUpgrade(){
@@ -302,6 +309,9 @@ void InputPreparationDay (int inpt) {
 
 void PrintPreparationDay() {
 	// Menampilkan informasi pada bagian inti game saat preparation day
+	JAM buka;
+	Hour(buka) = 9;
+	Minute(buka) = 0;
 	if (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '>' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '<' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '^' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == 'V' ) {
 		switch (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos))){
 		case '>':
@@ -337,7 +347,7 @@ void PrintPreparationDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
-	printf("Nama : %s		Uang: %d		Waktu tersisa: %d\n", "stranger", pmoney, 0);
+	printf("Nama : %s		Uang: %d		Waktu tersisa: %d menit\n", "stranger", pmoney, Durasi(time, buka));
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, 0);
 	printf("%s","Jam : ");
 	TulisJAM(time);
