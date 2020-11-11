@@ -4,7 +4,14 @@
 #include "bintree.c"
 
 int main() {
-    BuildTree(&treeWahana);
-    PrintTree(treeWahana, 2);
+    char id;
+    scanf("%c", &id);
+    BuildTree();
+    for(int i = 0; i < 8; i++) {
+        PrintTree(listUpgrade[i], 2);
+    }
+    printf("\n");
+    PrintUpgradeWahana(id);
+    
     return 0;
 }

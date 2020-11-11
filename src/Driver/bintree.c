@@ -4,39 +4,40 @@
 #include "../Header/bintree.h"
 #include "../Header/wahana.h"
 
-BinTree tempTreeWahana[10];
-BinTree tempTreeKlasifikasi[10];
-BinTree treeWahana;
-nama arrKlasifikasi[10] = {"Wahana", "Anak-anak", "Dewasa", "Murah", "Mahal", "Murah", "Mahal"};
-nama arrNamaWahana[10] = {"Sky Coaster", "Pirate Ship", "Tornado", "Carousel", "Haunted House", "Ferris Wheel", "Giant Swings", "Gyro Drop"};
-nama arrTipeWahana[10] = {"tipe1", "tipe2", "tipe1", "tipe2", "tipe1", "tipe2", "tipe1", "tipe2"};
-int arrHargaWahana[10] = {10000, 15000, 50000, 40000, 5000, 10000, 75000, 50000};
-int arrKapasitas[10] = {8, 6, 4, 8, 2, 6, 4, 8};
-nama arrDeskripsi[10] = {"Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi"};
+BinTree listUpgrade[10];
+BinTree treeUpgrade[10];
+string arrNamaWahana[10] = {"Sky Coaster", "Pirate Ship", "Tornado", "Carousel", "Haunted House", "Ferris Wheel", "Giant Swings", "Gyro Drop"};
+char idWahana[8] = {'S', 'P', 'T', 'C', 'H', 'F','G','Y'};
+string arrUpgrade[10] = {"Money Up S", "Money Up M", "Money Up XL", "capacity up S", "capacity up M", "capacity up XL", "speed up S", "speed up M", "speed up XL"};
 
 void buatTree(BinTree parent,BinTree l, BinTree r){
     Left(parent) = l;
     Right(parent) = r;
 }
 
-void BuildTree(BinTree *P)
+void BuildTree()
 /* I.S P adalah tree kosong */
 /* F.S P adalah tree berisi wahana willy wangky*/
 {
-    for (int i = 0; i < 8; i++)
-        tempTreeWahana[i] = AlokNode(i);
-    for (int i = 0; i < 7; i++)
-        tempTreeKlasifikasi[i] = AlokNode(i);
+    for (int i = 0; i < 8; i++) {
+        listUpgrade[i] = AlokNode(i);
+    }
+    for (int i = 0; i < 9; i++) {
+        treeUpgrade[i] = AlokNode(i);
+    }
 
-    buatTree(tempTreeKlasifikasi[0], tempTreeKlasifikasi[1], tempTreeKlasifikasi[2]);
-    buatTree(tempTreeKlasifikasi[1], tempTreeKlasifikasi[3], tempTreeKlasifikasi[4]);
-    buatTree(tempTreeKlasifikasi[2], tempTreeKlasifikasi[5], tempTreeKlasifikasi[6]);
-    buatTree(tempTreeKlasifikasi[3], tempTreeWahana[0], tempTreeWahana[1]);
-    buatTree(tempTreeKlasifikasi[4], tempTreeWahana[2], tempTreeWahana[3]);
-    buatTree(tempTreeKlasifikasi[5], tempTreeWahana[4], tempTreeWahana[5]);
-    buatTree(tempTreeKlasifikasi[6], tempTreeWahana[6], tempTreeWahana[7]);
-
-    *P = tempTreeKlasifikasi[0];
+    buatTree(listUpgrade[0], treeUpgrade[0], treeUpgrade[3]);
+    buatTree(listUpgrade[1], treeUpgrade[0], treeUpgrade[6]);
+    buatTree(listUpgrade[2], treeUpgrade[0], treeUpgrade[3]);
+    buatTree(listUpgrade[3], treeUpgrade[0], treeUpgrade[6]);
+    buatTree(listUpgrade[4], treeUpgrade[0], treeUpgrade[3]);
+    buatTree(listUpgrade[5], treeUpgrade[0], treeUpgrade[6]);
+    buatTree(listUpgrade[6], treeUpgrade[0], treeUpgrade[3]);
+    buatTree(listUpgrade[7], treeUpgrade[0], treeUpgrade[6]);
+    buatTree(treeUpgrade[0], treeUpgrade[1], treeUpgrade[2]);
+    buatTree(treeUpgrade[0], treeUpgrade[1], treeUpgrade[2]);
+    buatTree(treeUpgrade[3], treeUpgrade[4], treeUpgrade[5]);
+    buatTree(treeUpgrade[6], treeUpgrade[7], treeUpgrade[8]);
 }
 
 /* Manajemen Memory */
@@ -116,7 +117,7 @@ boolean IsBiner(BinTree P)
 }
 
 /*fungsi untuk mencari bahan makanan */
-int findIndex(nama namaWahana){
+int findIndex(string namaWahana){
     int ret = -1;
     for (int i = 0; i < 8 && ret == -1; i++){
         if (strcmp(namaWahana, arrNamaWahana[i]) == 0){
@@ -157,8 +158,12 @@ boolean isParent(BinTree Now, BinTree X, BinTree Y){
 void PrintTreeUtil(BinTree P, int h, int level){
   if(IsTreeEmpty(P)) return;
 
-  printf("%d\n", Akar(P));
-
+    if(level == 1) {
+        printf("%s\n", arrNamaWahana[Akar(P)]);
+    } else {
+        printf("%s\n", arrUpgrade[Akar(P)]);
+    }
+  
   if(!IsTreeEmpty(Left(P))){
     for (int i = 0; i < h*level; i++) {
         printf(" ");
@@ -193,4 +198,15 @@ A
 */
 {
   PrintTreeUtil(P, h, 1);
+}
+
+void PrintUpgradeWahana(char id) {
+    int res;
+    for(int i = 0; i < 8; i++) {
+        if(id == idWahana[i]) {
+            res = i;
+            break;
+        }
+    }
+    PrintTree(listUpgrade[res], 2);
 }
