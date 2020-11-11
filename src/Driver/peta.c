@@ -45,6 +45,17 @@ Wahana wahana;
 
 void UpdateWaktu(int n){
 	time = NextNMenit(time,n);
+	int broke = rand() % 2000;
+	if(broke == 69 || broke == 420 || broke == 34) {
+		int machine = rand() % 8;
+		if(wahana.TI[machine].status == 'G') {
+			wahana.TI[machine].status = 'B';
+			printf("OH NO!!! %s broke. Please repair it ASAP!!!\n", wahana.TI[machine].nama);
+			printf("Tekan tombol enter untuk melanjutkan permainan!!\n");
+			getchar();
+		}
+	}
+
 	if (state == MAIN_DAY && JAMToMenit(time) >= 1260) {
 		state = PREPARATION_DAY;
 	} else if (state == PREPARATION_DAY && JAMToMenit(time) >= 540 && JAMToMenit(time) <= 560){
@@ -54,7 +65,21 @@ void UpdateWaktu(int n){
 
 boolean IsBisaDilewati(char c){
 	// Return true apabila c adalah karakter yang bisa ditindih player
-	return (c=='^' || c=='>' || c=='<' || c=='V' || c=='-'|| c=='P');
+	return (c=='^' || c=='>' || c=='<' || c=='V' || c=='-'|| c=='P' || c=='O');
+}
+
+char getBangunanSekitar(){
+	if (Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='-'){
+		return Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos));
+	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='-'){
+		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1);
+	} else if (Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='-'){
+		return Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos));
+	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='-'){
+		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1);
+	} else {
+		return '*';
+	}
 }
 
 void InputMainDay (int inpt) {
@@ -75,12 +100,18 @@ void InputMainDay (int inpt) {
 		state = PREPARATION_DAY;
 		Hour(time) = 21 ;
 		Minute(time) = 0;
-	} else {
-
+	} else if (inpt == INPUT_1 && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)) == 'O') {
+		state = OFFICE;
+	} else if (inpt == INPUT_2 && getBangunanSekitar() != 'A' && getBangunanSekitar() != '*') {
+		printDetailWahana(&wahana, getBangunanSekitar());	
+		getchar();
 	}
 }
 
 void PrintMainDay() {
+	JAM tutup;
+	Hour(tutup) = 21;
+	Minute(tutup) = 0;
 	// Menampilkan informasi pada bagian inti game saat mainday
 	if (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '>' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '<' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '^' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == 'V' ) {
 		switch (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos))){
@@ -117,9 +148,11 @@ void PrintMainDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
-	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d\n", "stranger", pmoney, 0);
+	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", "stranger", pmoney, Durasi(time, tutup));
 	printf("%s","Jam : ");
 	TulisJAM(time);
+	printf("\n");
+	printBrokenWahana(&wahana);
 	printf("%s\n","");
 	// Masih harus ngeprint data data seperti queue , broken wahana dll
 }
@@ -166,19 +199,6 @@ void HandleBuild(){
 	// itoa(PbuildY, SbuildY, 10); itoa(PbuildX, SbuildX, 10); itoa(PbuildMap, SbuildMap, 10);
 	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,bangunan); strcat(action," "); strcat(action,SbuildX);strcat(action," "); strcat(action,SbuildY);strcat(action," "); strcat(action,SbuildMap);
 	Push(&aksi,action);
-}
-char getBangunanSekitar(){
-	if (Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='-'){
-		return Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos));
-	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='-'){
-		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1);
-	} else if (Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='-'){
-		return Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos));
-	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='-'){
-		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1);
-	} else {
-		return '*';
-	}
 }
 
 void HandleUpgrade(){
@@ -289,6 +309,9 @@ void InputPreparationDay (int inpt) {
 
 void PrintPreparationDay() {
 	// Menampilkan informasi pada bagian inti game saat preparation day
+	JAM buka;
+	Hour(buka) = 9;
+	Minute(buka) = 0;
 	if (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '>' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '<' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '^' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == 'V' ) {
 		switch (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos))){
 		case '>':
@@ -324,10 +347,12 @@ void PrintPreparationDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
-	printf("Nama : %s		Uang: %d		Waktu tersisa: %d\n", "stranger", pmoney, 0);
+	printf("Nama : %s		Uang: %d		Waktu tersisa: %d menit\n", "stranger", pmoney, Durasi(time, buka));
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, 0);
 	printf("%s","Jam : ");
 	TulisJAM(time);
+	printf("\n");
+	printBrokenWahana(&wahana);
 	// Tulis Material yang dibutuhkan
 	printf("%s\n","");
 	printf("%s\n","==================================================================");
@@ -335,6 +360,41 @@ void PrintPreparationDay() {
 	PrintStack(aksi);
 	printf("%s\n","==================================================================");
 	// Masih harus ngeprint data data seperti stack dll
+}
+
+void InputOffice() {
+	char input[100];
+	scanf("%s", &input);
+	getchar();
+	if(strcmp(input, "Details") == 0) {
+		printf("Daftar Wahana :\n");
+		printListWahana(&wahana);
+		printf("\n");
+
+		char id;
+		printf("Masukkan ID Wahana yang ingin dilihat detailnya : ");
+		scanf("%c", &id);
+		getchar();
+		printDetailWahana(&wahana, id);
+		printf("\nTekan sembarang tombol untuk kembali ke menu office");
+		getchar();
+		UpdateWaktu(5);
+	} else if (strcmp(input, "Report") == 0) {
+		printf("Daftar Wahana :\n");
+		printListWahana(&wahana);
+		printf("\n");
+
+		char id;
+		printf("Masukkan ID Wahana yang ingin dilihat reportnya : ");
+		scanf("%c", &id);
+		getchar();
+		printReportWahana(&wahana, id);
+		printf("\nTekan sembarang tombol untuk kembali ke menu office");
+		getchar();
+		UpdateWaktu(5);
+	} else if (strcmp(input, "Exit") == 0) {
+		state = MAIN_DAY;
+	}
 }
 
 // =======================================================================================================
@@ -403,6 +463,7 @@ void PrintMain(){
 		break;
 	case OFFICE:
 		// List menu office diprint dan dipilih
+		printf("\nSELAMAT DATANG DI OFFICE WILLY WANGKY'S WORLD!!!\n\n");
 		break;
 	case OFFICE_DETAIL:
 		// Detail 
@@ -425,7 +486,7 @@ void PrintMain(){
 
 
 void BacaInput(){
-	int inpt = GetInput();
+	int inpt;
 	switch (state) {
 	case MAIN_MENU:
 		// Input yang ada di main menu
@@ -437,13 +498,16 @@ void BacaInput(){
 		// Input saat player mau load game
 		break;
 	case MAIN_DAY:
+		inpt = GetInput();
 		InputMainDay(inpt);
 		break;
 	case PREPARATION_DAY:
+		inpt = GetInput();
 		InputPreparationDay(inpt);
 		break; 
 	case OFFICE:
 		// Input saat mengakses office
+		InputOffice();
 		break;
 	case OFFICE_DETAIL:
 		// Input saat mengakses office detail
@@ -466,32 +530,37 @@ void BacaInput(){
 }
 
 void PrintFooter(){
-	printf("%s\n","				Tombol aksi						 	 ");
 	switch (state) {
 	case MAIN_MENU:
+		printf("%s\n","				Tombol aksi						 	 ");
 		printf("%s\n","w : atas  s : bawah	 enter : pilih menu");
 		break;
 	case MAIN_DAY:
+		printf("%s\n","				Tombol aksi						 	 ");
 		printf("%s\n","	Main Day");
 		printf("%s\n","	w : atas a : kiri  s : bawah  d: kanan i: masuk ke preparation day");
 		break;
 	case PREPARATION_DAY:
+		printf("%s\n","				Tombol aksi						 	 ");
 		printf("%s\n","	Preparation Day");
 		printf("%s\n","	w : atas a : kiri  s : bawah  d: kanan i: masuk ke main day");
 		printf("%s\n"," b: buy l : build k : upgrade j : undo 2 : execute 1 : inventory" ); 
 		break;
 	case INVENTORY:
+		printf("%s\n","				Tombol aksi						 	 ");
 		printf("%s\n","	Inventory ");
 		printf("%s\n","	Tekan Enter untuk kembali ke Preparation Phase");
 		break;
 	case NEW_GAME:
+		printf("%s\n","				Tombol aksi						 	 ");
 		printf("%s\n","					       Masukkan Nama 						 ");
 		printf("%s\n","		   ketik enter untuk next, ketik lainnya untuk back	     ");
 		break;
-	
+	case OFFICE:
+		printf("%s\n","		           Tombol aksi				 ");
+		printf("\n%s\n","Details : Lihat Detail Wahana, Report : Melihat Report Wahana, \nExit : Keluar dari Office");
 	default:
-		printf("%s\n","					       Masukkan Nama 						 ");
-		printf("%s\n","		   ketik enter untuk next, ketik lainnya untuk back	     ");
+		printf("\n");
 		break;
 	}
 }
