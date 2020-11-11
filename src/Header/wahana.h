@@ -45,4 +45,7 @@ void printListWahana(Wahana *W);
 void printDetailWahana(Wahana *W, char id);
 void printReportWahana(Wahana *W, char id);
 void printNotBuilded(Wahana *W);
+int countBrokenWahana(Wahana *W);
+void printBrokenWahana(Wahana *W);
+
 #endif

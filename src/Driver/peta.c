@@ -45,6 +45,17 @@ Wahana wahana;
 
 void UpdateWaktu(int n){
 	time = NextNMenit(time,n);
+	int broke = rand() % 2000;
+	if(broke == 69 || broke == 420 || broke == 34) {
+		int machine = rand() % 8;
+		if(wahana.TI[machine].status == 'G') {
+			wahana.TI[machine].status = 'B';
+			printf("OH NO!!! %s broke. Please repair it ASAP!!!\n", wahana.TI[machine].nama);
+			printf("Tekan tombol enter untuk melanjutkan permainan!!\n");
+			getchar();
+		}
+	}
+
 	if (state == MAIN_DAY && JAMToMenit(time) >= 1260) {
 		state = PREPARATION_DAY;
 	} else if (state == PREPARATION_DAY && JAMToMenit(time) >= 540 && JAMToMenit(time) <= 560){
@@ -120,6 +131,8 @@ void PrintMainDay() {
 	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d\n", "stranger", pmoney, 0);
 	printf("%s","Jam : ");
 	TulisJAM(time);
+	printf("\n");
+	printBrokenWahana(&wahana);
 	printf("%s\n","");
 	// Masih harus ngeprint data data seperti queue , broken wahana dll
 }
@@ -328,6 +341,8 @@ void PrintPreparationDay() {
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, 0);
 	printf("%s","Jam : ");
 	TulisJAM(time);
+	printf("\n");
+	printBrokenWahana(&wahana);
 	// Tulis Material yang dibutuhkan
 	printf("%s\n","");
 	printf("%s\n","==================================================================");

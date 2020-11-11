@@ -153,6 +153,31 @@ void printListWahana(Wahana *W) {
     }
 }
 
+int countBrokenWahana(Wahana *W) {
+    int res = 0;
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].status == 'B') {
+            res++;
+        }
+    }
+    return res;
+}
+
+void printBrokenWahana(Wahana *W) {
+    if(countBrokenWahana(W) == 0) {
+        printf("Tidak ada wahana yang sedang rusak.\n");
+    } else {
+        printf("Wahana yang sedang rusak :\n");
+        int count = 1;
+        for(int i = 0; i < 8; i++) {
+            if((*W).TI[i].status == 'B') {
+                printf("%d. %s\n", count, (*W).TI[i].nama);
+                count++;
+            }
+        }
+    }
+}
+
 void printNotBuilded(Wahana *W){
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].status == 'N'){
