@@ -8,7 +8,7 @@
 
 #define Nil NULL
 
-typedef char nama[100];
+typedef char string[100];
 typedef int infotype;
 
 typedef struct tNode *addrNode;
@@ -20,11 +20,9 @@ typedef struct tNode{
 
 typedef addrNode BinTree;
 
-extern BinTree tempTreeWahana[10];
-extern BinTree tempTreeKlasifikasi[10];
-extern BinTree treeWahana;
-extern BinTree treeKlasifikasi;
-extern BinTree arrWahana[10];
+extern BinTree listUpgrade[10];
+extern string arrNamaWahana[10];
+extern string arrUpgrade[10];
 
 #define Akar(P) (P)->info
 #define Left(P) (P)->left
@@ -32,7 +30,7 @@ extern BinTree arrWahana[10];
 
 void BuatTree(BinTree parent, BinTree l, BinTree r);
 
-void BuildTree(BinTree *P);
+void BuildTree();
 /* I.S P adalah tree kosong */
 /* F.S P adalah tree berisi bahan makanan dari restoran engi kitchen */
 
@@ -71,5 +69,7 @@ boolean isElement(BinTree P, infotype X);
 boolean isParent(BinTree Now, BinTree X, BinTree Y);
 
 void PrintTree(BinTree P, int h);
+
+void PrintUpgradeWahana(char id);
 
 #endif
