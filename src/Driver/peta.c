@@ -350,7 +350,20 @@ void InputOffice() {
 		printf("Masukkan ID Wahana yang ingin dilihat detailnya : ");
 		scanf("%c", &id);
 		getchar();
-		printInfo(&wahana, id);
+		printDetailWahana(&wahana, id);
+		printf("\nTekan sembarang tombol untuk kembali ke menu office");
+		getchar();
+		UpdateWaktu(5);
+	} else if (strcmp(input, "Report") == 0) {
+		printf("Daftar Wahana :\n");
+		printListWahana(&wahana);
+		printf("\n");
+
+		char id;
+		printf("Masukkan ID Wahana yang ingin dilihat reportnya : ");
+		scanf("%c", &id);
+		getchar();
+		printReportWahana(&wahana, id);
 		printf("\nTekan sembarang tombol untuk kembali ke menu office");
 		getchar();
 		UpdateWaktu(5);

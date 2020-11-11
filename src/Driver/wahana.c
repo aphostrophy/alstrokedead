@@ -120,17 +120,24 @@ int getTotalPenghasilan(Wahana *W, char id) {
     }
 }
 
-void printInfo(Wahana *W, char id) {
+void printDetailWahana(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id == id) {
             printf("Wahana ID : %c\n", (*W).TI[i].id);
             printf("Nama Wahana : %s\n", (*W).TI[i].nama);
-            printf("Harga Wahana : %d\n", (*W).TI[i].harga);
+            printf("Harga Tiket Wahana : %d\n", (*W).TI[i].harga);
             printf("Durasi Wahana : %d\n", (*W).TI[i].durasi);
             printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
             printf("Status Wahana : %c\n", (*W).TI[i].status);
             printf("Deskripsi Wahana : %s\n", (*W).TI[i].deskripsi);
-            printf("Penumpang yang sedang menaiki wahana : %d\n", (*W).TI[i].inside);
+            break;
+        }
+    }
+}
+
+void printReportWahana(Wahana *W, char id) {
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id == id) {
             printf("Jumlah Pengunjung Wahana hari ini : %d\n", (*W).TI[i].pengunjung);
             printf("Jumlah Penghasilan Wahana hari ini : %d\n", (*W).TI[i].penghasilan);
             printf("Jumlah Total Pengunjung Wahana : %d\n", (*W).TI[i].total_pengunjung);
