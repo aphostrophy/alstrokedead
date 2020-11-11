@@ -21,7 +21,7 @@ void START(char* namafile);
 		Jika CC != MARK maka EOP akan padam (false)
 		Jika CC = MARK maka EOP akan menyala (true) */
 
-void START2();
+void STARTBUY();
 /* Mesin siap dioperasikan. Pita disiapkan untuk dibaca.
 	Karakter pertama yang ada pada pita posisinya adalah pada jendela.
 	I.S. : sembarang
@@ -35,6 +35,8 @@ void ADV();
 	F.S. : CC adalah karakter berikutnya dari CC yang lama, 
 		CC mungkin = MARK
 		Jika  CC = MARK maka EOP akan menyala (true) */
+
+void ADVBUY();
 
 
 #endif

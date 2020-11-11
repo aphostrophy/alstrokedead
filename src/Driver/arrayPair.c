@@ -105,7 +105,6 @@ void ArrayPair_BacaIsi (TabInt * T, char * namafile){
     START(namafile);
     while(!EOP){
         IgnoreBlank();
-        EOP= true;
         if(EOL){
             even = (even+1)%2;
             j++;

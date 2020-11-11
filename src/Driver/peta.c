@@ -10,6 +10,7 @@
 #include "../Header/jam.h"
 #include "../Header/wahana.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 // =======================================================================================================
 
@@ -37,6 +38,8 @@ int count_aksi, need_money;
 TabInt Materials, Inventory;
 JAM time ;
 Wahana wahana;
+Kata CKata;
+boolean EndKata;
 
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
@@ -128,19 +131,91 @@ void PrintMainDay() {
 
 // ========================================Fungsi Preparation Day=========================================
 void HandleBuy() {
-	char action[100] ; char method[100] ; char barang[100]; char jumlah[100];
-	int jumlah2;
+	// char action[100] ; char method[100] ; char barang[100]; char jumlah[100]; char boolBuy[100] = {'b','u','y'};
+	Kata Action, StackEl, Barang, Jumlah;
+	int jumlah_int;
+	int null;
+	// char nullzone[100];
 	printf("Selamat Datang ke Menu Pembelian\n");
 	printf("Daftar Barang yang dapat dibeli: \n");
     ArrayPair_TulisIsiTabNumbering(Materials);printf("\n");
 	printf("Masukkan Barang yang ingin dibeli: ");
-	scanf("%s",&method); scanf("%s",&jumlah); scanf("%s",&barang);getchar();
-	jumlah2 = atoi(jumlah);
+	// scanf("%s",&method); scanf("%s",&jumlah); scanf("%s",&barang);getchar();
+	// jumlah_int = atoi(jumlah);
+
+	Kata BUY;
+   	int kata_ke = 1;
+    BUY.TabKata[0] = 'b';
+    BUY.TabKata[1] = 'u';
+    BUY.TabKata[2] = 'y';
+    BUY.Length = 3;
+    STARTBUY();
+    while(!EOP){
+		int i = 0;
+        while(CC!=BLANK){
+			CKata.TabKata[i] = CC;
+			if(CC=='\n'){
+				break;
+			}
+			i++;
+			CKata.Length=i;
+			ADV();
+		}
+		printf("%d",CKata.Length);
+		if(kata_ke==1){
+			Action = CKata;
+		} else if(kata_ke==2){
+			Jumlah = CKata;
+		} else if(kata_ke==3){
+			Barang = CKata;
+		}
+		if(CC=='\n'){
+			break;
+		}
+		kata_ke++;
+		IgnoreBlank();
+    }
+	for(int i=0;i<Action.Length;i++){
+		printf("%c",Action.TabKata[i]);
+	}
+	printf("\n");
+	for(int i=0;i<Jumlah.Length;i++){
+		printf("%c",Jumlah.TabKata[i]);
+	}
+	printf("\n");
+	for(int i=0;i<Barang.Length;i++){
+		printf("%c",Barang.TabKata[i]);
+	}
+	printf("\n");
+	jumlah_int = atoi(Jumlah.TabKata);
+	int materialPrice = ArrayPair_SearchByItem(Materials,Barang);
+	if(IsKataSama(Action,BUY) && materialPrice != IdxUndef){
+		if(pmoney>jumlah_int*materialPrice+need_money){
+			strcpy(StackEl.TabKata,"");strcat(StackEl.TabKata,Action.TabKata);strcat(StackEl.TabKata," ");strcat(StackEl.TabKata,Jumlah.TabKata);strcat(StackEl.TabKata," ");strcat(StackEl.TabKata,Barang.TabKata);
+			Push(&aksi,StackEl.TabKata);
+		} else{ // Uang tidak cukup
+			printf("Uang tidak cukup, tekan 0 untuk melanjutkan");
+			scanf("%d",&null);
+		}
+	} else{
+		printf("Command salah, tekan 0 untuk melanjutkan");
+		scanf("%d",&null);
+	}
+	// End of Parser
+
+
+	// if(IsArrCharSama(method,boolBuy)){
+	// 	// if(pmoney>=jumlah_int*)
+	// 	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,jumlah); strcat(action," "); strcat(action,barang);
+	// 	Push(&aksi,action);
+	// } else{
+	// 	printf("BEDA");
+	// 	int dummy;
+	// 	scanf("%d",dummy);
+	// }
 	// Validasi apakah yang diketik benar benar "buy"
 	// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , kalau ada validasi lain jg sabi
 	// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, kalo tidak keluarkan pesan error
-	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,jumlah); strcat(action," "); strcat(action,barang);
-	Push(&aksi,action);
 }
 
 void HandleBuild(){
