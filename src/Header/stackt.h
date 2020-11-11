@@ -41,7 +41,7 @@ void CreateEmpty (Stack *S);
 /* Ciri stack kosong : TOP bernilai Nil */
 
 /* ************ Predikat Untuk test keadaan KOLEKSI ************ */
-boolean IsEmpty (Stack S);
+boolean IsEmptyStack (Stack S);
 /* Mengirim true jika Stack kosong: lihat definisi di atas */
 boolean IsFull (Stack S);
 /* Mengirim true jika tabel penampung nilai elemen stack penuh */
@@ -69,5 +69,9 @@ void Reverse(Stack *S);
 void PrintStack(Stack S);
 /*	I.S. S tidak kosong dan terdefinisi */
 /*	F.S. Seluruh isi S dicetak */
+
+void AkuisisiBuy(infotype S, int* N, char benda[100]);
+void AkuisisiBuild(infotype S, int* buildX, int* buildY, int* buildMap, char bangunan[100]);
+void AkuisisiUpgrade(infotype S, int* N, char benda[100]);
 
 #endif

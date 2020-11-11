@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define NMax 50
+#define NMax 100
 #define BLANK ' '
 
 boolean EndKata = false;

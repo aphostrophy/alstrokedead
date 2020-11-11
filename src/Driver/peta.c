@@ -47,7 +47,7 @@ void UpdateWaktu(int n){
 	time = NextNMenit(time,n);
 	if (state == MAIN_DAY && JAMToMenit(time) >= 1260) {
 		state = PREPARATION_DAY;
-	} else if (state == PREPARATION_DAY && JAMToMenit(time) >= 540 && JAMToMenit(time) <= 550){
+	} else if (state == PREPARATION_DAY && JAMToMenit(time) >= 540 && JAMToMenit(time) <= 560){
 		state = MAIN_DAY;
 	}
 }
@@ -134,12 +134,120 @@ void HandleBuy() {
 	printf("Daftar Barang yang dapat dibeli: \n");
     ArrayPair_TulisIsiTabNumbering(Materials);printf("\n");
 	printf("Masukkan Barang yang ingin dibeli: ");
-	scanf("%s",&method); scanf("%s",&jumlah); scanf("%s",&barang);
+	scanf("%s",&method); scanf("%s",&jumlah); scanf("%s",&barang);getchar();
 	jumlah2 = atoi(jumlah);
+	// Validasi apakah yang diketik benar benar "buy"
+	// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , kalau ada validasi lain jg sabi
+	// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, kalo tidak keluarkan pesan error
 	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,jumlah); strcat(action," "); strcat(action,barang);
-	printf("%s", action);
+	Push(&aksi,action);
 }
 
+void HandleBuild(){
+	char action[100] ; char method[100] ; char bangunan[100]; char choice; char SbuildX[100]; char SbuildY[100]; char SbuildMap[100];
+	int PbuildX = 0; int PbuildY = 0; int PbuildMap = cmap;  //Membangun di koordinat (PbuildX,Pbuildy) di peta PbuildMap
+	printf("Selamat Datang ke Menu Pembangunan\n");
+	printf("Ingin membangun diposisi mana (w/a/s/d): \n");
+	scanf("%c",&choice);
+	// Mendapatkan lokasi mau dibangun dimana
+	if (choice == 'w') { PbuildX = Absis(playerpos) -1 ; PbuildY = Ordinat(playerpos) ;} 
+	else if (choice == 'a' ){ PbuildX = Absis(playerpos) ; PbuildY = Ordinat(playerpos)-1 ;} 
+	else if (choice == 's' ){ PbuildX = Absis(playerpos) +1 ; PbuildY = Ordinat(playerpos) ;} 
+	else if (choice == 'd' ){ PbuildX = Absis(playerpos)  ; PbuildY = Ordinat(playerpos) + 1 ;}
+	printf("Daftar Bangunan yang dapat dibangun: \n");
+	printNotBuilded(&wahana);
+	printf("Masukkan Bangunan yang ingin dibangun: ");
+	scanf("%s",&method); scanf("%s",&bangunan); getchar();
+	// Validasi apakah yang diketik benar benar "build"
+	// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup
+	// Validasi apakah tempat yang dipilih emang bisa dibangun, dan kalo ada validasi lagi juga sabi
+	// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
+	sprintf(SbuildX, "%d", PbuildX); sprintf(SbuildY, "%d", PbuildY); sprintf(SbuildMap, "%d", PbuildMap); sprintf(SbuildY, "%d", PbuildY);
+	// itoa(PbuildY, SbuildY, 10); itoa(PbuildX, SbuildX, 10); itoa(PbuildMap, SbuildMap, 10);
+	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,bangunan); strcat(action," "); strcat(action,SbuildX);strcat(action," "); strcat(action,SbuildY);strcat(action," "); strcat(action,SbuildMap);
+	Push(&aksi,action);
+}
+char getBangunanSekitar(){
+	if (Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='-'){
+		return Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos));
+	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='-'){
+		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1);
+	} else if (Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos))!='-'){
+		return Elmt(mapRoom, Absis(playerpos)-1, Ordinat(playerpos));
+	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1)!='-'){
+		return Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)-1);
+	} else {
+		return '*';
+	}
+}
+
+void HandleUpgrade(){
+	char action[100] ; char method[100] ; char upgrade[100]; 
+	char bangunan = getBangunanSekitar();
+	if (bangunan != '*'){
+		printf("Selamat Datang ke Menu Upgrade\n");
+		printf("Daftar Upgrade: \n");
+		// Ambil upgrade dari si bangunan dengan state sekarang
+		printf("Masukkan Upgrade yang ingin dilakukan: ");
+		scanf("%s",&method); scanf("%s",&upgrade);
+		// Validasi apakah yang diketik benar benar "upgrade"
+		// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup untuk upgrade
+		// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
+		strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,upgrade);
+		Push(&aksi,action);
+	}
+
+}
+
+void HandleUndo(){
+	if(!IsEmptyStack(aksi)){
+		infotype x ;
+		Pop(&aksi,&x);
+		if (x[0] == 'b' && x[2] == 'y'){
+			char benda[100]; int n; 
+			AkuisisiBuy(x,&n,benda);
+			printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
+			// Karena input sudah bisa di parse maka sisanya mestinya mudah
+			// Kurangi waktu yang dibutuhkan dari buy
+			// Kurangi uang yang dibutuhkan dari buy material 'benda' ini sejumlah 'n'
+		} else if (x[0] == 'b' && x[2] == 'i') {
+			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100];
+			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);
+			printf("%d %d %d %c", PbuildX,PbuildY,PbuildMap,bangunan[0]); getchar(); // Ini gw tes dengan ngeprint wkwk
+			// Karena input sudah bisa di parse maka sisanya mestinya mudah
+			// Kurangi waktu yang dibutuhkan dari buy
+			// Kurangi uang yang dibutuhkan dari buy material 'benda' ini sejumlah 'n'
+		} else if (x[0] == 'u'){
+			printf("upgrade"); getchar();
+		}
+	}
+}
+
+void HandleExecution(){
+	infotype x;
+	// Tambah waktu sekarang dengan waktu dibutuhkan total
+	// Kurangi uang dengan uang yang dibutuhkan 
+	// Kurangi material dengan semua material dibutuhkan
+	Reverse(&aksi);
+	while(!IsEmptyStack(aksi)){
+		Pop(&aksi,&x);
+		if (x[0] == 'b' && x[2] == 'y'){
+			char benda[100]; int n; 
+			AkuisisiBuy(x,&n,benda);
+			printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
+			// Karena input sudah bisa di parse maka sisanya mestinya mudah
+			// Tambah material 'benda' di inventory sesuai jumlah 'n'
+		} else if (x[0] == 'b' && x[2] == 'i') {
+			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100];
+			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);
+			// Karena input sudah bisa di parse maka sisanya mestinya mudah
+			Elmt(map[PbuildMap],PbuildX,PbuildY) = bangunan[0];
+			// Set Status dari wahana yang dibabngun menjadi aktif
+		} else if (x[0] == 'u'){
+			printf("upgrade"); getchar();
+		}
+	}
+}
 
 void InputPreparationDay (int inpt) {
 	// Mengelola input yang diterima konsol saat main day dan tindakan yang dilakukan setelah input itu
@@ -159,15 +267,22 @@ void InputPreparationDay (int inpt) {
 		state = MAIN_DAY;
 		Hour(time) = 9 ;
 		Minute(time) = 0;
+		infotype x;
+		while(!IsEmptyStack(aksi)){
+			Pop(&aksi,&x);
+		}
 	} else if (inpt == INPUT_b){
-		int limit;
 		HandleBuy();
-		printf("Hayoloh");
-		scanf("%d",&limit);
 	} else if (inpt == INPUT_1){
 		state = INVENTORY;
-	} else{
-
+	} else if (inpt == INPUT_l) {
+		HandleBuild();
+	} else if(inpt == INPUT_k) { 
+		HandleUpgrade();
+	} else if (inpt == INPUT_j){
+		HandleUndo();
+	} else if (inpt == INPUT_2){
+		HandleExecution();
 	}
 }
 
@@ -213,7 +328,12 @@ void PrintPreparationDay() {
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, 0);
 	printf("%s","Jam : ");
 	TulisJAM(time);
+	// Tulis Material yang dibutuhkan
 	printf("%s\n","");
+	printf("%s\n","==================================================================");
+	printf("%s\n","Stack of Your Action");
+	PrintStack(aksi);
+	printf("%s\n","==================================================================");
 	// Masih harus ngeprint data data seperti stack dll
 }
 
@@ -240,7 +360,7 @@ void GameSetup (){
 	count_aksi = 0 ;
 	need_money = 0 ;
 	pmoney = 10000 ;
-	Hour(time) = 20 ;
+	Hour(time) = 9 ;
 	Minute(time) = 0 ;
 	makeListWahana(&wahana);
 }
@@ -358,7 +478,7 @@ void PrintFooter(){
 	case PREPARATION_DAY:
 		printf("%s\n","	Preparation Day");
 		printf("%s\n","	w : atas a : kiri  s : bawah  d: kanan i: masuk ke main day");
-		printf("%s\n"," b: buy l : build u : upgrade z : undo r : execute 1 : inventory" );
+		printf("%s\n"," b: buy l : build k : upgrade j : undo 2 : execute 1 : inventory" ); 
 		break;
 	case INVENTORY:
 		printf("%s\n","	Inventory ");

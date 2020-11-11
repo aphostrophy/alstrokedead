@@ -139,3 +139,11 @@ void printInfo(Wahana *W, char id) {
         }
     }
 }
+
+void printNotBuilded(Wahana *W){
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].status == 'N'){
+            printf("%s\n", (*W).TI[i].nama);
+        }
+    }
+}

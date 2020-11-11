@@ -42,5 +42,5 @@ int getPenghasilan(Wahana *W, char id);
 int getTotalPengunjung(Wahana *W, char id);
 int getTotalPenghasilan(Wahana *W, char id);
 void printInfo(Wahana *W, char id);
-
+void printNotBuilded(Wahana *W);
 #endif
