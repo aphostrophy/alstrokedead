@@ -270,14 +270,19 @@ void HandleBuild(){
 			kata_ke++;
 			IgnoreBlank();
 		}
+		if(IsKataSama(Method,BUILD)){
+			sprintf(SbuildX, "%d", PbuildX); sprintf(SbuildY, "%d", PbuildY); sprintf(SbuildMap, "%d", PbuildMap); sprintf(SbuildY, "%d", PbuildY);
+			// itoa(PbuildY, SbuildY, 10); itoa(PbuildX, SbuildX, 10); itoa(PbuildMap, SbuildMap, 10);
+			strcpy(StackEl.TabKata,""); StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," ");StackEl.Length++; strcat(StackEl.TabKata,SbuildX);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildY);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildMap);
+			Push(&aksi,StackEl.TabKata);
+		} else{
+			printf("Invalid Command!");
+			getchar();
+		}
 		// Validasi apakah yang diketik benar benar "build"
 		// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup
 		// Validasi apakah tempat yang dipilih emang bisa dibangun, dan kalo ada validasi lagi juga sabi
 		// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
-		sprintf(SbuildX, "%d", PbuildX); sprintf(SbuildY, "%d", PbuildY); sprintf(SbuildMap, "%d", PbuildMap); sprintf(SbuildY, "%d", PbuildY);
-		// itoa(PbuildY, SbuildY, 10); itoa(PbuildX, SbuildX, 10); itoa(PbuildMap, SbuildMap, 10);
-		strcpy(StackEl.TabKata,""); StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," ");StackEl.Length++; strcat(StackEl.TabKata,SbuildX);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildY);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildMap);
-		Push(&aksi,StackEl.TabKata);
 	} else{
 		printf("Invalid location!");
 		getchar();
