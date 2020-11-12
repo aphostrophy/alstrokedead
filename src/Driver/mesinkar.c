@@ -24,7 +24,7 @@ void START(char *namafile) {
 	ADV();
 }
 
-void START2() {
+void STARTBUY() {
 /* Mesin siap dioperasikan. Pita disiapkan untuk dibaca.
   Karakter pertama yang ada pada pita posisinya adalah pada jendela.
   I.S. : sembarang

@@ -1,0 +1,17 @@
+SkyCoaster
+1500
+PirateShip
+1500
+Tornado
+2000
+Carousel
+1300
+HauntedHouse
+1000
+FerrisWheel
+2000
+BumperCars
+1500
+GyroDrop
+1800
+.

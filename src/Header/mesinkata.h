@@ -31,6 +31,8 @@ void STARTKATA();
           atau EndKata = false, CKata adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 
+void STARTKATAHANDLEBUY();
+
 void ADVKATA();
 /* I.S. : CC adalah karakter pertama kata yang akan diakuisisi 
    F.S. : CKata adalah kata terakhir yang sudah diakuisisi, 
@@ -47,5 +49,9 @@ void SalinKata();
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 void AKUISISI_BUY(char *action, char* method, int* jumlah, char barang );
 // Mengakuisisi kata berbasis buy
+
+boolean IsKataSama (Kata K1, Kata K2);
+
+Kata KataConcat(Kata K1,Kata K2);
 
 #endif

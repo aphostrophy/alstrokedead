@@ -1,0 +1,15 @@
+buy
+20
+build
+40
+upgrade
+60
+w
+1
+a
+1
+s
+1
+d
+1
+.

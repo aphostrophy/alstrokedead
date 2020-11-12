@@ -1,9 +1,0 @@
-Makan
-5
-Minum
-1
-Mandi
-10
-Sikat
-3
-.

@@ -41,12 +41,13 @@ void STARTKATA(char *namafile)
           atau EndKata = false, CKata adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 
-void STARTKATAHANDLEBUY(char *namafile)
+void STARTKATAHANDLEBUY()
 {
-    START(namafile);
+    STARTBUY();
     IgnoreBlank();
-    if (CC == MARK)
+    if (CC == NEWLINE)
     {
+        printf("Newline terbaca");
         EndKata = true;
     }
     else /* CC != MARK */
@@ -75,13 +76,26 @@ void ADVKATA()
           Jika CC = MARK, EndKata = true.          
    Proses : Akuisisi kata menggunakan procedure SalinKata */
 
+void ADVBUYKATA()
+{
+    IgnoreBlank();
+    if (CC == NEWLINE)
+    {
+        EndKata = true;
+    }
+    else /* CC != MARK */
+    {
+        SalinKata();
+        IgnoreBlank();
+    }
+}
+
 void SalinKata()
 {
     int i = 0;
     while ((CC != MARK) && (CC != BLANK) && (i < NMax))
     {
         CKata.TabKata[i] = CC;
-		printf("%c",CC);
         ADV();
         i++;
     } /* CC = MARK or CC = BLANK */
@@ -107,4 +121,28 @@ void AKUISISI_BUY(char *action, char* method, int* jumlah, char barang )
 	token = strtok(NULL, " ");
 	barang = token[0];
 
+}
+
+boolean IsKataSama (Kata K1, Kata K2){
+   int i=0;
+   if(K1.Length!=K2.Length){
+      return false;
+   } else{
+      while(i<K1.Length){
+         if(K1.TabKata[i]!=K2.TabKata[i]){
+             return false;
+         }
+         i++;
+      }
+      return true;
+   }
+}
+
+Kata KataConcat(Kata K1, Kata K2){
+    // for(int i=K1.Length;i<K1.Length+K2.Length;i++){
+    //     K1.TabKata[i] = K2.TabKata[i-K1.Length];
+    // }
+    strncat(K1.TabKata,K2.TabKata,K2.Length);
+    K1.Length = K1.Length + K2.Length;
+    return K1;
 }
