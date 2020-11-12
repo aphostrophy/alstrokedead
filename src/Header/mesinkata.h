@@ -52,6 +52,6 @@ void AKUISISI_BUY(char *action, char* method, int* jumlah, char barang );
 
 boolean IsKataSama (Kata K1, Kata K2);
 
-boolean IsArrCharSama (char K1[100], char K2[100]);
+Kata KataConcat(Kata K1,Kata K2);
 
 #endif

@@ -138,13 +138,10 @@ boolean IsKataSama (Kata K1, Kata K2){
    }
 }
 
-boolean IsArrCharSama(char K1[100],char K2[100]){
-    int i=0;
-    while(i<100){
-        if(K1[i]!=K2[i]){
-            return false;
-        }
-        i++;
+Kata KataConcat(Kata K1, Kata K2){
+    for(int i=K1.Length;i<K1.Length+K2.Length;i++){
+        K1.TabKata[i] = K2.TabKata[i-K1.Length];
     }
-    return true;
+    K1.Length = K1.Length + K2.Length;
+    return K1;
 }

@@ -134,7 +134,6 @@ void HandleBuy() {
 	// char action[100] ; char method[100] ; char barang[100]; char jumlah[100]; char boolBuy[100] = {'b','u','y'};
 	Kata Action, StackEl, Barang, Jumlah;
 	int jumlah_int;
-	int null;
 	// char nullzone[100];
 	printf("Selamat Datang ke Menu Pembelian\n");
 	printf("Daftar Barang yang dapat dibeli: \n");
@@ -152,6 +151,7 @@ void HandleBuy() {
     STARTBUY();
     while(!EOP){
 		int i = 0;
+		CKata.Length=0;
         while(CC!=BLANK){
 			CKata.TabKata[i] = CC;
 			if(CC=='\n'){
@@ -161,7 +161,7 @@ void HandleBuy() {
 			CKata.Length=i;
 			ADV();
 		}
-		printf("%d",CKata.Length);
+		// printf("%d\n",CKata.Length);
 		if(kata_ke==1){
 			Action = CKata;
 		} else if(kata_ke==2){
@@ -175,31 +175,21 @@ void HandleBuy() {
 		kata_ke++;
 		IgnoreBlank();
     }
-	for(int i=0;i<Action.Length;i++){
-		printf("%c",Action.TabKata[i]);
-	}
-	printf("\n");
-	for(int i=0;i<Jumlah.Length;i++){
-		printf("%c",Jumlah.TabKata[i]);
-	}
-	printf("\n");
-	for(int i=0;i<Barang.Length;i++){
-		printf("%c",Barang.TabKata[i]);
-	}
-	printf("\n");
 	jumlah_int = atoi(Jumlah.TabKata);
-	int materialPrice = ArrayPair_SearchByItem(Materials,Barang);
-	if(IsKataSama(Action,BUY) && materialPrice != IdxUndef){
-		if(pmoney>jumlah_int*materialPrice+need_money){
-			strcpy(StackEl.TabKata,"");strcat(StackEl.TabKata,Action.TabKata);strcat(StackEl.TabKata," ");strcat(StackEl.TabKata,Jumlah.TabKata);strcat(StackEl.TabKata," ");strcat(StackEl.TabKata,Barang.TabKata);
+	int materialIndex = ArrayPair_SearchByItem(Materials,Barang);
+	if(IsKataSama(Action,BUY) && materialIndex != IdxUndef){
+		if(pmoney>=jumlah_int*Pair_Cost(Materials,materialIndex)+need_money){
+			need_money = need_money + jumlah_int*Pair_Cost(Materials,materialIndex);
+			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Jumlah);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Barang);
 			Push(&aksi,StackEl.TabKata);
 		} else{ // Uang tidak cukup
-			printf("Uang tidak cukup, tekan 0 untuk melanjutkan");
-			scanf("%d",&null);
+			printf("%d\n",jumlah_int*Pair_Cost(Materials,materialIndex)+need_money);
+			printf("Uang tidak cukup, tekan 0 untuk melanjutkan\n");
+			getchar();
 		}
 	} else{
-		printf("Command salah, tekan 0 untuk melanjutkan");
-		scanf("%d",&null);
+		printf("Command salah, tekan 0 untuk melanjutkan\n");
+		getchar();
 	}
 	// End of Parser
 
