@@ -134,13 +134,11 @@ void HandleBuy() {
 	// char action[100] ; char method[100] ; char barang[100]; char jumlah[100]; char boolBuy[100] = {'b','u','y'};
 	Kata Action, StackEl, Barang, Jumlah;
 	int jumlah_int;
-	// char nullzone[100];
+
 	printf("Selamat Datang ke Menu Pembelian\n");
 	printf("Daftar Barang yang dapat dibeli: \n");
     ArrayPair_TulisIsiTabNumbering(Materials);printf("\n");
 	printf("Masukkan Barang yang ingin dibeli: ");
-	// scanf("%s",&method); scanf("%s",&jumlah); scanf("%s",&barang);getchar();
-	// jumlah_int = atoi(jumlah);
 
 	Kata BUY;
    	int kata_ke = 1;
@@ -161,7 +159,6 @@ void HandleBuy() {
 			CKata.Length=i;
 			ADV();
 		}
-		// printf("%d\n",CKata.Length);
 		if(kata_ke==1){
 			Action = CKata;
 		} else if(kata_ke==2){
@@ -182,27 +179,18 @@ void HandleBuy() {
 			need_money = need_money + jumlah_int*Pair_Cost(Materials,materialIndex);
 			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Jumlah);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Barang);
 			Push(&aksi,StackEl.TabKata);
+			Pair_Cost(Inventory,materialIndex) += jumlah_int; // Menambah jumlah barang di inventory
 		} else{ // Uang tidak cukup
 			printf("%d\n",jumlah_int*Pair_Cost(Materials,materialIndex)+need_money);
-			printf("Uang tidak cukup, tekan 0 untuk melanjutkan\n");
+			printf("Uang tidak cukup! Tekan apapun untuk melanjutkan\n");
 			getchar();
 		}
 	} else{
-		printf("Command salah, tekan 0 untuk melanjutkan\n");
+		printf("Command salah! Tekan apapun untuk melanjutkan\n");
 		getchar();
 	}
 	// End of Parser
 
-
-	// if(IsArrCharSama(method,boolBuy)){
-	// 	// if(pmoney>=jumlah_int*)
-	// 	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,jumlah); strcat(action," "); strcat(action,barang);
-	// 	Push(&aksi,action);
-	// } else{
-	// 	printf("BEDA");
-	// 	int dummy;
-	// 	scanf("%d",dummy);
-	// }
 	// Validasi apakah yang diketik benar benar "buy"
 	// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , kalau ada validasi lain jg sabi
 	// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, kalo tidak keluarkan pesan error
@@ -247,19 +235,57 @@ char getBangunanSekitar(){
 }
 
 void HandleUpgrade(){
-	char action[100] ; char method[100] ; char upgrade[100]; 
+	// char action[100] ; char method[100] ; char upgrade[100]; 
+	Kata Action, Nama_Wahana, StackEl;
 	char bangunan = getBangunanSekitar();
 	if (bangunan != '*'){
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
-		scanf("%s",&method); scanf("%s",&upgrade);
+		Kata UPGRADE;
+		int kata_ke = 1;
+		UPGRADE.TabKata[0] = 'u';UPGRADE.TabKata[1] = 'p';UPGRADE.TabKata[2] = 'g';UPGRADE.TabKata[3] = 'r';UPGRADE.TabKata[4] = 'a';UPGRADE.TabKata[5] = 'd';UPGRADE.TabKata[6]= 'e';
+		UPGRADE.Length = 7;
+		STARTBUY();
+		while(!EOP){
+			int i = 0;
+			CKata.Length=0;
+			while(CC!=BLANK){
+				CKata.TabKata[i] = CC;
+				if(CC=='\n'){
+					break;
+				}
+				i++;
+				CKata.Length=i;
+				ADV();
+			}
+			if(kata_ke==1){
+				Action = CKata;
+			} else if(kata_ke==2){
+				Nama_Wahana = CKata;
+			}
+			if(CC=='\n'){
+				break;
+			}
+			kata_ke++;
+			IgnoreBlank();
+		}
+		if(IsKataSama(Action, UPGRADE)){
+			//Validasi, tapi belum soalnya g tau dmn :v
+
+		} else{
+			printf("Command salah! Tekan apapun untuk melanjutkan\n");
+			getchar();
+		}
 		// Validasi apakah yang diketik benar benar "upgrade"
 		// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup untuk upgrade
 		// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
-		strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,upgrade);
-		Push(&aksi,action);
+		strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
+		Push(&aksi,StackEl.TabKata);
+	} else{
+		printf("Tidak ada wahana di sekitar Anda");
+		getchar();
 	}
 
 }
