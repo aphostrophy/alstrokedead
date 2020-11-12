@@ -201,24 +201,88 @@ void HandleBuild(){
 	int PbuildX = 0; int PbuildY = 0; int PbuildMap = cmap;  //Membangun di koordinat (PbuildX,Pbuildy) di peta PbuildMap
 	printf("Selamat Datang ke Menu Pembangunan\n");
 	printf("Ingin membangun diposisi mana (w/a/s/d): \n");
-	scanf("%c",&choice);
+	Kata Choice,BUILD,StackEl;
+   	int kata_ke = 1;
+    BUILD.TabKata[0] = 'b'; BUILD.TabKata[1] = 'u'; BUILD.TabKata[2] = 'i';BUILD.TabKata[3] = 'l'; BUILD.TabKata[4] ='d';
+    BUILD.Length = 5;
+	STARTBUY();
+	while(!EOP){
+		int i = 0;
+		CKata.Length=0;
+		while(CC!=BLANK){
+			CKata.TabKata[i] = CC;
+			if(CC=='\n'){
+				break;
+			}
+			i++;
+			CKata.Length=i;
+			ADV();
+		}
+		if(kata_ke==1){
+			Choice = CKata;
+		}
+		if(CC=='\n'){
+			break;
+		}
+		kata_ke++;
+		IgnoreBlank();
+	}
 	// Mendapatkan lokasi mau dibangun dimana
-	if (choice == 'w') { PbuildX = Absis(playerpos) -1 ; PbuildY = Ordinat(playerpos) ;} 
-	else if (choice == 'a' ){ PbuildX = Absis(playerpos) ; PbuildY = Ordinat(playerpos)-1 ;} 
-	else if (choice == 's' ){ PbuildX = Absis(playerpos) +1 ; PbuildY = Ordinat(playerpos) ;} 
-	else if (choice == 'd' ){ PbuildX = Absis(playerpos)  ; PbuildY = Ordinat(playerpos) + 1 ;}
-	printf("Daftar Bangunan yang dapat dibangun: \n");
-	printNotBuilded(&wahana);
-	printf("Masukkan Bangunan yang ingin dibangun: ");
-	scanf("%s",&method); scanf("%s",&bangunan); getchar();
-	// Validasi apakah yang diketik benar benar "build"
-	// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup
-	// Validasi apakah tempat yang dipilih emang bisa dibangun, dan kalo ada validasi lagi juga sabi
-	// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
-	sprintf(SbuildX, "%d", PbuildX); sprintf(SbuildY, "%d", PbuildY); sprintf(SbuildMap, "%d", PbuildMap); sprintf(SbuildY, "%d", PbuildY);
-	// itoa(PbuildY, SbuildY, 10); itoa(PbuildX, SbuildX, 10); itoa(PbuildMap, SbuildMap, 10);
-	strcpy(action,""); strcat(action,method); strcat(action," "); strcat(action,bangunan); strcat(action," "); strcat(action,SbuildX);strcat(action," "); strcat(action,SbuildY);strcat(action," "); strcat(action,SbuildMap);
-	Push(&aksi,action);
+	if(Choice.TabKata[0]=='w' || Choice.TabKata[0]=='a' || Choice.TabKata[0]=='s' || Choice.TabKata[0]=='d'){
+		if (Choice.TabKata[0] == 'w') { PbuildX = Absis(playerpos) -1 ; PbuildY = Ordinat(playerpos) ;} 
+		else if (Choice.TabKata[0] == 'a' ){ PbuildX = Absis(playerpos) ; PbuildY = Ordinat(playerpos)-1 ;} 
+		else if (Choice.TabKata[0] == 's' ){ PbuildX = Absis(playerpos) +1 ; PbuildY = Ordinat(playerpos) ;} 
+		else if (Choice.TabKata[0] == 'd' ){ PbuildX = Absis(playerpos)  ; PbuildY = Ordinat(playerpos) + 1 ;}
+		printf("Daftar Bangunan yang dapat dibangun: \n");
+		printNotBuilded(&wahana);
+		printf("Masukkan Bangunan yang ingin dibangun: ");
+		Kata Method, Bangunan;
+		STARTBUY();
+		while(!EOP){
+			int i = 0;
+			CKata.Length=0;
+			if(kata_ke==1){
+				while(CC!=BLANK){
+					CKata.TabKata[i] = CC;
+					if(CC=='\n'){
+						break;
+					}
+					i++;
+					CKata.Length=i;
+					ADV();
+					}
+				Method = CKata;
+			} else if(kata_ke==2){
+				while(true){
+					CKata.TabKata[i] = CC;
+					if(CC=='\n'){
+						break;
+					}
+					i++;
+					CKata.Length=i;
+					ADV();
+				}
+				Bangunan = CKata;
+			}
+			if(CC=='\n'){
+				break;
+			}
+			kata_ke++;
+			IgnoreBlank();
+		}
+		// Validasi apakah yang diketik benar benar "build"
+		// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup
+		// Validasi apakah tempat yang dipilih emang bisa dibangun, dan kalo ada validasi lagi juga sabi
+		// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
+		sprintf(SbuildX, "%d", PbuildX); sprintf(SbuildY, "%d", PbuildY); sprintf(SbuildMap, "%d", PbuildMap); sprintf(SbuildY, "%d", PbuildY);
+		// itoa(PbuildY, SbuildY, 10); itoa(PbuildX, SbuildX, 10); itoa(PbuildMap, SbuildMap, 10);
+		strcpy(StackEl.TabKata,""); StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," ");StackEl.Length++; strcat(StackEl.TabKata,SbuildX);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildY);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildMap);
+		Push(&aksi,StackEl.TabKata);
+	} else{
+		printf("Invalid location!");
+		getchar();
+	}
+
 }
 char getBangunanSekitar(){
 	if (Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='-'){
@@ -272,8 +336,9 @@ void HandleUpgrade(){
 			IgnoreBlank();
 		}
 		if(IsKataSama(Action, UPGRADE)){
-			//Validasi, tapi belum soalnya g tau dmn :v
-
+			//Validasi di sini, tapi belum ,soalnya g tau dmn :v
+			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
+			Push(&aksi,StackEl.TabKata);
 		} else{
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
 			getchar();
@@ -281,8 +346,6 @@ void HandleUpgrade(){
 		// Validasi apakah yang diketik benar benar "upgrade"
 		// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup untuk upgrade
 		// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
-		strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
-		Push(&aksi,StackEl.TabKata);
 	} else{
 		printf("Tidak ada wahana di sekitar Anda");
 		getchar();
