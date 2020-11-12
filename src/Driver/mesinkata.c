@@ -139,9 +139,10 @@ boolean IsKataSama (Kata K1, Kata K2){
 }
 
 Kata KataConcat(Kata K1, Kata K2){
-    for(int i=K1.Length;i<K1.Length+K2.Length;i++){
-        K1.TabKata[i] = K2.TabKata[i-K1.Length];
-    }
+    // for(int i=K1.Length;i<K1.Length+K2.Length;i++){
+    //     K1.TabKata[i] = K2.TabKata[i-K1.Length];
+    // }
+    strncat(K1.TabKata,K2.TabKata,K2.Length);
     K1.Length = K1.Length + K2.Length;
     return K1;
 }

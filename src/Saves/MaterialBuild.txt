@@ -1,0 +1,17 @@
+SkyCoaster
+5
+PirateShip
+4
+Tornado
+5
+Carousel
+6
+HauntedHouse
+8
+FerrisWheel
+5
+BumperCars
+4
+GyroDrop
+6
+.
