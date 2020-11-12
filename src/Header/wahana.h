@@ -41,7 +41,13 @@ int getPengunjung(Wahana *W, char id);
 int getPenghasilan(Wahana *W, char id);
 int getTotalPengunjung(Wahana *W, char id);
 int getTotalPenghasilan(Wahana *W, char id);
-void printInfo(Wahana *W, char id);
+void printListWahana(Wahana *W);
+void printDetailWahana(Wahana *W, char id);
+void printReportWahana(Wahana *W, char id);
 void printNotBuilded(Wahana *W);
 int GetIndex(Wahana *W, char id);
+int countBrokenWahana(Wahana *W);
+void printBrokenWahana(Wahana *W);
+
+
 #endif
