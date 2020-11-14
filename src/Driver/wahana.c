@@ -2,39 +2,140 @@
 #include <string.h>
 #include "../Header/boolean.h"
 #include "../Header/wahana.h"
+#include "mesinkar.c"
+#include "mesinkata.c"
 
 string arrNamaWahana[10] = {"SkyCoaster", "PirateShip", "Tornado", "Carousel", "HauntedHouse", "FerrisWheel", "BumperCars", "GyroDrop"};
-char idWahana[8] = {'S', 'P', 'T', 'C', 'H', 'F','B','G'};
-int arrHargaWahana[8] = {10000, 15000, 50000, 40000, 5000, 10000, 75000, 50000};
+string idWahana[8] = {'S', 'P', 'T', 'C', 'H', 'F','B','G'};
+int arrHargaWahana[8] = {10000, 15000, 50000, 40000, 20000, 10000, 75000, 50000};
 int durasiWahana[8] = {20, 15, 10, 10, 25, 20, 15, 10};
 int arrKapasitas[8] = {8, 6, 4, 8, 2, 6, 4, 8};
 string arrDeskripsi[8] = {"Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi"};
 
 /* KONSTUKTOR */
-Wahana makeListWahana(Wahana *W) {
-    int i;
-    for(i = 0; i < 8; i++) {
-        (*W).TI[i].id = idWahana[i];
-        strcpy((*W).TI[i].nama, arrNamaWahana[i]);
-        (*W).TI[i].harga = arrHargaWahana[i];
-        (*W).TI[i].durasi = durasiWahana[i];
-        (*W).TI[i].kapasitas = arrKapasitas[i];
-        (*W).TI[i].status = 'N'; //inisiasi dengan not build
-        strcpy((*W).TI[i].deskripsi, arrDeskripsi[i]);
+// void makeListWahana(Wahana *W) {
+//     int i;
+//     for(i = 0; i < 8; i++) {
+//         strcpy((*W).TI[i].id, idWahana[i]);
+//         strcpy((*W).TI[i].nama, arrNamaWahana[i]);
+//         (*W).TI[i].harga = arrHargaWahana[i];
+//         (*W).TI[i].durasi = durasiWahana[i];
+//         (*W).TI[i].kapasitas = arrKapasitas[i];
+//         (*W).TI[i].status = 'N'; //inisiasi dengan not build
+//         strcpy((*W).TI[i].deskripsi, arrDeskripsi[i]);
 
-        //inisiasi jumlah pengunjung dan penghasilan dengan 0
-        (*W).TI[i].inside = 0;
-        (*W).TI[i].pengunjung = 0;
-        (*W).TI[i].total_pengunjung = 0;
-        (*W).TI[i].penghasilan = 0;
-        (*W).TI[i].total_penghasilan = 0;
+//         //inisiasi jumlah pengunjung dan penghasilan dengan 0
+//         (*W).TI[i].inside = 0;
+//         (*W).TI[i].pengunjung = 0;
+//         (*W).TI[i].total_pengunjung = 0;
+//         (*W).TI[i].penghasilan = 0;
+//         (*W).TI[i].total_penghasilan = 0;
+//     }
+// }
+
+void bacaWahana(Wahana *W, char* namaFile) {
+    /* I.S. List Wahana valid dan namafile valid
+	/* F.S. W terdefinisi nilai */
+	/* Proses: membaca nilai per baris */
+    
+    Kata id, nama, deskripsi, bil1, bil2, bil3;
+    int harga, durasi, kapasitas;
+	int infoKe = 0;
+    int kataKe = 1;
+    
+	START(namaFile);
+    
+	while (!EOP){
+        int i = 0;
+        CKata.Length = 0;
+        while(CC != BLANK){
+            if(CC == '\n') {
+                ADV();
+                break;
+            }
+            if(CC == '.') {
+                break;
+            }
+            
+            CKata.TabKata[i] = CC;
+            i++;
+            CKata.Length = i;
+            // printf("%s %d\n", CKata.TabKata, CKata.Length);
+            ADV();
+        }
+        switch(kataKe) {
+            case 1:
+                id = copyKata(CKata);
+                break;
+            case 2:
+                nama = copyKata(CKata);
+                break;
+            case 3:
+                bil1 = copyKata(CKata);
+                harga = atoi(bil1.TabKata);
+                break;
+            case 4:
+                bil2 = copyKata(CKata);
+                durasi = atoi(bil2.TabKata);
+                break;
+            case 5:
+                bil3 = copyKata(CKata);
+                kapasitas = atoi(bil3.TabKata);
+                break;
+            case 6:
+                deskripsi = copyKata(CKata);
+
+                // inisiasi list
+                (*W).TI[infoKe].id = copyKata(id);
+                (*W).TI[infoKe].nama = copyKata(nama);
+                (*W).TI[infoKe].harga = harga;
+                (*W).TI[infoKe].durasi = durasi;
+                (*W).TI[infoKe].kapasitas = kapasitas;
+                (*W).TI[infoKe].status = 'N'; //inisiasi dengan not build
+                (*W).TI[infoKe].deskripsi = copyKata(deskripsi);
+
+                //inisiasi jumlah pengunjung dan penghasilan dengan 0
+                (*W).TI[infoKe].inside = 0;
+                (*W).TI[infoKe].pengunjung = 0;
+                (*W).TI[infoKe].total_pengunjung = 0;
+                (*W).TI[infoKe].penghasilan = 0;
+                (*W).TI[infoKe].total_penghasilan = 0;
+
+                kataKe = 0;
+                infoKe++;
+                break;
+            default:
+                break;
+        }        
+        kataKe++;
+        IgnoreBlank();
+
+        if(CC == '.') {
+            break;
+        }
+	}
+}
+
+Kata copyKata(Kata in) {
+    Kata out;
+    // printf("%s %d\n", CKata.TabKata, CKata.Length);
+    out.Length = in.Length;
+    for(int i = 0; i < in.Length; i++) {
+        out.TabKata[i] = in.TabKata[i];
+    }
+    return out;
+}
+
+void printKata(Kata in) {
+    for(int i = 0; i < in.Length; i++) {
+        printf("%c", in.TabKata[i]);
     }
 }
 
 /* SELEKTOR */
-char* getNama(Wahana *W, char id) {
+Kata getNama(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].nama;
         }
     }
@@ -42,7 +143,7 @@ char* getNama(Wahana *W, char id) {
 
 int getHarga(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].harga;
         }
     }
@@ -50,7 +151,7 @@ int getHarga(Wahana *W, char id) {
 
 int getDurasi(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].durasi;
         }
     }
@@ -58,7 +159,7 @@ int getDurasi(Wahana *W, char id) {
 
 int getKapasitas(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].kapasitas;
         }
     }
@@ -66,15 +167,15 @@ int getKapasitas(Wahana *W, char id) {
 
 char getStatus(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].status;
         }
     }
 }
 
-char* getDeskripsi(Wahana *W, char id) {
+Kata getDeskripsi(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].deskripsi;
         }
     }
@@ -82,7 +183,7 @@ char* getDeskripsi(Wahana *W, char id) {
 
 int getInside(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].inside;
         }
     }
@@ -90,7 +191,7 @@ int getInside(Wahana *W, char id) {
 
 int getPengunjung(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].pengunjung;
         }
     }
@@ -98,7 +199,7 @@ int getPengunjung(Wahana *W, char id) {
 
 int getPenghasilan(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].penghasilan;
         }
     }
@@ -106,7 +207,7 @@ int getPenghasilan(Wahana *W, char id) {
 
 int getTotalPengunjung(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].total_pengunjung;
         }
     }
@@ -114,7 +215,7 @@ int getTotalPengunjung(Wahana *W, char id) {
 
 int getTotalPenghasilan(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return (*W).TI[i].total_penghasilan;
         }
     }
@@ -122,14 +223,14 @@ int getTotalPenghasilan(Wahana *W, char id) {
 
 void printDetailWahana(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
-            printf("Wahana ID : %c\n", (*W).TI[i].id);
-            printf("Nama Wahana : %s\n", (*W).TI[i].nama);
+        if((*W).TI[i].id.TabKata[0] == id) {
+            printKata((*W).TI[i].id); printf("\n");
+            printKata((*W).TI[i].nama); printf("\n");
             printf("Harga Tiket Wahana : %d\n", (*W).TI[i].harga);
             printf("Durasi Wahana : %d\n", (*W).TI[i].durasi);
             printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
             printf("Status Wahana : %c\n", (*W).TI[i].status);
-            printf("Deskripsi Wahana : %s\n", (*W).TI[i].deskripsi);
+            printKata((*W).TI[i].deskripsi); printf("\n");
             break;
         }
     }
@@ -137,7 +238,7 @@ void printDetailWahana(Wahana *W, char id) {
 
 void printReportWahana(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             printf("Jumlah Pengunjung Wahana hari ini : %d\n", (*W).TI[i].pengunjung);
             printf("Jumlah Penghasilan Wahana hari ini : %d\n", (*W).TI[i].penghasilan);
             printf("Jumlah Total Pengunjung Wahana : %d\n", (*W).TI[i].total_pengunjung);
@@ -149,7 +250,8 @@ void printReportWahana(Wahana *W, char id) {
 
 void printListWahana(Wahana *W) {
     for(int i = 0; i < 8; i++) {
-        printf("%s (%c)\n", (*W).TI[i].nama, (*W).TI[i].id);
+        printKata((*W).TI[i].nama); printf(" ");
+        printKata((*W).TI[i].id); printf("\n");
     }
 }
 
@@ -188,7 +290,7 @@ void printNotBuilded(Wahana *W){
 
 int GetIndex(Wahana *W, char id ){
     for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id == id) {
+        if((*W).TI[i].id.TabKata[0] == id) {
             return i;
         }
     }
