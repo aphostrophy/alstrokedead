@@ -1,0 +1,8 @@
+S SkyCoaster 10000 20 8 IniDeskripsi
+P PirateShip 15000 15 6 IniDeskripsi
+T Tornado 50000 10 4 IniDeskripsi
+C Carousel 40000 10 8 IniDeskripsi
+H HauntedHouse 20000 25 2 IniDeskripsi
+F FerrisWheel 10000 20 6 IniDeskripsi
+B BumperCars 75000 15 4 IniDeskripsi
+G GyroDrop 50000 10 8 IniDeskripsi.
