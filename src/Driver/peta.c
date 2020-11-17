@@ -28,6 +28,7 @@
 // =======================================================================================================
 
 // =========================Pendefinisian global variabel yang akan dipakai===============================
+char namaPlayer[100];
 int cmap;
 int state;
 MATRIKS map[5], mapRoom;
@@ -45,7 +46,8 @@ char ChoosenWahana;
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
 
-// ====================Pendefinisian kata supaya bisa di recognize mesinkar/kata==========================
+// ==================================== Fungsi Main Menu  ================================================
+
 
 // =======================================================================================================
 
@@ -205,7 +207,7 @@ void PrintMainDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
-	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", "stranger", pmoney, Durasi(time, tutup));
+	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer, pmoney, Durasi(time, tutup));
 	printf("%s","Jam : ");
 	TulisJAM(time);
 	printf("\n");
@@ -476,7 +478,6 @@ void HandleUndo(){
 			count_aksi = count_aksi - 1;
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
 			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
-			// Kurangi waktu yang dibutuhkan dari buy
 		} else if (x[0] == 'b' && x[2] == 'i') {
 			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100]; Kata Bangunan;
 			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);
@@ -676,6 +677,7 @@ void InputOffice() {
 // =========================================Fungsi Umum===================================================
 void GameSetup (){
 	// Setup awal untuk memulai game
+	strcpy(namaPlayer,"");
 	cmap = 0;
 	ArrayPair_MakeEmpty(&Materials);
 	ArrayPair_MakeEmpty(&Inventory);
@@ -695,7 +697,7 @@ void GameSetup (){
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
-	state = MAIN_DAY;
+	state = MAIN_MENU;
 	CopyMATRIKS(map[cmap], &mapRoom);
 	CreateEmpty(&aksi);
 	count_aksi = 0 ;
@@ -728,13 +730,17 @@ void PrintJudul (){
 void PrintMain(){
 	switch (state) {
 	case MAIN_MENU:
-		// Kebutuhan menu
+		printf("\n			SELAMAT DATANG DI GAME WILLY WANGKY'S WORLD!!!\n");
+		printf("	Silahkan pilih opsi main :\n");
+		printf("	1.NewGame\n");
+		printf("	2.LoadGame\n");
+		printf("	Silahkan ketik menu dengan benar\n");
 		break;
 	case NEW_GAME:
-		// Kebutuhan newgame
+		printf("\n		Silahkan masukkan nama pemain: \n");
 		break;
 	case LOAD_GAME:
-		// Kebutuhan load game
+		printf("\n		Silahkan masukkan nama pemain untuk diload: \n");
 		break;
 	case MAIN_DAY:
 		PrintMainDay();
@@ -743,7 +749,6 @@ void PrintMain(){
 		PrintPreparationDay();
 		break;
 	case OFFICE:
-		// List menu office diprint dan dipilih
 		printf("\nSELAMAT DATANG DI OFFICE WILLY WANGKY'S WORLD!!!\n\n");
 		break;
 	case OFFICE_DETAIL:
@@ -768,15 +773,43 @@ void PrintMain(){
 
 void BacaInput(){
 	int inpt;
+	char input[100]; char name[100];
 	switch (state) {
 	case MAIN_MENU:
-		// Input yang ada di main menu
+		scanf("%s", &input);
+		getchar();
+		if(strcmp(input, "NewGame") == 0) {
+			state = NEW_GAME;
+		} else if (strcmp(input, "LoadGame") == 0) {
+			state = LOAD_GAME;
+		} else {
+			printf("Anda memasukkan input yang salah !, ketik enter untuk melanjutkan");
+			getchar();
+		}
 		break;
 	case NEW_GAME:
-		// Input saat player mau new game
+		scanf("%s", &name);
+		getchar();
+		if(strcmp(name, "Exit") == 0) {
+			state = MAIN_MENU;
+		} else {
+			strcpy(namaPlayer, name);
+			printf("Selamat bermain %s semoga senang :)", namaPlayer);
+			getchar();
+			state = MAIN_DAY;
+		}
 		break;
 	case LOAD_GAME:
-		// Input saat player mau load game
+		scanf("%s", &name);
+		getchar();
+		if(strcmp(name, "Exit") == 0) {
+			state = MAIN_MENU;
+		} else {
+			strcpy(namaPlayer, name);
+			printf("Selamat bermain %s semoga senang :)", namaPlayer);
+			getchar();
+			state = MAIN_DAY;
+		}
 		break;
 	case MAIN_DAY:
 		inpt = GetInput();
@@ -815,7 +848,7 @@ void PrintFooter(){
 	switch (state) {
 	case MAIN_MENU:
 		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","w : atas  s : bawah	 enter : pilih menu");
+		printf("%s\n","		Ketik menu yang ingin dipilih");
 		break;
 	case MAIN_DAY:
 		printf("%s\n","				Tombol aksi						 	 ");
@@ -840,9 +873,10 @@ void PrintFooter(){
 		printf("%s\n","	Tekan apapun untuk kembali ke Main Phase");
 		break;
 	case NEW_GAME:
-		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","					       Masukkan Nama 						 ");
-		printf("%s\n","		   ketik enter untuk next, ketik lainnya untuk back	     ");
+		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");
+		break;
+	case LOAD_GAME:
+		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");
 		break;
 	case OFFICE:
 		printf("%s\n","		           Tombol aksi				 ");
