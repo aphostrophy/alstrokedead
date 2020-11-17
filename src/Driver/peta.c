@@ -9,6 +9,7 @@
 #include "../Header/arrayPair.h"
 #include "../Header/jam.h"
 #include "../Header/wahana.h"
+#include "../Header/bintree.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -85,7 +86,7 @@ void UpdateWaktu(int n){
 			MaintoPrepDay();
 		} else {
 			int broke = rand() % 100;
-			if(broke == 69 || broke == 12 || broke >= 80) {
+			if(broke >= 95) {
 				int machine = rand() % 8;
 				if(wahana.TI[machine].status == 'G') {
 					wahana.TI[machine].status = 'B';
@@ -414,6 +415,7 @@ void HandleUpgrade(){
 	if (bangunan != '*'){
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
+		PrintUpgradeWahana(bangunan);
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;
@@ -445,7 +447,8 @@ void HandleUpgrade(){
 			IgnoreBlank();
 		}
 		if(IsKataSama(Action, UPGRADE)){
-			//Validasi di sini, tapi belum ,soalnya g tau dmn :v
+
+
 			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
 			Push(&aksi,StackEl.TabKata);
 		} else{
@@ -695,6 +698,7 @@ void GameSetup (){
 	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
 	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
+	BuildTree();
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
 	state = MAIN_MENU;

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "boolean.h"
+#include "../Header/linkedlist.h"
 
 typedef char string[100];
 typedef struct {
@@ -19,6 +20,7 @@ typedef struct {
     int penghasilan;
     int total_pengunjung;
     int total_penghasilan;
+    List upgrade;
 } Infotype;
 
 typedef struct { 

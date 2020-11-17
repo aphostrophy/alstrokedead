@@ -28,6 +28,8 @@ Wahana makeListWahana(Wahana *W) {
         (*W).TI[i].total_pengunjung = 0;
         (*W).TI[i].penghasilan = 0;
         (*W).TI[i].total_penghasilan = 0;
+        (*W).TI[i].upgrade;
+        CreateEmpty_LinkedList(&(*W).TI[i].upgrade);
     }
 }
 
