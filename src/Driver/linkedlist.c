@@ -1,5 +1,4 @@
 #include "../Header/linkedlist.h"
-#include "boolean.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,8 +15,8 @@ void CreateEmpty_LinkedList (List *L){
 /* F.S. Terbentuk list kosong */
 
 /****************** Manajemen Memori ******************/
-address Alokasi_LinkedList (infotype X){
-    address P = (ElmtList *) malloc(sizeof(ElmtList));
+linkedlist_address Alokasi_LinkedList (linkedlist_infotype X){
+    linkedlist_address P = (ElmtList *) malloc(sizeof(ElmtList));
     if(P != Nil_LinkedList) {
         Info_LinkedList(P) = X;
         Next_LinkedList(P) = Nil_LinkedList;
@@ -26,24 +25,24 @@ address Alokasi_LinkedList (infotype X){
         return Nil_LinkedList;
     }
 }
-/* Mengirimkan address hasil alokasi sebuah elemen */
-/* Jika alokasi berhasil, maka address tidak Nil_LinkedList, dan misalnya */
+/* Mengirimkan linkedlist_address hasil alokasi sebuah elemen */
+/* Jika alokasi berhasil, maka linkedlist_address tidak Nil_LinkedList, dan misalnya */
 /* menghasilkan P, maka Info_LinkedList(P)=X, Next_LinkedList(P)=Nil_LinkedList */
 /* Jika alokasi gagal, mengirimkan Nil_LinkedList */
-void Dealokasi_LinkedList (address *P){
+void Dealokasi_LinkedList (linkedlist_address *P){
     free(*P);
 }
 /* I.S. P terdefinisi */
 /* F.S. P dikembalikan ke sistem */
-/* Melakukan dealokasi/pengembalian address P */
+/* Melakukan dealokasi/pengembalian linkedlist_address P */
 
 /****************** PENCARIAN SEBUAH ELEMEN LIST ******************/
-address Search_LinkedList (List L, infotype X)
+linkedlist_address Search_LinkedList (List L, linkedlist_infotype X)
 /* Mencari apakah ada elemen list dengan Info_LinkedList(P)= X */
-/* Jika ada, mengirimkan address elemen tersebut. */
+/* Jika ada, mengirimkan linkedlist_address elemen tersebut. */
 /* Jika tidak ada, mengirimkan Nil_LinkedList */
 {
-    address P;
+    linkedlist_address P;
     boolean found=false;
     P = First_LinkedList(L);
     while(!found && P!=Nil_LinkedList) {
@@ -58,47 +57,47 @@ address Search_LinkedList (List L, infotype X)
 
 /****************** PRIMITIF BERDASARKAN Nil_LinkedListAI ******************/
 /*** PENAMBAHAN ELEMEN ***/
-void InsVFirst_LinkedList_LinkedList (List *L, infotype X)
+void InsVFirst_LinkedList_LinkedList (List *L, linkedlist_infotype X)
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen pertama dengan Nil_LinkedListai X jika alokasi berhasil */
 {
-    address P = Alokasi_LinkedList(X);
+    linkedlist_address P = Alokasi_LinkedList(X);
     if(P != Nil_LinkedList){
         Next_LinkedList(P) = First_LinkedList(*L);
         First_LinkedList(*L) = P;
     }
 }
-void InsVLast_LinkedList (List *L, infotype X)
+void InsVLast_LinkedList (List *L, linkedlist_infotype X)
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen list di akhir: elemen terakhir yang baru */
 /* berNil_LinkedListai X jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S. */
 {
-    address P = Alokasi_LinkedList(X);
+    linkedlist_address P = Alokasi_LinkedList(X);
     if(P != Nil_LinkedList){
         InsertLast_LinkedList(L, P);
     }
 }
 
 /*** PENGHAPUSAN ELEMEN ***/
-void DelVFirst_LinkedList_LinkedList (List *L, infotype *X)
+void DelVFirst_LinkedList (List *L, linkedlist_infotype *X)
 /* I.S. List L tidak kosong  */
 /* F.S. Elemen pertama list dihapus: Nil_LinkedListai Info_LinkedList disimpan pada X */
 /*      dan alamat elemen pertama di-dealokasi */
 {
-    address P;
+    linkedlist_address P;
     P = First_LinkedList(*L);
     *X = Info_LinkedList(P);
     DelFirst_LinkedList(L, &P);
     Dealokasi_LinkedList(&P);
 }
-void DelVLast_LinkedList (List *L, infotype *X)
+void DelVLast_LinkedList (List *L, linkedlist_infotype *X)
 /* I.S. list tidak kosong */
 /* F.S. Elemen terakhir list dihapus: Nil_LinkedListai Info_LinkedList disimpan pada X */
 /*      dan alamat elemen terakhir di-dealokasi */
 {
-    address P;
+    linkedlist_address P;
 
     DelLast_LinkedList(L, &P);
     *X = Info_LinkedList(P);
@@ -107,14 +106,14 @@ void DelVLast_LinkedList (List *L, infotype *X)
 
 /****************** PRIMITIF BERDASARKAN ALAMAT ******************/
 /*** PENAMBAHAN ELEMEN BERDASARKAN ALAMAT ***/
-void InsertFirst_LinkedList_LinkedList (List *L, address P)
+void InsertFirst_LinkedList (List *L, linkedlist_address P)
 /* I.S. Sembarang, P sudah dialokasi  */
-/* F.S. Menambahkan elemen ber-address P sebagai elemen pertama */
+/* F.S. Menambahkan elemen ber-linkedlist_address P sebagai elemen pertama */
 {
     Next_LinkedList(P) = First_LinkedList(*L);
     First_LinkedList(*L) = P;
 }
-void InsertAfter_LinkedList (List *L, address P, address Prec)
+void InsertAfter_LinkedList (List *L, linkedlist_address P, linkedlist_address Prec)
 /* I.S. Prec pastilah elemen list dan bukan elemen terakhir, */
 /*      P sudah dialokasi  */
 /* F.S. Insert P sebagai elemen sesudah elemen beralamat Prec */
@@ -122,11 +121,11 @@ void InsertAfter_LinkedList (List *L, address P, address Prec)
     Next_LinkedList(P) = Next_LinkedList(Prec);
     Next_LinkedList(Prec) = P;
 }
-void InsertLast_LinkedList (List *L, address P){
+void InsertLast_LinkedList (List *L, linkedlist_address P){
     if(IsEmpty_LinkedList(*L)){
         InsertFirst_LinkedList(L, P);
     } else{
-        address traverse;
+        linkedlist_address traverse;
         traverse = First_LinkedList(*L);
         while(Next_LinkedList(traverse) != Nil_LinkedList){
             traverse = Next_LinkedList(traverse);
@@ -138,7 +137,7 @@ void InsertLast_LinkedList (List *L, address P){
 /* F.S. P ditambahkan sebagai elemen terakhir yang baru */
 
 /*** PENGHAPUSAN SEBUAH ELEMEN ***/
-void DelFirst_LinkedList_LinkedList (List *L, address *P)
+void DelFirst_LinkedList (List *L, linkedlist_address *P)
 /* I.S. List tidak kosong */
 /* F.S. P adalah alamat elemen pertama list sebelum penghapusan */
 /*      Elemen list berkurang satu (mungkin menjadi kosong) */
@@ -148,16 +147,16 @@ void DelFirst_LinkedList_LinkedList (List *L, address *P)
     First_LinkedList(*L) = Next_LinkedList(First_LinkedList(*L));
     Next_LinkedList(*P) = Nil_LinkedList;
 }
-void DelP_LinkedList (List *L, infotype X)
+void DelP_LinkedList (List *L, linkedlist_infotype X)
 /* I.S. Sembarang */
-/* F.S. Jika ada elemen list beraddress P, dengan Info_LinkedList(P)=X  */
+/* F.S. Jika ada elemen list berlinkedlist_address P, dengan Info_LinkedList(P)=X  */
 /* Maka P dihapus dari list dan di-dealokasi */
 /* Jika ada lebih dari satu elemen list dengan Info_LinkedList berNil_LinkedListai X */
 /* maka yang dihapus hanya elemen pertama dengan Info_LinkedList = X */
 /* Jika tidak ada elemen list dengan Info_LinkedList(P)=X, maka list tetap */
 /* List mungkin menjadi kosong karena penghapusan */
 {
-    address P, Prec, Pdel;
+    linkedlist_address P, Prec, Pdel;
     boolean found;
 
     P = First_LinkedList(*L);
@@ -182,14 +181,14 @@ void DelP_LinkedList (List *L, infotype X)
         }
     }
 }
-void DelLast_LinkedList (List *L, address *P)
+void DelLast_LinkedList (List *L, linkedlist_address *P)
 /* I.S. List tidak kosong */
 /* F.S. P adalah alamat elemen terakhir list sebelum penghapusan  */
 /*      Elemen list berkurang satu (mungkin menjadi kosong) */
 /* Last element baru adalah predesesor elemen terakhir yg lama, */
 /* jika ada */
 {
-    address Prev;
+    linkedlist_address Prev;
     Prev = Nil_LinkedList;
     *P = First_LinkedList(*L);
     while(Next_LinkedList(*P)!=Nil_LinkedList){
@@ -202,12 +201,12 @@ void DelLast_LinkedList (List *L, address *P)
         DelAfter_LinkedList(L, P, Prev);
     }
 }
-void DelAfter_LinkedList (List *L, address *Pdel, address Prec)
+void DelAfter_LinkedList (List *L, linkedlist_address *Pdel, linkedlist_address Prec)
 /* I.S. List tidak kosong. Prec adalah anggota list  */
 /* F.S. Menghapus Next_LinkedList(Prec): */
 /*      Pdel adalah alamat elemen list yang dihapus  */
 {
-    address P;
+    linkedlist_address P;
     boolean found;
 
     P = First_LinkedList(*L);
@@ -232,7 +231,7 @@ void PrintInfo_LinkedList_LinkedList (List L){
         printf("[]");
     }
     else {
-        address P;
+        linkedlist_address P;
         P = First_LinkedList(L);
         printf("[%d", Info_LinkedList(P));
         P = Next_LinkedList(P);
@@ -255,7 +254,7 @@ int NbElmt_LinkedList (List L)
         return 0;
     } else{
         int counter=0;
-        address P;
+        linkedlist_address P;
         P= First_LinkedList(L);
         while(P != Nil_LinkedList){
             P = Next_LinkedList(P);
@@ -266,11 +265,11 @@ int NbElmt_LinkedList (List L)
 }
 
 /*** Prekondisi untuk Min: List tidak kosong ***/
-infotype Min_LinkedList (List L)
+linkedlist_infotype Min_LinkedList (List L)
 /* Mengirimkan Nil_LinkedListai Info_LinkedList(P) yang minimum */
 {
-    infotype min;
-    address P;
+    linkedlist_infotype min;
+    linkedlist_address P;
     P = First_LinkedList(L);
     min = Info_LinkedList(First_LinkedList(L));
     while(Next_LinkedList(P) != Nil_LinkedList){
@@ -283,11 +282,11 @@ infotype Min_LinkedList (List L)
 }
 
 /*** Prekondisi untuk Max: List tidak kosong ***/
-infotype Max_LinkedList (List L)
+linkedlist_infotype Max_LinkedList (List L)
 /* Mengirimkan Nil_LinkedListai Info_LinkedList(P) yang maksimum */
 {
-    infotype max;
-    address P;
+    linkedlist_infotype max;
+    linkedlist_address P;
     max = Info_LinkedList(First_LinkedList(L));
     P = First_LinkedList(L);
     while(P != Nil_LinkedList){
@@ -308,7 +307,7 @@ void Konkat1_LinkedList (List *L1, List *L2, List *L3)
 /* dan L1 serta L2 menjadi list kosong.*/
 /* Tidak ada alokasi/dealokasi pada prosedur ini */
 {
-    address P;
+    linkedlist_address P;
 
     CreateEmpty_LinkedList(L3);
 	if(IsEmpty_LinkedList(*L1)) {
