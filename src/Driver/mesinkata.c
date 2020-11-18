@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #define NMax 100
 #define BLANK ' '
@@ -129,7 +130,7 @@ boolean IsKataSama (Kata K1, Kata K2){
       return false;
    } else{
       while(i<K1.Length){
-         if(toLower(K1.TabKata[i])!=toLower(K2.TabKata[i])){
+         if(tolower(K1.TabKata[i])!=tolower(K2.TabKata[i])){
              return false;
          }
          i++;

@@ -648,10 +648,29 @@ void PrintPreparationDay() {
 
 void InputOffice() {
 	char input[100];
+	Kata INPUT;
+	Kata EXIT; EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T';
+	Kata REPORT; REPORT.TabKata[0] = 'R'; REPORT.TabKata[1] = 'E'; REPORT.TabKata[2] = 'P'; REPORT.TabKata[3] = 'O'; REPORT.TabKata[4] = 'R'; REPORT.TabKata[5] = 'T';
+	Kata DETAILS; DETAILS.TabKata[0] = 'D'; DETAILS.TabKata[1] = 'E'; DETAILS.TabKata[2] = 'T'; DETAILS.TabKata[3] = 'A'; DETAILS.TabKata[4] = 'I'; DETAILS.TabKata[5] = 'L'; DETAILS.TabKata[6] = 'S'; DETAILS.Length=7;
 	Kata Office; Office.TabKata[0] = 'o'; Office.TabKata[1] = 'f'; Office.TabKata[2] = 'f'; Office.TabKata[3] = 'i'; Office.TabKata[4] = 'c'; Office.TabKata[5] = 'e'; Office.Length = 6;
-	scanf("%s", &input);
-	getchar();
-	if(strcmp(input, "Details") == 0) {
+	STARTBUY();
+	while(!EOL){
+		IgnoreBlank();
+		int i = 0;
+		while(CC!=EOL){
+			if(CC=='\n'){
+				break; // Pengaman kadang EOL ga kedetect
+			}
+			INPUT.TabKata[i]=CC;
+			i++;
+			ADV();
+		}
+		INPUT.Length = i;
+		break;
+	}
+	// scanf("%s", &input);
+	// getchar();
+	if(IsKataSama(DETAILS,INPUT)) {
 		printf("Daftar Wahana :\n");
 		printListWahana(&wahana);
 		printf("\n");
@@ -660,7 +679,7 @@ void InputOffice() {
 		scanf("%c", &ChoosenWahana); getchar();
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,Office)));
 		state = OFFICE_DETAIL;
-	} else if (strcmp(input, "Report") == 0) {
+	} else if (IsKataSama(REPORT,INPUT)) {
 		printf("Daftar Wahana :\n");
 		printListWahana(&wahana);
 		printf("\n");
@@ -669,7 +688,7 @@ void InputOffice() {
 		scanf("%c", &ChoosenWahana); getchar();
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,Office)));
 		state = OFFICE_REPORT;
-	} else if (strcmp(input, "Exit") == 0) {
+	} else if (IsKataSama(EXIT,INPUT)) {
 		state = MAIN_DAY;
 	}
 }
@@ -736,8 +755,8 @@ void PrintMain(){
 	case MAIN_MENU:
 		printf("\n			SELAMAT DATANG DI GAME WILLY WANGKY'S WORLD!!!\n");
 		printf("	Silahkan pilih opsi main :\n");
-		printf("	1.NewGame\n");
-		printf("	2.LoadGame\n");
+		printf("	1.New Game\n");
+		printf("	2.Load Game\n");
 		printf("	Silahkan ketik menu dengan benar\n");
 		break;
 	case NEW_GAME:
@@ -776,10 +795,12 @@ void PrintMain(){
 
 
 void BacaInput(){
+	Kata EXIT;
+	EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length=4;
 	int inpt;
 	char input[100]; char name[100]; 
 	switch (state) {
-	case MAIN_MENU:
+	case MAIN_MENU: ; //Semicolon for Label Handling
 		Kata NEWGAME, LOADGAME, INPUT;
 		NEWGAME.TabKata[0]='N';	NEWGAME.TabKata[1]='E';	NEWGAME.TabKata[2]='W';	NEWGAME.TabKata[3]=' ';	NEWGAME.TabKata[4]='G';	NEWGAME.TabKata[5]='A';	NEWGAME.TabKata[6]='M';	NEWGAME.TabKata[7]='E'; NEWGAME.Length=8;
 		LOADGAME.TabKata[0]='L'; LOADGAME.TabKata[1]='O'; LOADGAME.TabKata[2]='A'; LOADGAME.TabKata[3]='D'; LOADGAME.TabKata[4]=' '; LOADGAME.TabKata[5]='G'; LOADGAME.TabKata[6]='A'; LOADGAME.TabKata[7]='M'; LOADGAME.TabKata[8]='E'; LOADGAME.Length=9;
@@ -793,6 +814,7 @@ void BacaInput(){
 				}
 				INPUT.TabKata[i]=CC;
 				i++;
+				ADV();
 			}
 			INPUT.Length = i;
 			break;
@@ -808,9 +830,8 @@ void BacaInput(){
 			getchar();
 		}
 		break;
-	case NEW_GAME:
-		Kata NAMA,EXIT;
-		EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length=4;
+	case NEW_GAME: ; //Semicolon for Label Handling
+		Kata NAMA;
 		STARTBUY();
 		while(!EOL){
 			IgnoreBlank();
@@ -821,6 +842,7 @@ void BacaInput(){
 				}
 				NAMA.TabKata[i]=CC;
 				i++;
+				ADV();
 			}
 			NAMA.Length = i;
 			break;
@@ -831,17 +853,17 @@ void BacaInput(){
 			state = MAIN_MENU;
 		} else {
 			// strcpy(namaPlayer, name);
-			printf("Selamat bermain %s semoga senang :)");
+			printf("Selamat bermain ");
 			for(int i=0;i<NAMA.Length;i++){
 				printf("%c", NAMA.TabKata[i]);
 			}
+			printf(" semoga senang :)");
 			getchar();
 			state = MAIN_DAY;
 		}
 		break;
-	case LOAD_GAME:
-		Kata NAME,EXIT;
-		EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length=4;
+	case LOAD_GAME: ; //Semicolon for Label Handling
+		Kata NAME;
 		STARTBUY();
 		while(!EOL){
 			IgnoreBlank();
@@ -852,6 +874,7 @@ void BacaInput(){
 				}
 				NAMA.TabKata[i]=CC;
 				i++;
+				ADV();
 			}
 			NAMA.Length = i;
 			break;
@@ -932,7 +955,7 @@ void PrintFooter(){
 		printf("%s\n","	Tekan apapun untuk kembali ke Main Phase");
 		break;
 	case NEW_GAME:
-		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");
+		printf("%s\n","			Masukkan Nama Bisa Pake Spasi, Ketikkan 'Exit' untuk keluar	");
 		break;
 	case LOAD_GAME:
 		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");
