@@ -41,7 +41,7 @@ void BuildTree()
 }
 
 /* Manajemen Memory */
-addrNode AlokNode(infotype X)
+addrNode AlokNode(idx X)
 /* Mengirimkan addrNode hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka addrNode tidak Nil, dan misalnya menghasilkan P, 
   maka Akar(P) = X, Left(P) = Nil, Right(P)=Nil */
@@ -127,7 +127,7 @@ int findIndex(string namaWahana){
     return ret;
 }
 
-boolean isElement(BinTree P,infotype X){
+boolean isElement(BinTree P,idx X){
     if (IsTreeEmpty(P)){
         return false;
     }else{
