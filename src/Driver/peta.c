@@ -777,14 +777,31 @@ void PrintMain(){
 
 void BacaInput(){
 	int inpt;
-	char input[100]; char name[100];
+	char input[100]; char name[100]; 
 	switch (state) {
 	case MAIN_MENU:
-		scanf("%s", &input);
-		getchar();
-		if(strcmp(input, "NewGame") == 0) {
+		Kata NEWGAME, LOADGAME, INPUT;
+		NEWGAME.TabKata[0]='N';	NEWGAME.TabKata[1]='E';	NEWGAME.TabKata[2]='W';	NEWGAME.TabKata[3]=' ';	NEWGAME.TabKata[4]='G';	NEWGAME.TabKata[5]='A';	NEWGAME.TabKata[6]='M';	NEWGAME.TabKata[7]='E'; NEWGAME.Length=8;
+		LOADGAME.TabKata[0]='L'; LOADGAME.TabKata[1]='O'; LOADGAME.TabKata[2]='A'; LOADGAME.TabKata[3]='D'; LOADGAME.TabKata[4]=' '; LOADGAME.TabKata[5]='G'; LOADGAME.TabKata[6]='A'; LOADGAME.TabKata[7]='M'; LOADGAME.TabKata[8]='E'; LOADGAME.Length=9;
+		STARTBUY();
+		while(!EOL){
+			IgnoreBlank();
+			int i = 0;
+			while(CC!=EOL){
+				if(CC=='\n'){
+					break; // Pengaman kadang EOL ga kedetect
+				}
+				INPUT.TabKata[i]=CC;
+				i++;
+			}
+			INPUT.Length = i;
+			break;
+		}
+		// scanf("%s", &input);
+		// getchar();
+		if(IsKataSama(INPUT,NEWGAME)) {
 			state = NEW_GAME;
-		} else if (strcmp(input, "LoadGame") == 0) {
+		} else if (IsKataSama(INPUT,LOADGAME)) {
 			state = LOAD_GAME;
 		} else {
 			printf("Anda memasukkan input yang salah !, ketik enter untuk melanjutkan");
@@ -792,25 +809,63 @@ void BacaInput(){
 		}
 		break;
 	case NEW_GAME:
-		scanf("%s", &name);
-		getchar();
-		if(strcmp(name, "Exit") == 0) {
+		Kata NAMA,EXIT;
+		EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length=4;
+		STARTBUY();
+		while(!EOL){
+			IgnoreBlank();
+			int i = 0;
+			while(CC!=EOL){
+				if(CC=='\n'){
+					break; // Pengaman kadang EOL ga kedetect
+				}
+				NAMA.TabKata[i]=CC;
+				i++;
+			}
+			NAMA.Length = i;
+			break;
+		}
+		// scanf("%s", &name);
+		// getchar();
+		if(IsKataSama(EXIT,NAMA)) {
 			state = MAIN_MENU;
 		} else {
-			strcpy(namaPlayer, name);
-			printf("Selamat bermain %s semoga senang :)", namaPlayer);
+			// strcpy(namaPlayer, name);
+			printf("Selamat bermain %s semoga senang :)");
+			for(int i=0;i<NAMA.Length;i++){
+				printf("%c", NAMA.TabKata[i]);
+			}
 			getchar();
 			state = MAIN_DAY;
 		}
 		break;
 	case LOAD_GAME:
-		scanf("%s", &name);
-		getchar();
-		if(strcmp(name, "Exit") == 0) {
+		Kata NAME,EXIT;
+		EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length=4;
+		STARTBUY();
+		while(!EOL){
+			IgnoreBlank();
+			int i = 0;
+			while(CC!=EOL){
+				if(CC=='\n'){
+					break; // Pengaman kadang EOL ga kedetect
+				}
+				NAMA.TabKata[i]=CC;
+				i++;
+			}
+			NAMA.Length = i;
+			break;
+		}
+		// scanf("%s", &name);
+		// getchar();
+		if(IsKataSama(NAMA,EXIT)) {
 			state = MAIN_MENU;
 		} else {
-			strcpy(namaPlayer, name);
-			printf("Selamat bermain %s semoga senang :)", namaPlayer);
+			// strcpy(namaPlayer, name);
+			printf("Selamat bermain %s semoga senang :)");
+			for(int i=0;i<NAMA.Length;i++){
+				printf("%c", NAMA.TabKata[i]);
+			}
 			getchar();
 			state = MAIN_DAY;
 		}

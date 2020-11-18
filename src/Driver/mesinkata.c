@@ -129,7 +129,7 @@ boolean IsKataSama (Kata K1, Kata K2){
       return false;
    } else{
       while(i<K1.Length){
-         if(K1.TabKata[i]!=K2.TabKata[i]){
+         if(toLower(K1.TabKata[i])!=toLower(K2.TabKata[i])){
              return false;
          }
          i++;
