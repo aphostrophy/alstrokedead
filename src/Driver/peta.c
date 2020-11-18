@@ -87,7 +87,7 @@ void UpdateWaktu(int n){
 				int machine = rand() % 8;
 				if(wahana.TI[machine].status == 'G') {
 					wahana.TI[machine].status = 'B';
-					printf("OH NO!!! %s broke. Please repair it ASAP!!!\n", wahana.TI[machine].nama);
+					printf("OH NO!!! "); printKata(wahana.TI[machine].nama); printf(" broke. Please repair it ASAP!!!\n"); 
 					printf("Tekan tombol enter untuk melanjutkan permainan!!\n");
 					getchar();
 				}
@@ -703,7 +703,7 @@ void GameSetup (){
 	pmoney = 10000 ;
 	Hour(time) = 9 ;
 	Minute(time) = 0 ;
-	makeListWahana(&wahana);
+	bacaWahana(&wahana, "../file/wahana.txt");
 }
 
 void PrintJudul (){

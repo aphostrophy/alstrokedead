@@ -9,11 +9,11 @@
 #define Nil NULL
 
 typedef char string[100];
-typedef int infotype;
+typedef int idx;
 
 typedef struct tNode *addrNode;
 typedef struct tNode{
-  infotype info;
+  idx info;
   addrNode left;
   addrNode right;
 } Node;
@@ -35,7 +35,7 @@ void BuildTree();
 /* F.S P adalah tree berisi bahan makanan dari restoran engi kitchen */
 
 /* Manajemen Memory */
-addrNode AlokNode(infotype X);
+addrNode AlokNode(idx X);
 /* Mengirimkan addrNode hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka addrNode tidak Niil, dan misalnya menghasilkan P, 
   maka Akar(P) = X, Left(P) = Niil, Right(P)=Niil */
@@ -63,7 +63,7 @@ boolean IsBiner(BinTree P);
 int cariIndeks(char* namaWahana);
 
 /*fungsi untuk mengecek apakah ada suatu elemen x pada sebuah binary tree P*/
-boolean isElement(BinTree P, infotype X);
+boolean isElement(BinTree P, idx X);
 
 /*fungsi untuk mengecek apakah X parent dari Y atau bukan */
 boolean isParent(BinTree Now, BinTree X, BinTree Y);

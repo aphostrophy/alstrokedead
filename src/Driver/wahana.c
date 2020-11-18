@@ -2,8 +2,8 @@
 #include <string.h>
 #include "../Header/boolean.h"
 #include "../Header/wahana.h"
-#include "mesinkar.c"
-#include "mesinkata.c"
+#include "../Header/mesinkar.h"
+#include "../Header/mesinkata.h"
 
 string arrNamaWahana[10] = {"SkyCoaster", "PirateShip", "Tornado", "Carousel", "HauntedHouse", "FerrisWheel", "BumperCars", "GyroDrop"};
 string idWahana[8] = {'S', 'P', 'T', 'C', 'H', 'F','B','G'};
@@ -273,7 +273,7 @@ void printBrokenWahana(Wahana *W) {
         int count = 1;
         for(int i = 0; i < 8; i++) {
             if((*W).TI[i].status == 'B') {
-                printf("%d. %s\n", count, (*W).TI[i].nama);
+                printf("%d. ", count); printKata((*W).TI[i].nama); printf("\n");
                 count++;
             }
         }
@@ -283,7 +283,7 @@ void printBrokenWahana(Wahana *W) {
 void printNotBuilded(Wahana *W){
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].status == 'N'){
-            printf("%s\n", (*W).TI[i].nama);
+            printKata((*W).TI[i].nama); printf("\n");
         }
     }
 }
