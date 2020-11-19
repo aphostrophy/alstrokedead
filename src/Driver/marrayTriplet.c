@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "../Header/arrayPair.h"
 #include "../Header/arrayTriplet.h"
 #include "../Header/boolean.h"
 

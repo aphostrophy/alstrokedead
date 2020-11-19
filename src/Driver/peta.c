@@ -10,6 +10,7 @@
 #include "../Header/jam.h"
 #include "../Header/wahana.h"
 #include "../Header/bintree.h"
+#include "../Header/arrayTriplet.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,6 +39,7 @@ int pmoney;
 Stack aksi;
 int count_aksi, need_money, need_time;
 TabInt Materials, Inventory, need_material, HargaBuild, MaterialBuild, ActionTime;
+Triplet_TabInt UpgradeCosts;
 JAM time ;
 Wahana wahana;
 Kata CKata;
@@ -707,6 +709,7 @@ void GameSetup (){
 	ArrayPair_MakeEmpty(&HargaBuild);
 	ArrayPair_MakeEmpty(&MaterialBuild);
 	ArrayPair_MakeEmpty(&ActionTime);
+	ArrayTriplet_MakeEmpty(&UpgradeCosts);
 	BacaMATRIKS(&map[1], "../file/1.txt");
 	BacaMATRIKS(&map[0], "../file/0.txt");
 	BacaMATRIKS(&map[2], "../file/2.txt");
@@ -717,6 +720,7 @@ void GameSetup (){
 	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
 	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
+	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
 	BuildTree();
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;

@@ -7,8 +7,8 @@
 // Contoh: [P1, P2, P3, ...] dengan misal P1.item = "makan" dan P1.cost = 5
 
 
-#ifndef ARRAYPOS_H
-#define ARRAYPOS_H
+#ifndef ARRAYPOSTRI_H
+#define ARRAYPOSTRI_H
 
 #include "boolean.h"
 #include "triplet.h"
