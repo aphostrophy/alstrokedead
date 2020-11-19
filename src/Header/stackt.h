@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define Nil -1
+#define Stack_Nil -1
 #define MaxEl 10
 /* Nil adalah stack dengan elemen kosong . */
 

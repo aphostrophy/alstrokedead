@@ -9,6 +9,8 @@
 #include "../Header/arrayPair.h"
 #include "../Header/jam.h"
 #include "../Header/wahana.h"
+#include "../Header/bintree.h"
+#include "../Header/arrayTriplet.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +30,7 @@
 // =======================================================================================================
 
 // =========================Pendefinisian global variabel yang akan dipakai===============================
+char namaPlayer[100];
 int cmap;
 int state;
 MATRIKS map[5], mapRoom;
@@ -36,6 +39,7 @@ int pmoney;
 Stack aksi;
 int count_aksi, need_money, need_time;
 TabInt Materials, Inventory, need_material, HargaBuild, MaterialBuild, ActionTime;
+Triplet_TabInt UpgradeCosts;
 JAM time ;
 Wahana wahana;
 Kata CKata;
@@ -45,7 +49,8 @@ char ChoosenWahana;
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
 
-// ====================Pendefinisian kata supaya bisa di recognize mesinkar/kata==========================
+// ==================================== Fungsi Main Menu  ================================================
+
 
 // =======================================================================================================
 
@@ -83,7 +88,7 @@ void UpdateWaktu(int n){
 			MaintoPrepDay();
 		} else {
 			int broke = rand() % 100;
-			if(broke == 69 || broke == 12 || broke >= 80) {
+			if(broke >= 95) {
 				int machine = rand() % 8;
 				if(wahana.TI[machine].status == 'G') {
 					wahana.TI[machine].status = 'B';
@@ -205,7 +210,7 @@ void PrintMainDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
-	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", "stranger", pmoney, Durasi(time, tutup));
+	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer, pmoney, Durasi(time, tutup));
 	printf("%s","Jam : ");
 	TulisJAM(time);
 	printf("\n");
@@ -412,6 +417,7 @@ void HandleUpgrade(){
 	if (bangunan != '*'){
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
+		PrintUpgradeWahana(bangunan);
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;
@@ -443,7 +449,8 @@ void HandleUpgrade(){
 			IgnoreBlank();
 		}
 		if(IsKataSama(Action, UPGRADE)){
-			//Validasi di sini, tapi belum ,soalnya g tau dmn :v
+
+
 			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
 			Push(&aksi,StackEl.TabKata);
 		} else{
@@ -476,7 +483,6 @@ void HandleUndo(){
 			count_aksi = count_aksi - 1;
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
 			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
-			// Kurangi waktu yang dibutuhkan dari buy
 		} else if (x[0] == 'b' && x[2] == 'i') {
 			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100]; Kata Bangunan;
 			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);
@@ -644,10 +650,29 @@ void PrintPreparationDay() {
 
 void InputOffice() {
 	char input[100];
+	Kata INPUT;
+	Kata EXIT; EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T';
+	Kata REPORT; REPORT.TabKata[0] = 'R'; REPORT.TabKata[1] = 'E'; REPORT.TabKata[2] = 'P'; REPORT.TabKata[3] = 'O'; REPORT.TabKata[4] = 'R'; REPORT.TabKata[5] = 'T';
+	Kata DETAILS; DETAILS.TabKata[0] = 'D'; DETAILS.TabKata[1] = 'E'; DETAILS.TabKata[2] = 'T'; DETAILS.TabKata[3] = 'A'; DETAILS.TabKata[4] = 'I'; DETAILS.TabKata[5] = 'L'; DETAILS.TabKata[6] = 'S'; DETAILS.Length=7;
 	Kata Office; Office.TabKata[0] = 'o'; Office.TabKata[1] = 'f'; Office.TabKata[2] = 'f'; Office.TabKata[3] = 'i'; Office.TabKata[4] = 'c'; Office.TabKata[5] = 'e'; Office.Length = 6;
-	scanf("%s", &input);
-	getchar();
-	if(strcmp(input, "Details") == 0) {
+	STARTBUY();
+	while(!EOL){
+		IgnoreBlank();
+		int i = 0;
+		while(CC!=EOL){
+			if(CC=='\n'){
+				break; // Pengaman kadang EOL ga kedetect
+			}
+			INPUT.TabKata[i]=CC;
+			i++;
+			ADV();
+		}
+		INPUT.Length = i;
+		break;
+	}
+	// scanf("%s", &input);
+	// getchar();
+	if(IsKataSama(DETAILS,INPUT)) {
 		printf("Daftar Wahana :\n");
 		printListWahana(&wahana);
 		printf("\n");
@@ -656,7 +681,7 @@ void InputOffice() {
 		scanf("%c", &ChoosenWahana); getchar();
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,Office)));
 		state = OFFICE_DETAIL;
-	} else if (strcmp(input, "Report") == 0) {
+	} else if (IsKataSama(REPORT,INPUT)) {
 		printf("Daftar Wahana :\n");
 		printListWahana(&wahana);
 		printf("\n");
@@ -665,7 +690,7 @@ void InputOffice() {
 		scanf("%c", &ChoosenWahana); getchar();
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,Office)));
 		state = OFFICE_REPORT;
-	} else if (strcmp(input, "Exit") == 0) {
+	} else if (IsKataSama(EXIT,INPUT)) {
 		state = MAIN_DAY;
 	}
 }
@@ -676,6 +701,7 @@ void InputOffice() {
 // =========================================Fungsi Umum===================================================
 void GameSetup (){
 	// Setup awal untuk memulai game
+	strcpy(namaPlayer,"");
 	cmap = 0;
 	ArrayPair_MakeEmpty(&Materials);
 	ArrayPair_MakeEmpty(&Inventory);
@@ -683,6 +709,7 @@ void GameSetup (){
 	ArrayPair_MakeEmpty(&HargaBuild);
 	ArrayPair_MakeEmpty(&MaterialBuild);
 	ArrayPair_MakeEmpty(&ActionTime);
+	ArrayTriplet_MakeEmpty(&UpgradeCosts);
 	BacaMATRIKS(&map[1], "../file/1.txt");
 	BacaMATRIKS(&map[0], "../file/0.txt");
 	BacaMATRIKS(&map[2], "../file/2.txt");
@@ -693,9 +720,11 @@ void GameSetup (){
 	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
 	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
+	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
+	BuildTree();
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
-	state = MAIN_DAY;
+	state = MAIN_MENU;
 	CopyMATRIKS(map[cmap], &mapRoom);
 	CreateEmpty(&aksi);
 	count_aksi = 0 ;
@@ -728,13 +757,17 @@ void PrintJudul (){
 void PrintMain(){
 	switch (state) {
 	case MAIN_MENU:
-		// Kebutuhan menu
+		printf("\n			SELAMAT DATANG DI GAME WILLY WANGKY'S WORLD!!!\n");
+		printf("	Silahkan pilih opsi main :\n");
+		printf("	1.New Game\n");
+		printf("	2.Load Game\n");
+		printf("	Silahkan ketik menu dengan benar\n");
 		break;
 	case NEW_GAME:
-		// Kebutuhan newgame
+		printf("\n		Silahkan masukkan nama pemain: \n");
 		break;
 	case LOAD_GAME:
-		// Kebutuhan load game
+		printf("\n		Silahkan masukkan nama pemain untuk diload: \n");
 		break;
 	case MAIN_DAY:
 		PrintMainDay();
@@ -743,7 +776,6 @@ void PrintMain(){
 		PrintPreparationDay();
 		break;
 	case OFFICE:
-		// List menu office diprint dan dipilih
 		printf("\nSELAMAT DATANG DI OFFICE WILLY WANGKY'S WORLD!!!\n\n");
 		break;
 	case OFFICE_DETAIL:
@@ -767,16 +799,103 @@ void PrintMain(){
 
 
 void BacaInput(){
+	Kata EXIT;
+	EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length=4;
 	int inpt;
+	char input[100]; char name[100]; 
 	switch (state) {
-	case MAIN_MENU:
-		// Input yang ada di main menu
+	case MAIN_MENU: ; //Semicolon for Label Handling
+		Kata NEWGAME, LOADGAME, INPUT;
+		NEWGAME.TabKata[0]='N';	NEWGAME.TabKata[1]='E';	NEWGAME.TabKata[2]='W';	NEWGAME.TabKata[3]=' ';	NEWGAME.TabKata[4]='G';	NEWGAME.TabKata[5]='A';	NEWGAME.TabKata[6]='M';	NEWGAME.TabKata[7]='E'; NEWGAME.Length=8;
+		LOADGAME.TabKata[0]='L'; LOADGAME.TabKata[1]='O'; LOADGAME.TabKata[2]='A'; LOADGAME.TabKata[3]='D'; LOADGAME.TabKata[4]=' '; LOADGAME.TabKata[5]='G'; LOADGAME.TabKata[6]='A'; LOADGAME.TabKata[7]='M'; LOADGAME.TabKata[8]='E'; LOADGAME.Length=9;
+		STARTBUY();
+		while(!EOL){
+			IgnoreBlank();
+			int i = 0;
+			while(CC!=EOL){
+				if(CC=='\n'){
+					break; // Pengaman kadang EOL ga kedetect
+				}
+				INPUT.TabKata[i]=CC;
+				i++;
+				ADV();
+			}
+			INPUT.Length = i;
+			break;
+		}
+		// scanf("%s", &input);
+		// getchar();
+		if(IsKataSama(INPUT,NEWGAME)) {
+			state = NEW_GAME;
+		} else if (IsKataSama(INPUT,LOADGAME)) {
+			state = LOAD_GAME;
+		} else {
+			printf("Anda memasukkan input yang salah !, ketik enter untuk melanjutkan");
+			getchar();
+		}
 		break;
-	case NEW_GAME:
-		// Input saat player mau new game
+	case NEW_GAME: ; //Semicolon for Label Handling
+		Kata NAMA;
+		STARTBUY();
+		while(!EOL){
+			IgnoreBlank();
+			int i = 0;
+			while(CC!=EOL){
+				if(CC=='\n'){
+					break; // Pengaman kadang EOL ga kedetect
+				}
+				NAMA.TabKata[i]=CC;
+				i++;
+				ADV();
+			}
+			NAMA.Length = i;
+			break;
+		}
+		// scanf("%s", &name);
+		// getchar();
+		if(IsKataSama(EXIT,NAMA)) {
+			state = MAIN_MENU;
+		} else {
+			// strcpy(namaPlayer, name);
+			printf("Selamat bermain ");
+			for(int i=0;i<NAMA.Length;i++){
+				printf("%c", NAMA.TabKata[i]);
+			}
+			printf(" semoga senang :)");
+			getchar();
+			state = MAIN_DAY;
+		}
 		break;
-	case LOAD_GAME:
-		// Input saat player mau load game
+	case LOAD_GAME: ; //Semicolon for Label Handling
+		Kata NAME;
+		STARTBUY();
+		while(!EOL){
+			IgnoreBlank();
+			int i = 0;
+			while(CC!=EOL){
+				if(CC=='\n'){
+					break; // Pengaman kadang EOL ga kedetect
+				}
+				NAMA.TabKata[i]=CC;
+				i++;
+				ADV();
+			}
+			NAMA.Length = i;
+			break;
+		}
+		// scanf("%s", &name);
+		// getchar();
+		if(IsKataSama(NAMA,EXIT)) {
+			state = MAIN_MENU;
+		} else {
+			// strcpy(namaPlayer, name);
+			printf("Selamat bermain %s semoga senang :)");
+			for(int i=0;i<NAMA.Length;i++){
+				printf("%c", NAMA.TabKata[i]);
+			}
+			getchar();
+			state = MAIN_DAY;
+		}
 		break;
 	case MAIN_DAY:
 		inpt = GetInput();
@@ -815,7 +934,7 @@ void PrintFooter(){
 	switch (state) {
 	case MAIN_MENU:
 		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","w : atas  s : bawah	 enter : pilih menu");
+		printf("%s\n","		Ketik menu yang ingin dipilih");
 		break;
 	case MAIN_DAY:
 		printf("%s\n","				Tombol aksi						 	 ");
@@ -840,9 +959,10 @@ void PrintFooter(){
 		printf("%s\n","	Tekan apapun untuk kembali ke Main Phase");
 		break;
 	case NEW_GAME:
-		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","					       Masukkan Nama 						 ");
-		printf("%s\n","		   ketik enter untuk next, ketik lainnya untuk back	     ");
+		printf("%s\n","			Masukkan Nama Bisa Pake Spasi, Ketikkan 'Exit' untuk keluar	");
+		break;
+	case LOAD_GAME:
+		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");
 		break;
 	case OFFICE:
 		printf("%s\n","		           Tombol aksi				 ");
