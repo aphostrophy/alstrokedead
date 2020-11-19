@@ -123,13 +123,13 @@ boolean ArrayTriplet_IsEQ (Triplet_TabInt T1, Triplet_TabInt T2);
 
 /* ********** SEARCHING ********** */
 /* ***  Perhatian : Tabel boleh kosong!! *** */
-IdxType ArrayTriplet_SearchByItem (Triplet_TabInt T, Kata X);
+IdxType ArrayTriplet_SearchByNama (Triplet_TabInt T, Kata X);
 /* Search apakah ada elemen tabel T yang bernilai X */
 /* Jika ada, menghasilkan indeks i terkecil, dengan elemen ke-i = X */
 /* Jika tidak ada, mengirimkan IdxUndef */
 /* Menghasilkan indeks tak terdefinisi (IdxUndef) jika tabel T kosong */
 /* Skema Searching yang digunakan bebas */
-boolean ArrayTriplet_SearchBooleanByItem (Triplet_TabInt T, Kata X);
+boolean ArrayTriplet_SearchBooleanByNama (Triplet_TabInt T, Kata X);
 /* Search apakah ada elemen tabel T yang bernilai X */
 /* Jika ada, menghasilkan true, jika tidak ada menghasilkan false */
 /* Skema searching yang digunakan bebas */

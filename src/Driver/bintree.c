@@ -7,9 +7,9 @@
 BinTree listUpgrade[10];
 BinTree treeUpgrade[10];
 
-string arrNamaWahana[10] = {"Sky Coaster", "Pirate Ship", "Tornado", "Carousel", "Haunted House", "Ferris Wheel", "Giant Swings", "Gyro Drop"};
+string arrNamaWahanaUpgrade[10] = {"Sky Coaster", "Pirate Ship", "Tornado", "Carousel", "Haunted House", "Ferris Wheel", "Giant Swings", "Gyro Drop"};
 char idWahanaUpgrade[8] = {'S', 'P', 'T', 'C', 'H', 'F','G','Y'};
-string arrUpgrade[10] = {"Money Up S", "Money Up M", "Money Up XL", "capacity up S", "capacity up M", "capacity up XL", "speed up S", "speed up M", "speed up XL"};
+string arrUpgrade[10] = {"Money-Up-S", "Money-Up-M", "Money-Up-XL", "capacity-up-S", "capacity-up-M", "capacity-up-XL", "speed-up-S", "speed-up-M", "speed-up-XL"};
 int levelWahana[10] = {1, 1, 1, 1, 1, 1, 1, 1};
 
 void buatTree(BinTree parent,BinTree l, BinTree r){
@@ -43,7 +43,7 @@ void BuildTree()
 }
 
 /* Manajemen Memory */
-addrNode AlokNode(idx X)
+addrNode AlokNode(bintree_infotype X)
 /* Mengirimkan addrNode hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka addrNode tidak bintree_Nil, dan misalnya menghasilkan P, 
   maka Akar(P) = X, Left(P) = bintree_Nil, Right(P)=bintree_Nil */
@@ -205,10 +205,6 @@ void PrintUpgradeWahana(char id) {
             break;
         }
     }
-    PrintTree(listUpgrade[res], 2);
-}
-
-// void HandleUpgradeWahana(char id, )
     if(IsTreeOneElmt(listUpgrade[res])) {
         printf("Tidak ada lagi upgrade yang bisa dilakukan!!\n");
     } else {
@@ -221,7 +217,7 @@ void moveUpgrade(char id, string upgrade) {
     int idx;
     // Mencari wahana
     for(int i = 0; i < 8; i++) {
-        if(id == idWahana[i]) {
+        if(id == idWahanaUpgrade[i]) {
             idx = i;
             res_wahana = listUpgrade[i];
             break;
@@ -246,7 +242,7 @@ void moveUpgrade(char id, string upgrade) {
 void PrintAvailableUpgrade(char id) {
     BinTree res;
     for(int i = 0; i < 8; i++) {
-        if(id == idWahana[i]) {
+        if(id == idWahanaUpgrade[i]) {
             res = listUpgrade[i];
             break;
         }
