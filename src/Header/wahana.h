@@ -3,41 +3,44 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "mesinkata.h"
 #include "boolean.h"
 #include "../Header/linkedlist.h"
 
 typedef char string[100];
 typedef struct {
-    char id;
-    string nama;
+    Kata id;
+    Kata nama;
     int harga;
     int durasi;
     int kapasitas;
     char status;
-    string deskripsi;
+    Kata deskripsi;
     int inside;
     int pengunjung;
     int penghasilan;
     int total_pengunjung;
     int total_penghasilan;
     List upgrade;
-} Infotype;
+} InfoWahana;
 
 typedef struct { 
-  Infotype TI[8]; /* memori tempat penyimpan elemen (container) */
+  InfoWahana TI[8]; /* memori tempat penyimpan elemen (container) */
 } Wahana;
 
 /* KONSTUKTOR */
-Wahana makeListWahana(Wahana *W);
+void makeListWahana(Wahana *W);
 /* Fungsi untuk mengisi list Wahana W dengan data wahana */
 
+void bacaWahana(Wahana *W, char* namaFile);
+
 /* SELEKTOR */
-char* getNama(Wahana *W, char id);
+Kata getNama(Wahana *W, char id);
 int getHarga(Wahana *W, char id);
 int getDurasi(Wahana *W, char id);
 int getKapasitas(Wahana *W, char id);
 char getStatus(Wahana *W, char id);
-char* getDeskripsi(Wahana *W, char id);
+Kata getDeskripsi(Wahana *W, char id);
 int getInside(Wahana *W, char id);
 int getPengunjung(Wahana *W, char id);
 int getPenghasilan(Wahana *W, char id);
@@ -50,6 +53,8 @@ void printNotBuilded(Wahana *W);
 int GetIndex(Wahana *W, char id);
 int countBrokenWahana(Wahana *W);
 void printBrokenWahana(Wahana *W);
-
+Kata copyKata(Kata in);
+void makeEmpty(Kata* in);
+void printKata(Kata in);
 
 #endif

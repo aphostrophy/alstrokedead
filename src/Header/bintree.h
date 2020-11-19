@@ -59,17 +59,16 @@ boolean IsUnerRight(BinTree P);
 boolean IsBiner(BinTree P);
 /* Mengirimkan true jika pohon biner tidak kosong P adalah pohon biner: mempunyai subpohon kiri dan subpohon kanan*/
 
-/*fungsi untuk mencari bahan makanan*/
-int cariIndeks(char* namaWahana);
-
 /*fungsi untuk mengecek apakah ada suatu elemen x pada sebuah binary tree P*/
 boolean isElement(BinTree P, bintree_infotype X);
 
 /*fungsi untuk mengecek apakah X parent dari Y atau bukan */
-boolean isParent(BinTree Now, BinTree X, BinTree Y);
+boolean isChild(BinTree parent, BinTree child);
 
 void PrintTree(BinTree P, int h);
 
 void PrintUpgradeWahana(char id);
+
+void PrintAvailableUpgrade(char id);
 
 #endif

@@ -6,9 +6,11 @@
 
 BinTree listUpgrade[10];
 BinTree treeUpgrade[10];
-string arrNamaWahanaUpgrade[10] = {"Sky Coaster", "Pirate Ship", "Tornado", "Carousel", "Haunted House", "Ferris Wheel", "Giant Swings", "Gyro Drop"};
+
+string arrNamaWahana[10] = {"Sky Coaster", "Pirate Ship", "Tornado", "Carousel", "Haunted House", "Ferris Wheel", "Giant Swings", "Gyro Drop"};
 char idWahanaUpgrade[8] = {'S', 'P', 'T', 'C', 'H', 'F','G','Y'};
 string arrUpgrade[10] = {"Money Up S", "Money Up M", "Money Up XL", "capacity up S", "capacity up M", "capacity up XL", "speed up S", "speed up M", "speed up XL"};
+int levelWahana[10] = {1, 1, 1, 1, 1, 1, 1, 1};
 
 void buatTree(BinTree parent,BinTree l, BinTree r){
     Left(parent) = l;
@@ -41,7 +43,7 @@ void BuildTree()
 }
 
 /* Manajemen Memory */
-addrNode AlokNode(bintree_infotype X)
+addrNode AlokNode(idx X)
 /* Mengirimkan addrNode hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka addrNode tidak bintree_Nil, dan misalnya menghasilkan P, 
   maka Akar(P) = X, Left(P) = bintree_Nil, Right(P)=bintree_Nil */
@@ -116,6 +118,7 @@ boolean IsBiner(BinTree P)
     return false;
 }
 
+
 /*fungsi untuk mencari bahan makanan */
 int findIndex(string namaWahana){
     int ret = -1;
@@ -137,21 +140,15 @@ boolean isElement(BinTree P,bintree_infotype X){
     }
 }
 
-boolean isParent(BinTree Now, BinTree X, BinTree Y){
-    if (Akar(Now) == Akar(X)) {
-        if (Left(Now) != bintree_Nil) 
-            if (Akar(Left(Now)) == Akar(Y))
-                return true;
-        if (Right(Now) != bintree_Nil)
-            if (Akar(Right(Now)) == Akar(Y))
-                return true;
-        return false;        
-    }else {
-        if (isElement(Left(Now), Akar(X)))
-            return isParent(Left(Now), X, Y);
-        else if (isElement(Right(Now), Akar(X)))
-            return isParent(Right(Now), X, Y);
-        else return false;
+boolean isChild(BinTree parent, BinTree child){
+    if(IsTreeOneElmt(parent)) {
+        return false;
+    } else {
+        if((Akar(Left(parent)) == Akar(child)) || (Akar(Right(parent)) == Akar(child))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -212,3 +209,53 @@ void PrintUpgradeWahana(char id) {
 }
 
 // void HandleUpgradeWahana(char id, )
+    if(IsTreeOneElmt(listUpgrade[res])) {
+        printf("Tidak ada lagi upgrade yang bisa dilakukan!!\n");
+    } else {
+        PrintTreeUtil(listUpgrade[res], 2, levelWahana[res]);
+    }
+}
+
+void moveUpgrade(char id, string upgrade) {
+    BinTree res_upgrade, res_wahana;
+    int idx;
+    // Mencari wahana
+    for(int i = 0; i < 8; i++) {
+        if(id == idWahana[i]) {
+            idx = i;
+            res_wahana = listUpgrade[i];
+            break;
+        }
+    }
+
+    for(int i = 0; i < 9; i++) {
+        if(strcmp(upgrade, arrUpgrade[i]) == 0) {
+            res_upgrade = treeUpgrade[i];
+        }
+    }
+    
+    if(isChild(res_wahana, res_upgrade)) {
+        listUpgrade[idx] = res_upgrade;
+        levelWahana[idx]++;
+        PrintAvailableUpgrade(id);
+    } else {
+        printf("Invalid Upgrade!!\n");
+    }
+}
+
+void PrintAvailableUpgrade(char id) {
+    BinTree res;
+    for(int i = 0; i < 8; i++) {
+        if(id == idWahana[i]) {
+            res = listUpgrade[i];
+            break;
+        }
+    }
+    if(IsTreeOneElmt(res)) {
+        printf("Tidak ada upgrade lagi!!\n");
+    } else {
+        printf("Available Upgrade :\n");
+        printf("- %s\n", arrUpgrade[Akar(Left(res))]);
+        printf("- %s\n", arrUpgrade[Akar(Right(res))]);
+    }
+}
