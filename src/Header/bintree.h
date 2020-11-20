@@ -5,6 +5,7 @@
 
 #include <string.h>
 #include "../Header/boolean.h"
+#include "../Header/mesinkata.h"
 
 #define bintree_Nil NULL
 
@@ -21,12 +22,14 @@ typedef struct tNode{
 typedef addrNode BinTree;
 
 extern BinTree listUpgrade[10];
-extern string arrNamaWahana[10];
-extern string arrUpgrade[10];
+extern Kata arrNamaWahana[10];
+extern Kata arrUpgrade[10];
 
 #define Akar(P) (P)->info
 #define Left(P) (P)->left
 #define Right(P) (P)->right
+
+void bacaUpgrade(char* namaFile);
 
 void BuatTree(BinTree parent, BinTree l, BinTree r);
 
@@ -71,6 +74,6 @@ void PrintUpgradeWahana(char id);
 
 void PrintAvailableUpgrade(char id);
 
-void moveUpgrade(char id, string upgrade);
+void moveUpgrade(char id, Kata upgrade);
 
 #endif
