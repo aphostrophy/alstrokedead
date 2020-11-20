@@ -3,24 +3,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int addUpgrade( Node **head, Kata data )
+int addUpgrade( ListNode **head, Kata data )
 {
-    Node *node = malloc( sizeof( Node ) );
+    ListNode *node = malloc( sizeof( ListNode ) );
     int success = node != NULL;
-
-    if ( success ){
+    if(success){
         node->data = data;
-        node->next = *head;
-        *head = node;
+        node->next = NULL;
+        ListNode *current=*head;
+        if(current==NULL){
+            *head = node;
+        } else{
+            while(current->next!=NULL){
+                current=current->next;
+            }
+            current->next = node;
+        }
     }
     return success;
 }
 
-void printUpgrades( Node **head )
+void removeUpgrade( ListNode **head )
 {
-    printf( "%s", "NULL" );
-    for( Node *current =*head; current != NULL; current = current->next ) //Mark pakai NULL
+    ListNode* temp = *head;
+    *head = temp->next;
+    free(temp);
+}
+
+void printUpgrades( ListNode **head )
+{
+    for( ListNode *current =*head; current != NULL; current = current->next ) //Mark pakai NULL
     {
-        printf("<-");printKata(current->data);
+        printKata(current->data);printf("->");
     }
+    printf( "%s", "NULL" );
 }

@@ -6,14 +6,16 @@
 #ifndef ARRAYLIST_H
 #define ARRAYLIST_H
 
-typedef struct Node 
+typedef struct ListNode 
 {
     Kata data;
-    struct Node *next;
-} Node;
+    struct ListNode *next;
+} ListNode;
 
-int addUpgrade( Node **head, Kata data );
+int addUpgrade( ListNode **head, Kata data );
 
-void printUpgrades( Node **head );
+void removeUpgrade( ListNode **head);
+
+void printUpgrades( ListNode **head );
 
 #endif
