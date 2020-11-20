@@ -274,6 +274,7 @@ void HandleBuy() {
 			Push(&aksi,StackEl.TabKata);
 			count_aksi = count_aksi + 1;
 			need_time = need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
+			Pair_Cost(Inventory,materialIndex) += jumlah_int;
 			
 		} else{ // Uang tidak cukup
 			printf("Uang tidak cukup! Tekan apapun untuk melanjutkan\n");
@@ -388,7 +389,7 @@ void HandleBuild(){
 				} else {
 					Pair_Cost(need_material,materialIndex) = Pair_Cost(need_material,materialIndex) + banyakAmberdibutuhkan ;
 					need_money = need_money + Pair_Cost(HargaBuild,bangunanIndex);
-					Elmt(map[PbuildMap],PbuildX,PbuildY) = 'X';
+					Elmt(map[PbuildMap],PbuildX,PbuildY) = Bangunan.TabKata[0];
 					sprintf(SbuildX, "%d", PbuildX); sprintf(SbuildY, "%d", PbuildY); sprintf(SbuildMap, "%d", PbuildMap); sprintf(SbuildY, "%d", PbuildY);
 					strcpy(StackEl.TabKata,""); StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," ");StackEl.Length++; strcat(StackEl.TabKata,SbuildX);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildY);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildMap);
 					Push(&aksi,StackEl.TabKata);
@@ -493,6 +494,7 @@ void HandleUndo(){
 			need_money = need_money - n*Pair_Cost(Materials,materialIndex);
 			count_aksi = count_aksi - 1;
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
+			Pair_Cost(Inventory,materialIndex) -= n;
 			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
 		} else if (x[0] == 'b' && x[2] == 'i') {
 			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100]; Kata Bangunan;
@@ -539,7 +541,7 @@ void HandleExecution(){
 			strcpy(Benda.TabKata, benda);  Benda.Length = strlen(benda);
 			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
 			int materialIndex = ArrayPair_SearchByItem(Materials,Benda);
-			Pair_Cost(Inventory,materialIndex) += n; // Menambah jumlah barang di inventory
+			// Pair_Cost(Inventory,materialIndex) += n; // Menambah jumlah barang di inventory
 		} else if (x[0] == 'b' && x[2] == 'i') {
 			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100];
 			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);
