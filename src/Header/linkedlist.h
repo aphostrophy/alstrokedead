@@ -140,4 +140,6 @@ void Konkat1_LinkedList (List *L1, List *L2, List *L3);
 /* dan L1 serta L2 menjadi list kosong.*/
 /* Tidak ada alokasi/dealokasi pada prosedur ini */
 
+// void Akuisisi_FileLinkedList(Node * link, char *namafile);
+
 #endif

@@ -11,7 +11,7 @@
 #include "../Header/wahana.h"
 #include "../Header/bintree.h"
 #include "../Header/arrayTriplet.h"
-#include "../Header/linkedlist.h"
+#include "../Header/list_linkedlist.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,6 +46,7 @@ Wahana wahana;
 Kata CKata;
 boolean EndKata;
 char ChoosenWahana;
+Node * link[20] = { 0 };
 
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
@@ -418,7 +419,7 @@ void HandleUpgrade(){
 	if (bangunan != '*'){
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
-		// PrintAvailableUpgrade(bangunan);
+		PrintAvailableUpgrade(bangunan);
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;
