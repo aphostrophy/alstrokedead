@@ -40,20 +40,20 @@ typedef struct
 #define Next(Pn) (Pn)->Next
 
 /* ----- KONSTRUKTOR ----- */
-void CreateGraph(infotypePeta X, Graph* G); // membuat graph baru
-void InitGraph(Graph* G, char* source); // load graph dari ext
+void CreateGraph(infotypePeta X, Graph* G); 
+void InitGraph(Graph* G, char* source); 
 
 /* ----- MANAJEMEN MEMORI ----- */
-adrPeta AlokPetaGraph(infotypePeta X); // mengembalikan hasil alokasi simpul
-void DeAlokPetaGraph(adrPeta P); // mengembalikan simpul ke sistem
-adrTerowongan AlokSuccPeta(adrPeta P); // mengembalikan hasil alokasi succ simpul
-void DealokSuccPeta(adrTerowongan T); // mengembalikan succ simpul ke sistem
+adrPeta AlokPetaGraph(infotypePeta X); 
+void DeAlokPetaGraph(adrPeta P); 
+adrTerowongan AlokSuccPeta(adrPeta P); 
+void DealokSuccPeta(adrTerowongan T); 
 
 /* ----- OPERASI GRAF ----- */
-boolean isPetaEqual(adrPeta P, infotypePeta X); // mengembalikan apakah P memiliki Id X
-adrPeta SearchPeta(Graph G, infotypePeta X); // mencari X pada G, return nil jika tiada
-adrTerowongan SearchTerowongan(Graph G, infotypePeta prec, infotypePeta succ); // mencari succ dari prec pada G, return nil jika tiada
-void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn); // memasang X ke akhir G
-void InsertTerowongan(Graph* G, infotypePeta prec, infotypePeta succ); // memasang succ ke akhir prec
+boolean isPetaEqual(adrPeta P, infotypePeta X); 
+adrPeta SearchPeta(Graph G, infotypePeta X); 
+adrTerowongan SearchTerowongan(Graph G, infotypePeta prec, infotypePeta succ); 
+void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn); 
+void InsertTerowongan(Graph* G, infotypePeta prec, infotypePeta succ); 
 
 #endif
