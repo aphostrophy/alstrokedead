@@ -4,12 +4,13 @@
 int main() {
     Wahana W;
     char id;
-    makeListWahana(&W);
+    
+    bacaWahana(&W, "../file/wahana.txt");
 
     printf("Masukkan ID wahana yang ingin dicari : ");
-    scanf("%s", &id);
+    scanf("%c", &id);
     printf("\n");
 
-    printInfo(&W, id);
+    printDetailWahana(&W, id);
     return 0;
 }

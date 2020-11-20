@@ -173,16 +173,36 @@ void PrintMainDay() {
 	Minute(tutup) = 0;
 	// Menampilkan informasi pada bagian inti game saat mainday
 	if (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '>' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '<' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '^' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == 'V' ) {
-		infotypePeta CurrentPos;
-		CurrentPos.room = cmap;
-		Absis(CurrentPos.p) = Absis(playerpos);
-		Ordinat(CurrentPos.p) = Ordinat(playerpos);
-		adrPeta P = SearchPeta(G,CurrentPos);
-		adrTerowongan T = Trail(P);
-		P = T->Succ;
-		cmap = Id(P).room;
-		Absis(playerpos) = Absis(Id(P).p);
-		Ordinat(playerpos) = Ordinat(Id(P).p);
+		switch (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos))){
+		case '>':
+			if (cmap == 0) {
+				cmap = 1; Absis(playerpos) = 2; Ordinat(playerpos) = 1;
+			} else {
+				cmap = 2; Absis(playerpos) = 2; Ordinat(playerpos) = 1;
+			}
+			break;
+		case '^':
+			if (cmap == 3) {
+				cmap = 0; Absis(playerpos) = 5; Ordinat(playerpos) = 6;
+			} else {
+				cmap = 1; Absis(playerpos) = 3; Ordinat(playerpos) = 2;
+			}
+			break;
+		case '<':
+			if (cmap == 1) {
+				cmap = 0; Absis(playerpos) = 3; Ordinat(playerpos) = 11;
+			} else {
+				cmap = 3;  Absis(playerpos) = 3; Ordinat(playerpos) = 7;
+			}
+			break;
+		default:
+			if (cmap == 0) {
+				cmap = 3; Absis(playerpos) = 1; Ordinat(playerpos) = 4;
+			} else {
+				cmap = 2; Absis(playerpos) = 1; Ordinat(playerpos) = 4;
+			}
+			break;
+		}
 	}
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
@@ -577,16 +597,36 @@ void PrintPreparationDay() {
 	Hour(buka) = 9;
 	Minute(buka) = 0;
 	if (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '>' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '<' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '^' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == 'V' ) {
-		infotypePeta CurrentPos;
-		CurrentPos.room = cmap;
-		Absis(CurrentPos.p) = Absis(playerpos);
-		Ordinat(CurrentPos.p) = Ordinat(playerpos);
-		adrPeta P = SearchPeta(G,CurrentPos);
-		adrTerowongan T = Trail(P);
-		P = T->Succ;
-		cmap = Id(P).room;
-		Absis(playerpos) = Absis(Id(P).p);
-		Ordinat(playerpos) = Ordinat(Id(P).p);
+		switch (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos))){
+		case '>':
+			if (cmap == 0) {
+				cmap = 1; Absis(playerpos) = 2; Ordinat(playerpos) = 1;
+			} else {
+				cmap = 2; Absis(playerpos) = 2; Ordinat(playerpos) = 1;
+			}
+			break;
+		case '^':
+			if (cmap == 3) {
+				cmap = 0; Absis(playerpos) = 5; Ordinat(playerpos) = 6;
+			} else {
+				cmap = 1; Absis(playerpos) = 3; Ordinat(playerpos) = 2;
+			}
+			break;
+		case '<':
+			if (cmap == 1) {
+				cmap = 0; Absis(playerpos) = 3; Ordinat(playerpos) = 11;
+			} else {
+				cmap = 3;  Absis(playerpos) = 3; Ordinat(playerpos) = 7;
+			}
+			break;
+		default:
+			if (cmap == 0) {
+				cmap = 3; Absis(playerpos) = 1; Ordinat(playerpos) = 4;
+			} else {
+				cmap = 2; Absis(playerpos) = 1; Ordinat(playerpos) = 4;
+			}
+			break;
+		}
 	}
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
