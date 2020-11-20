@@ -13,26 +13,6 @@ int arrKapasitas[8] = {8, 6, 4, 8, 2, 6, 4, 8};
 string arrDeskripsi[8] = {"Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi"};
 
 /* KONSTUKTOR */
-Wahana makeListWahana(Wahana *W) {
-    int i;
-    for(i = 0; i < 8; i++) {
-        (*W).TI[i].id = idWahana[i];
-        strcpy((*W).TI[i].nama, arrNamaWahana[i]);
-        (*W).TI[i].harga = arrHargaWahana[i];
-        (*W).TI[i].durasi = durasiWahana[i];
-        (*W).TI[i].kapasitas = arrKapasitas[i];
-        (*W).TI[i].status = 'N'; //inisiasi dengan not build
-        strcpy((*W).TI[i].deskripsi, arrDeskripsi[i]);
-
-        //inisiasi jumlah pengunjung dan penghasilan dengan 0
-        (*W).TI[i].inside = 0;
-        (*W).TI[i].pengunjung = 0;
-        (*W).TI[i].total_pengunjung = 0;
-        (*W).TI[i].penghasilan = 0;
-        (*W).TI[i].total_penghasilan = 0;
-        (*W).TI[i].upgrade;
-        CreateEmpty_LinkedList(&(*W).TI[i].upgrade);
-
 // void makeListWahana(Wahana *W) {
 //     int i;
 //     for(i = 0; i < 8; i++) {

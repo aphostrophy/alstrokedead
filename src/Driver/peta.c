@@ -11,6 +11,7 @@
 #include "../Header/wahana.h"
 #include "../Header/bintree.h"
 #include "../Header/arrayTriplet.h"
+#include "../Header/linkedlist.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -412,12 +413,12 @@ void HandleBuild(){
 
 void HandleUpgrade(){
 	// char action[100] ; char method[100] ; char upgrade[100]; 
-	Kata Action, Nama_Wahana, StackEl;
+	Kata Action, Nama_Upgrade, StackEl;
 	char bangunan = getBangunanSekitar();
 	if (bangunan != '*'){
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
-		PrintUpgradeWahana(bangunan);
+		// PrintAvailableUpgrade(bangunan);
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;
@@ -440,7 +441,7 @@ void HandleUpgrade(){
 			if(kata_ke==1){
 				Action = CKata;
 			} else if(kata_ke==2){
-				Nama_Wahana = CKata;
+				Nama_Upgrade = CKata;
 			}
 			if(CC=='\n'){
 				break;
@@ -449,10 +450,20 @@ void HandleUpgrade(){
 			IgnoreBlank();
 		}
 		if(IsKataSama(Action, UPGRADE)){
-
-
-			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
-			Push(&aksi,StackEl.TabKata);
+			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
+			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
+			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
+			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
+			printKata(bahan);printf("\n");
+			printf("%d",Triplet_Cost(UpgradeCosts,id));printf("\n");
+			printf("%d",inventorySupply);
+			if(inventorySupply>=Triplet_Cost(UpgradeCosts,id)){
+				strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Upgrade);
+				Push(&aksi,StackEl.TabKata);
+			} else{
+				printf("Not enough materials");
+			}
+			getchar();
 		} else{
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
 			getchar();
@@ -724,7 +735,7 @@ void GameSetup (){
 	BuildTree();
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
-	state = MAIN_MENU;
+	state = MAIN_DAY;
 	CopyMATRIKS(map[cmap], &mapRoom);
 	CreateEmpty(&aksi);
 	count_aksi = 0 ;

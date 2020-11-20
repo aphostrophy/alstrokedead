@@ -71,4 +71,6 @@ void PrintUpgradeWahana(char id);
 
 void PrintAvailableUpgrade(char id);
 
+void moveUpgrade(char id, string upgrade);
+
 #endif
