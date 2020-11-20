@@ -666,7 +666,7 @@ void GameSetup (){
 	pmoney = 10000 ;
 	Hour(time) = 9 ;
 	Minute(time) = 0 ;
-	makeListWahana(&wahana);
+	bacaWahana(&wahana, "../file/wahana.txt");
 }
 
 void PrintJudul (){
