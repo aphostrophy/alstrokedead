@@ -174,15 +174,15 @@ void PrintMainDay() {
 	// Menampilkan informasi pada bagian inti game saat mainday
 	if (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '>' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '<' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '^' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == 'V' ) {
 		infotypePeta CurrentPos;
-		CurrentPos.room = cmap;
+		CurrentPos.map = cmap;
 		Absis(CurrentPos.p) = Absis(playerpos);
 		Ordinat(CurrentPos.p) = Ordinat(playerpos);
 		adrPeta P = SearchPeta(denah,CurrentPos);
 		adrTerowongan T = Trail(P);
 		P = T->Succ;
-		cmap = Id(P).room;
-		Absis(playerpos) = Absis(Id(P).p);
-		Ordinat(playerpos) = Ordinat(Id(P).p);
+		cmap = idPeta(P).map;
+		Absis(playerpos) = Absis(idPeta(P).p);
+		Ordinat(playerpos) = Ordinat(idPeta(P).p);
 	}
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
@@ -578,15 +578,15 @@ void PrintPreparationDay() {
 	Minute(buka) = 0;
 	if (Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '>' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '<' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == '^' || Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)) == 'V' ) {
 		infotypePeta CurrentPos;
-		CurrentPos.room = cmap;
+		CurrentPos.map = cmap;
 		Absis(CurrentPos.p) = Absis(playerpos);
 		Ordinat(CurrentPos.p) = Ordinat(playerpos);
 		adrPeta P = SearchPeta(denah,CurrentPos);
 		adrTerowongan T = Trail(P);
 		P = T->Succ;
-		cmap = Id(P).room;
-		Absis(playerpos) = Absis(Id(P).p);
-		Ordinat(playerpos) = Ordinat(Id(P).p);
+		cmap = idPeta(P).map;
+		Absis(playerpos) = Absis(idPeta(P).p);
+		Ordinat(playerpos) = Ordinat(idPeta(P).p);
 	}
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
@@ -657,7 +657,7 @@ void GameSetup (){
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
-	InitGraph(&denah,"../file/graph.txt");
+	BacaGraph(&denah,"../file/graph.txt");
 	state = MAIN_DAY;
 	CopyMATRIKS(map[cmap], &mapRoom);
 	CreateEmpty(&aksi);

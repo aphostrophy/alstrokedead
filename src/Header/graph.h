@@ -8,16 +8,16 @@
 #define Nil NULL
 
 typedef struct {
-	int room;
 	POINT p;
+    int map;
 } infotypePeta;
 
 typedef struct tPeta* adrPeta;
 typedef struct tTerowongan* adrTerowongan;
 typedef struct tPeta
 {
-	infotypePeta Id;
-    adrTerowongan Trail;
+	infotypePeta idPeta;
+    adrTerowongan Gerbang;
     adrPeta Next;
 } Peta;
 typedef struct tTerowongan
@@ -33,15 +33,13 @@ typedef struct
 
 /* ----- SELEKTOR ----- */
 #define First(G) (G).First
-#define Id(Pn) (Pn)->Id
-#define Trail(Pn) (Pn)->Trail
+#define idPeta(Pn) (Pn)->idPeta
+#define Gerbang(Pn) (Pn)->Gerbang
 #define Succ(Pn) (Pn)->Succ
-#define NPred(Pn) (Pn)->NPred
 #define Next(Pn) (Pn)->Next
 
 /* ----- KONSTRUKTOR ----- */
-void CreateGraph(infotypePeta X, Graph* G); 
-void InitGraph(Graph* G, char* source); 
+void BacaGraph(Graph* G, char* sumber); 
 
 /* ----- MANAJEMEN MEMORI ----- */
 adrPeta AlokPetaGraph(infotypePeta X); 

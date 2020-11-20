@@ -3,29 +3,24 @@
 #include "../Header/graph.h"
 
 /* ----- KONSTRUKTOR ----- */
-void CreateGraph(infotypePeta X, Graph* G){
+void BacaGraph(Graph* G, char* sumber){
+    FILE *file_graph = fopen(sumber, "r");
     First(*G) = Nil;
-    adrPeta P;
-    InsertPeta(G,X,&P);
-} 
-void InitGraph(Graph* G, char* source){
-    FILE *file_graph = fopen(source, "r");
-    First(*G) = Nil;
-    int a[6];
-    int X = fscanf(file_graph,"%d",&a[0]);
+    int tampungan[6];
+    int X = fscanf(file_graph,"%d",&tampungan[0]);
+    infotypePeta PrecAwal, SuccAwal;
     while (X == 1) {
         for (int i = 1; i < 6; i++) {
-            fscanf(file_graph,"%d",&a[i]);
+            fscanf(file_graph,"%d",&tampungan[i]);
         }
-        infotypePeta PrecAwal, SuccAwal;
-        PrecAwal.room = a[0];
-        Absis(PrecAwal.p) = a[1];
-        Ordinat(PrecAwal.p) = a[2];
-        SuccAwal.room = a[3];
-        Absis(SuccAwal.p) = a[4];
-        Ordinat(SuccAwal.p) = a[5];
+        PrecAwal.map = tampungan[0];
+        Absis(PrecAwal.p) = tampungan[1];
+        Ordinat(PrecAwal.p) = tampungan[2];
+        SuccAwal.map = tampungan[3];
+        Absis(SuccAwal.p) = tampungan[4];
+        Ordinat(SuccAwal.p) = tampungan[5];
         InsertTerowongan(G,PrecAwal,SuccAwal);
-        X = fscanf(file_graph,"%d",&a[0]);
+        X = fscanf(file_graph,"%d",&tampungan[0]);
     }
     fclose(file_graph);
 } 
@@ -34,8 +29,8 @@ void InitGraph(Graph* G, char* source){
 adrPeta AlokPetaGraph(infotypePeta X){
     adrPeta P = (adrPeta) malloc(sizeof(Peta));
     if (P != Nil) {
-        Id(P) = X;
-        Trail(P) = Nil;
+        idPeta(P) = X;
+        Gerbang(P) = Nil;
         Next(P) = Nil;
     }
     return P;
@@ -57,7 +52,7 @@ void DealokSuccPeta(adrTerowongan T){
 
 /* ----- OPERASI GRAF ----- */
 boolean isPetaEqual(adrPeta P, infotypePeta X){
-    if (Id(P).room == X.room && Absis(Id(P).p) == Absis(X.p) && Ordinat(Id(P).p) == Ordinat(X.p)) {
+    if (idPeta(P).map == X.map && Absis(idPeta(P).p) == Absis(X.p) && Ordinat(idPeta(P).p) == Ordinat(X.p)) {
         return true;
     }
     else {
@@ -80,7 +75,7 @@ adrTerowongan SearchTerowongan(Graph G, infotypePeta prec, infotypePeta succ){
     adrPeta Prec = SearchPeta(G,prec);
     adrTerowongan T = Nil;
     while (Prec != Nil) {
-        T = Trail(Prec);
+        T = Gerbang(Prec);
         if (isPetaEqual(Succ(T),succ)) {
             return T;
         }
@@ -113,15 +108,15 @@ void InsertTerowongan(Graph* G, infotypePeta prec, infotypePeta succ){
         if (P2 == Nil) {
             InsertPeta(G,succ,&P2);
         }
-        adrTerowongan T = Trail(P1);
+        adrTerowongan T = Gerbang(P1);
         if (T == Nil) {
-            Trail(P1) = AlokSuccPeta(P2);
+            Gerbang(P1) = AlokSuccPeta(P2);
         }
         else {
             while (Next(T) != Nil) {
                 T = Next(T);
             }
-            Next(Trail(P1)) = AlokSuccPeta(P2);
+            Next(Gerbang(P1)) = AlokSuccPeta(P2);
         }
     }
 } 
