@@ -1,4 +1,6 @@
 #include "../Header/linkedlist.h"
+#include "../Header/mesinkar.h"
+#include "../Header/mesinkata.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -46,7 +48,7 @@ linkedlist_address Search_LinkedList (List L, linkedlist_infotype X)
     boolean found=false;
     P = First_LinkedList(L);
     while(!found && P!=Nil_LinkedList) {
-        if(Info_LinkedList(P) == X){
+        if(IsKataSama(Info_LinkedList(P), X)){
             found = true;
         } else{
             P = Next_LinkedList(P);
@@ -163,7 +165,7 @@ void DelP_LinkedList (List *L, linkedlist_infotype X)
     Prec = Nil_LinkedList;
     found = false;
     while ( (P != Nil_LinkedList) && (!found) ) {
-        if (Info_LinkedList(P) == X) {
+        if (IsKataSama(Info_LinkedList(P), X)) {
             found = true;
         } else {
             Prec = P;
@@ -264,39 +266,39 @@ int NbElmt_LinkedList (List L)
     }
 }
 
-/*** Prekondisi untuk Min: List tidak kosong ***/
-linkedlist_infotype Min_LinkedList (List L)
-/* Mengirimkan Nil_LinkedListai Info_LinkedList(P) yang minimum */
-{
-    linkedlist_infotype min;
-    linkedlist_address P;
-    P = First_LinkedList(L);
-    min = Info_LinkedList(First_LinkedList(L));
-    while(Next_LinkedList(P) != Nil_LinkedList){
-        if(Info_LinkedList(P)<min){
-            min = Info_LinkedList(P);
-        }
-        P = Next_LinkedList(P);
-    }
-    return min;
-}
+// /*** Prekondisi untuk Min: List tidak kosong ***/
+// linkedlist_infotype Min_LinkedList (List L)
+// /* Mengirimkan Nil_LinkedListai Info_LinkedList(P) yang minimum */
+// {
+//     linkedlist_infotype min;
+//     linkedlist_address P;
+//     P = First_LinkedList(L);
+//     min = Info_LinkedList(First_LinkedList(L));
+//     while(Next_LinkedList(P) != Nil_LinkedList){
+//         if(Info_LinkedList(P)<min){
+//             min = Info_LinkedList(P);
+//         }
+//         P = Next_LinkedList(P);
+//     }
+//     return min;
+// }
 
-/*** Prekondisi untuk Max: List tidak kosong ***/
-linkedlist_infotype Max_LinkedList (List L)
-/* Mengirimkan Nil_LinkedListai Info_LinkedList(P) yang maksimum */
-{
-    linkedlist_infotype max;
-    linkedlist_address P;
-    max = Info_LinkedList(First_LinkedList(L));
-    P = First_LinkedList(L);
-    while(P != Nil_LinkedList){
-        if(Info_LinkedList(P)>max){
-            max = Info_LinkedList(P);
-        }
-        P = Next_LinkedList(P);
-    }
-    return max;
-}
+// /*** Prekondisi untuk Max: List tidak kosong ***/
+// linkedlist_infotype Max_LinkedList (List L)
+// /* Mengirimkan Nil_LinkedListai Info_LinkedList(P) yang maksimum */
+// {
+//     linkedlist_infotype max;
+//     linkedlist_address P;
+//     max = Info_LinkedList(First_LinkedList(L));
+//     P = First_LinkedList(L);
+//     while(P != Nil_LinkedList){
+//         if(Info_LinkedList(P)>max){
+//             max = Info_LinkedList(P);
+//         }
+//         P = Next_LinkedList(P);
+//     }
+//     return max;
+// }
 
 /****************** PROSES TERHADAP LIST ******************/
 void Konkat1_LinkedList (List *L1, List *L2, List *L3)

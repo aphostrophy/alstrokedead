@@ -2,10 +2,12 @@
 #define listlinier_H
 
 #include "boolean.h"
+#include "mesinkar.h"
+#include "mesinkata.h"
 
 #define Nil_LinkedList NULL
 
-typedef int linkedlist_infotype;
+typedef Kata linkedlist_infotype;
 typedef struct tElmtlist *linkedlist_address;
 typedef struct tElmtlist {
 	linkedlist_infotype info;
