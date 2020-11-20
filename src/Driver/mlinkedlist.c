@@ -2,9 +2,13 @@
 #include "../Header/list_linkedlist.h"
 #include "../Header/mesinkar.h"
 #include "../Header/mesinkata.h"
+#include "../Header/bintree.h"
 
 int main(){
+    bacaUpgrade("../Saves/Upgrade.txt");
+    BuildTree();
     ListNode * link[20] = { 0 };
+    PrintAvailableUpgrade('S', &link[0]);
     STARTBUY();
     while(!EOL){
         int i=0;
@@ -20,6 +24,8 @@ int main(){
     }
     printf("Oke\n");
     addUpgrade(&link[0], CKata);
+    PrintAvailableUpgrade('S', &link[0]);
+
     STARTBUY();
     while(!EOL){
         int i=0;
@@ -33,7 +39,9 @@ int main(){
         if(CC=='\n') break;
         ADV();
     }
+
     addUpgrade(&link[0], CKata);
+    PrintAvailableUpgrade('S', &link[0]);
     STARTBUY();
     while(!EOL){
         int i=0;
@@ -49,6 +57,7 @@ int main(){
     }
     printf("Oke\n");
     addUpgrade(&link[0],CKata);
+    PrintAvailableUpgrade('S', &link[0]);
     // removeUpgrade(&link[0]);
     printUpgrades(&link[0]);printf("\n");
     printUpgrades(&link[1]);printf("\n");
