@@ -8,6 +8,9 @@ int main(){
     bacaUpgrade("../Saves/Upgrade.txt");
     BuildTree();
     ListNode * link[20] = { 0 };
+    // for(int i=0;i<20;i++){
+    //     link[20] = NULL;
+    // }
     PrintAvailableUpgrade('S', &link[0]);
     STARTBUY();
     while(!EOL){

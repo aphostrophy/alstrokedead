@@ -45,6 +45,7 @@ JAM time ;
 Wahana wahana;
 Kata CKata;
 boolean EndKata;
+ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk load game bisa dilakukan add upgrade manual
 char ChoosenWahana;
 
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
@@ -735,7 +736,6 @@ void GameSetup (){
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
 	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
 	BuildTree();
-	ListNode *link[20] = { 0 };
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
 	state = MAIN_DAY;
