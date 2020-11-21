@@ -4,12 +4,12 @@
 #define _TREE_
 
 #include <string.h>
-#include "../Header/boolean.h"
-#include "../Header/mesinkata.h"
+#include "./boolean.h"
+#include "./mesinkata.h"
+#include "./list_linkedlist.h"
 
 #define bintree_Nil NULL
 
-typedef char string[100];
 typedef int bintree_infotype;
 
 typedef struct tNode *addrNode;
@@ -72,7 +72,9 @@ void PrintTree(BinTree P, int h);
 
 void PrintUpgradeWahana(char id);
 
-void PrintAvailableUpgrade(char id);
+void PrintAvailableUpgrade(char id, ListNode **head);
+
+void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head);
 
 void moveUpgrade(char id, Kata upgrade);
 

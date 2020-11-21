@@ -2,9 +2,9 @@ Sky-Coaster
 Pirate-Ship
 Tornado
 Carousel
-HauntedHouse
+Haunted-House
 Ferris-Wheel
-Giant-Swings
+Bumper-Cars
 Gyro-Drop
 Money-Up-S
 Money-Up-M

@@ -5,6 +5,7 @@
 #include "../Header/wahana.h"
 #include "../Header/mesinkar.h"
 #include "../Header/mesinkata.h"
+#include "../Header/list_linkedlist.h"
 
 BinTree listUpgrade[10];
 BinTree treeUpgrade[10];
@@ -259,25 +260,50 @@ void moveUpgrade(char id, Kata upgrade) {
     if(isChild(res_wahana, res_upgrade)) {
         listUpgrade[idx] = res_upgrade;
         levelWahana[idx]++;
-        PrintAvailableUpgrade(id);
     } else {
         printf("Invalid Upgrade!!\n");
     }
 }
 
-void PrintAvailableUpgrade(char id) {
-    BinTree res;
+void PrintAvailableUpgrade(char id, ListNode **head) {
+    BinTree P;
     for(int i = 0; i < 8; i++) {
         if(id == idWahanaUpgrade[i]) {
-            res = listUpgrade[i];
+            P = listUpgrade[i];
             break;
         }
     }
-    if(IsTreeOneElmt(res)) {
+
+    ListNode *current=*head;
+    if(current==NULL){
+        printf("Available Upgrade :\n");
+        printf("- "); printKata(arrUpgrade[Akar(Left(P))]); printf("\n");
+        printf("- "); printKata(arrUpgrade[Akar(Right(P))]); printf("\n");    
+    } else {
+        if(IsKataSama(current->data, arrUpgrade[Akar(Left(P))])) {
+            PrintAvailableUpgradeRecursion(Left(P), (&current->next));
+        } else if(IsKataSama(current->data, arrUpgrade[Akar(Right(P))])) {
+            PrintAvailableUpgradeRecursion(Right(P), (&current->next));
+        }
+    }
+    
+}
+
+void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head) {
+    if(IsTreeOneElmt(P)) {
         printf("Tidak ada upgrade lagi!!\n");
     } else {
-        printf("Available Upgrade :\n");
-        printf("- "); printKata(arrUpgrade[Akar(Left(res))]); printf("\n");
-        printf("- "); printKata(arrUpgrade[Akar(Right(res))]); printf("\n");
+        ListNode *current=*head;
+        if(current==NULL){
+            printf("Available Upgrade :\n");
+            printf("- "); printKata(arrUpgrade[Akar(Left(P))]); printf("\n");
+            printf("- "); printKata(arrUpgrade[Akar(Right(P))]); printf("\n");    
+        } else {
+            if(IsKataSama(current->data, arrUpgrade[Akar(Left(P))])) {
+                PrintAvailableUpgradeRecursion(Left(P), (&current->next));
+            } else if(IsKataSama(current->data, arrUpgrade[Akar(Right(P))])) {
+                PrintAvailableUpgradeRecursion(Right(P), (&current->next));
+            }
+        }
     }
 }
