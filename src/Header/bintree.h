@@ -68,6 +68,8 @@ boolean isElement(BinTree P, bintree_infotype X);
 /*fungsi untuk mengecek apakah X parent dari Y atau bukan */
 boolean isChild(BinTree parent, BinTree child);
 
+int findIndex(char id);
+
 void PrintTree(BinTree P, int h);
 
 void PrintUpgradeWahana(char id);

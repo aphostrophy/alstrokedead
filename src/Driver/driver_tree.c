@@ -13,63 +13,6 @@ int main() {
     // }
     // printf("\n");
 
-    // char id;
-    Kata upgrade;
-    // scanf("%c", &id);
-
-    int kata_ke = 1;
-    while(!EOP && !EOL){
-		int i = 0;
-		CKata.Length=0;
-        while(CC!=BLANK){
-			if(CC=='\r'){
-				CC ='\n';
-			}
-			if(CC=='\n'){
-				break;
-			}
-			CKata.TabKata[i] = CC;
-			i++;
-			CKata.Length=i;
-			// printf("%c",CC);
-			ADV();
-		}
-		if(kata_ke==1){
-			upgrade = CKata;
-		kata_ke++;
-		IgnoreBlank();
-        }
-    }
-
-    PrintUpgradeWahana('T');
-    PrintAvailableUpgrade('T');
-    moveUpgrade('T', upgrade);
-    PrintUpgradeWahana('T'); printf("\n");
-    
-    while(!EOP && !EOL){
-		int i = 0;
-		CKata.Length=0;
-        while(CC!=BLANK){
-			if(CC=='\r'){
-				CC ='\n';
-			}
-			if(CC=='\n'){
-				break;
-			}
-			CKata.TabKata[i] = CC;
-			i++;
-			CKata.Length=i;
-			// printf("%c",CC);
-			ADV();
-		}
-		if(kata_ke==1){
-			upgrade = CKata;
-            kata_ke++;
-            IgnoreBlank();
-        }
-    }
-
-    moveUpgrade('T', upgrade);
-    PrintUpgradeWahana('T');
+    printf("%d\n", findIndex('T'));
     return 0;
 }
