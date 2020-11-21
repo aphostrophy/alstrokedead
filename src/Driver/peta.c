@@ -46,7 +46,6 @@ Wahana wahana;
 Kata CKata;
 boolean EndKata;
 char ChoosenWahana;
-Node * link[20] = { 0 };
 
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
@@ -736,6 +735,7 @@ void GameSetup (){
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
 	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
 	BuildTree();
+	ListNode *link[20] = { 0 };
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
 	state = MAIN_DAY;
