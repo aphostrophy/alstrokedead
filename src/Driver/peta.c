@@ -416,11 +416,13 @@ void HandleBuild(){
 void HandleUpgrade(){
 	// char action[100] ; char method[100] ; char upgrade[100]; 
 	Kata Action, Nama_Upgrade, StackEl;
+	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
 	char bangunan = getBangunanSekitar();
 	if (bangunan != '*'){
+		int indexWahana = bintree_findIndex(bangunan);
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
-		PrintAvailableUpgrade(bangunan);
+		PrintAvailableUpgrade(bangunan, &link[indexWahana]);
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;
@@ -454,13 +456,16 @@ void HandleUpgrade(){
 		if(IsKataSama(Action, UPGRADE)){
 			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
 			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
+			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length++;
 			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
 			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
-			printKata(bahan);printf("\n");
+			printKata(bahan);printf(": ");
 			printf("%d",Triplet_Cost(UpgradeCosts,id));printf("\n");
-			printf("%d",inventorySupply);
+			printf("You have %d\n",inventorySupply);
 			if(inventorySupply>=Triplet_Cost(UpgradeCosts,id)){
-				strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Upgrade);
+				addUpgrade(&link[indexWahana], Nama_Upgrade);
+				Pair_Cost(Inventory,idInventory) = inventorySupply - Triplet_Cost(UpgradeCosts,id);
+				StackEl = KataConcat(StackEl,Action); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
 				Push(&aksi,StackEl.TabKata);
 			} else{
 				printf("Not enough materials");
@@ -487,7 +492,7 @@ void HandleUndo(){
 	if(!IsEmptyStack(aksi)){
 		infotype x ;
 		Pop(&aksi,&x);
-		if (x[0] == 'b' && x[2] == 'y'){
+		if (x[0] == 'b' && x[2] == 'y'){ // Untuk buy
 			char benda[100]; int n; Kata Benda;
 			AkuisisiBuy(x,&n,benda);
 			strcpy(Benda.TabKata, benda);  Benda.Length = strlen(benda);
@@ -497,7 +502,7 @@ void HandleUndo(){
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
 			Pair_Cost(Inventory,materialIndex) -= n;
 			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
-		} else if (x[0] == 'b' && x[2] == 'i') {
+		} else if (x[0] == 'b' && x[2] == 'i') { // Untuk build
 			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100]; Kata Bangunan;
 			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);
 			strcpy(Bangunan.TabKata, bangunan);  Bangunan.Length = strlen(bangunan);
@@ -736,6 +741,7 @@ void GameSetup (){
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
 	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
 	BuildTree();
+	bacaUpgrade("../Saves/Upgrade.txt");
 	Absis(playerpos) = 1;
 	Ordinat(playerpos)= 1;
 	state = MAIN_DAY;
