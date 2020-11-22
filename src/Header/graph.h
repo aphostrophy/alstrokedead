@@ -8,52 +8,50 @@
 #define Nil NULL
 
 typedef struct {
-	int room;
 	POINT p;
+    int map;
 } infotypePeta;
 
 typedef struct tPeta* adrPeta;
 typedef struct tTerowongan* adrTerowongan;
 typedef struct tPeta
 {
-	infotypePeta Id;
-    adrTerowongan Trail;
-    adrPeta Next;
+	infotypePeta idPeta;
+    adrTerowongan Gerbang;
+    adrPeta Graph_Next;
 } Peta;
 typedef struct tTerowongan
 {
-    adrPeta Succ;
-    adrTerowongan Next;
+    adrPeta Graph_Succ;
+    adrTerowongan Graph_Next;
 } Terowongan;
 
 typedef struct
 {
-    adrPeta First;
+    adrPeta Graph_First;
 } Graph;
 
 /* ----- SELEKTOR ----- */
-#define First(G) (G).First
-#define Id(Pn) (Pn)->Id
-#define Trail(Pn) (Pn)->Trail
-#define Succ(Pn) (Pn)->Succ
-#define NPred(Pn) (Pn)->NPred
-#define Next(Pn) (Pn)->Next
+#define Graph_First(G) (G).Graph_First
+#define idPeta(Pn) (Pn)->idPeta
+#define Gerbang(Pn) (Pn)->Gerbang
+#define Graph_Succ(Pn) (Pn)->Graph_Succ
+#define Graph_Next(Pn) (Pn)->Graph_Next
 
 /* ----- KONSTRUKTOR ----- */
-void CreateGraph(infotypePeta X, Graph* G); // membuat graph baru
-void InitGraph(Graph* G, char* source); // load graph dari ext
+void BacaGraph(Graph* G, char* sumber); 
 
 /* ----- MANAJEMEN MEMORI ----- */
-adrPeta AlokNodeGraph(infotypePeta X); // mengembalikan hasil alokasi simpul
-void DeAlokNodeGraph(adrPeta P); // mengembalikan simpul ke sistem
-adrTerowongan AlokSuccNode(adrPeta P); // mengembalikan hasil alokasi succ simpul
-void DealokSuccNode(adrTerowongan T); // mengembalikan succ simpul ke sistem
+adrPeta AlokPetaGraph(infotypePeta X); 
+void DeAlokPetaGraph(adrPeta P); 
+adrTerowongan AlokSuccPeta(adrPeta P); 
+void DealokSuccPeta(adrTerowongan T); 
 
 /* ----- OPERASI GRAF ----- */
-boolean isNodeEqual(adrPeta P, infotypePeta X); // mengembalikan apakah P memiliki Id X
-adrPeta SearchNode(Graph G, infotypePeta X); // mencari X pada G, return nil jika tiada
-adrTerowongan SearchEdge(Graph G, infotypePeta prec, infotypePeta succ); // mencari succ dari prec pada G, return nil jika tiada
-void InsertNode(Graph* G, infotypePeta X, adrPeta* Pn); // memasang X ke akhir G
-void InsertEdge(Graph* G, infotypePeta prec, infotypePeta succ); // memasang succ ke akhir prec
+boolean isPetaEqual(adrPeta P, infotypePeta X); 
+adrPeta SearchPeta(Graph G, infotypePeta X); 
+adrTerowongan SearchTerowongan(Graph G, infotypePeta prec, infotypePeta succ); 
+void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn); 
+void InsertTerowongan(Graph* G, infotypePeta prec, infotypePeta succ); 
 
 #endif

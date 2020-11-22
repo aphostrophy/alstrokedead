@@ -3,106 +3,120 @@
 #include "../Header/graph.h"
 
 /* ----- KONSTRUKTOR ----- */
-void CreateGraph(infotypePeta X, Graph* G){
-    First(*G) = Nil;
-    adrPeta P;
-    InsertNode(G,X,P);
-} // membuat graph baru
-void InitGraph(Graph* G, char* source){
-
-} // load graph dari ext
+void BacaGraph(Graph* G, char* sumber){
+    FILE *file_graph = fopen(sumber, "r");
+    Graph_First(*G) = Nil;
+    int tampungan[6];
+    int X = fscanf(file_graph,"%d",&tampungan[0]);
+    infotypePeta PrecAwal, SuccAwal;
+    while (X == 1) {
+        for (int i = 1; i < 6; i++) {
+            fscanf(file_graph,"%d",&tampungan[i]);
+        }
+        PrecAwal.map = tampungan[0];
+        Absis(PrecAwal.p) = tampungan[1];
+        Ordinat(PrecAwal.p) = tampungan[2];
+        SuccAwal.map = tampungan[3];
+        Absis(SuccAwal.p) = tampungan[4];
+        Ordinat(SuccAwal.p) = tampungan[5];
+        InsertTerowongan(G,PrecAwal,SuccAwal);
+        X = fscanf(file_graph,"%d",&tampungan[0]);
+    }
+    fclose(file_graph);
+} 
 
 /* ----- MANAJEMEN MEMORI ----- */
-adrPeta AlokNodeGraph(infotypePeta X){
+adrPeta AlokPetaGraph(infotypePeta X){
     adrPeta P = (adrPeta) malloc(sizeof(Peta));
     if (P != Nil) {
-        Id(P) = X;
-        Trail(P) = Nil;
-        Next(P) = Nil;
+        idPeta(P) = X;
+        Gerbang(P) = Nil;
+        Graph_Next(P) = Nil;
     }
     return P;
-} // mengembalikan hasil alokasi simpul
-void DeAlokNodeGraph(adrPeta P){
+} 
+void DeAlokPetaGraph(adrPeta P){
     free(P);
-} // mengembalikan simpul ke sistem
-adrTerowongan AlokSuccNode(adrPeta P){
+} 
+adrTerowongan AlokSuccPeta(adrPeta P){
     adrTerowongan T = (adrTerowongan) malloc(sizeof(Terowongan));
     if (T != Nil) {
-        Succ(T) = P;
-        Next(T) = Nil;
+        Graph_Succ(T) = P;
+        Graph_Next(T) = Nil;
     }
     return T;
-} // mengembalikan hasil alokasi succ simpul
-void DealokSuccNode(adrTerowongan T){
+} 
+void DealokSuccPeta(adrTerowongan T){
     free(T);
-} // mengembalikan succ simpul ke sistem
+} 
 
 /* ----- OPERASI GRAF ----- */
-boolean isNodeEqual(adrPeta P, infotypePeta X){
-    if (Id(P).room == X.room && Absis(Id(P).p) == Absis(X.p) && Ordinat(Id(P).p) == Ordinat(X.p)) {
+boolean isPetaEqual(adrPeta P, infotypePeta X){
+    if (idPeta(P).map == X.map && Absis(idPeta(P).p) == Absis(X.p) && Ordinat(idPeta(P).p) == Ordinat(X.p)) {
         return true;
     }
     else {
         return false;
     }
-} // mengembalikan apakah P memiliki Id X
-adrPeta SearchNode(Graph G, infotypePeta X){
-    adrPeta P = First(G);
+} 
+adrPeta SearchPeta(Graph G, infotypePeta X){
+    adrPeta P = Graph_First(G);
     while (P != Nil) {
-        if (isNodeEqual(P,X)) {
+        if (isPetaEqual(P,X)) {
             return P;
         }
         else {
-            P = Next(P);
+            P = Graph_Next(P);
         }
     }
     return P;
-} // mencari X pada G, return nil jika tiada
-adrTerowongan SearchEdge(Graph G, infotypePeta prec, infotypePeta succ){
-    adrPeta Prec = SearchNode(G,prec);
-    adrTerowongan T = Trail(Prec);
+} 
+adrTerowongan SearchTerowongan(Graph G, infotypePeta prec, infotypePeta Graph_Succ){
+    adrPeta Prec = SearchPeta(G,prec);
+    adrTerowongan T = Nil;
     while (Prec != Nil) {
-        if (isNodeEqual(Succ(T),succ)) {
+        T = Gerbang(Prec);
+        if (isPetaEqual(Graph_Succ(T),Graph_Succ)) {
             return T;
         }
         else {
-            Prec = Next(Prec);
+            Prec = Graph_Next(Prec);
         }
     }
     return T;
-} // mencari succ dari prec pada G, return nil jika tiada
-void InsertNode(Graph* G, infotypePeta X, adrPeta* Pn){
-    *Pn = AlokNodeGraph(X);
-    adrPeta P = First(*G);
+} 
+void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn){
+    *Pn = AlokPetaGraph(X);
+    adrPeta P = Graph_First(*G);
     if (P != Nil) {
-        while (Next(P) != Nil) {
-            P = Next(P);
+        while (Graph_Next(P) != Nil) {
+            P = Graph_Next(P);
         }
-        Next(P) = *Pn;
+        Graph_Next(P) = *Pn;
     }
     else {
-        First(*G) = *Pn;
+        Graph_First(*G) = *Pn;
     }
-} // memasang X ke akhir G
-void InsertEdge(Graph* G, infotypePeta prec, infotypePeta succ){
-    if (SearchEdge(*G,prec,succ) == Nil) {
-        adrPeta P1 = SearchNode(*G,prec);
-        adrPeta P2 = SearchNode(*G,succ);
+} 
+void InsertTerowongan(Graph* G, infotypePeta prec, infotypePeta Graph_Succ){
+    if (SearchTerowongan(*G,prec,Graph_Succ) == Nil) {
+        adrPeta P1 = SearchPeta(*G,prec);
+        adrPeta P2 = SearchPeta(*G,Graph_Succ);
         if (P1 == Nil) {
-            InsertNode(G,prec,&P1);
+            InsertPeta(G,prec,&P1);
         }
         if (P2 == Nil) {
-            InsertNode(G,succ,&P2);
+            InsertPeta(G,Graph_Succ,&P2);
         }
-        adrTerowongan T = Trail(P1);
+        adrTerowongan T = Gerbang(P1);
         if (T == Nil) {
-            T = AlokSuccNode(P2);
+            Gerbang(P1) = AlokSuccPeta(P2);
         }
         else {
-            while (Next(T) != Nil) {
-                T = Next(T);
+            while (Graph_Next(T) != Nil) {
+                T = Graph_Next(T);
             }
-            T = AlokSuccNode(P2);
+            Graph_Next(Gerbang(P1)) = AlokSuccPeta(P2);
         }
     }
-} // memasang succ ke akhir prec
+} 
