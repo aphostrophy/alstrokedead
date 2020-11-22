@@ -163,3 +163,32 @@ void printKata(Kata in) {
         printf("%c", in.TabKata[i]);
     }
 }
+
+void IntToKataRei(int in, Kata* Nilai) {
+    char StringNilai[100];
+    sprintf(StringNilai, "%d", in);
+    (*Nilai).Length=0; strcpy((*Nilai).TabKata,"");
+    int len = 1;
+    while (in / 10 != 0) {
+        len = len +1 ;
+        in = in /10 ;
+    }
+    (*Nilai).Length = len;
+    
+    for (int i = 0 ; i < len ; i++){
+        (*Nilai).TabKata[i] = StringNilai[i];
+    }
+}
+
+Kata IntToKata(int in){
+    Kata out;
+    int countDigits=0;
+    while(in!=0){
+        int ascii = (in % 10)+48;
+        out.TabKata[countDigits] = (char)ascii;
+        countDigits++;
+        in = in / 10;
+    }
+    out.Length=countDigits;
+    return out;
+}
