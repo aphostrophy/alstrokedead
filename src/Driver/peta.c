@@ -465,7 +465,7 @@ void HandleUpgrade(){
 			if(inventorySupply>=Triplet_Cost(UpgradeCosts,id)){
 				addUpgrade(&link[indexWahana], Nama_Upgrade);
 				Pair_Cost(Inventory,idInventory) = inventorySupply - Triplet_Cost(UpgradeCosts,id);
-				StackEl = KataConcat(StackEl,Action); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
+				StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
 				Push(&aksi,StackEl.TabKata);
 			} else{
 				printf("Not enough materials");
@@ -482,7 +482,6 @@ void HandleUpgrade(){
 		printf("Tidak ada wahana di sekitar Anda");
 		getchar();
 	}
-
 }
 
 void HandleUndo(){

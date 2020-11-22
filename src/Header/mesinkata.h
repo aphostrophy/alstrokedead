@@ -58,4 +58,6 @@ Kata copyKata(Kata in);
 
 void printKata(Kata in);
 
+Kata lowerCaseKata(Kata in);
+
 #endif
