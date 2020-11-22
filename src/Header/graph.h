@@ -18,25 +18,25 @@ typedef struct tPeta
 {
 	infotypePeta idPeta;
     adrTerowongan Gerbang;
-    adrPeta Next;
+    adrPeta Graph_Next;
 } Peta;
 typedef struct tTerowongan
 {
-    adrPeta Succ;
-    adrTerowongan Next;
+    adrPeta Graph_Succ;
+    adrTerowongan Graph_Next;
 } Terowongan;
 
 typedef struct
 {
-    adrPeta First;
+    adrPeta Graph_First;
 } Graph;
 
 /* ----- SELEKTOR ----- */
-#define First(G) (G).First
+#define Graph_First(G) (G).Graph_First
 #define idPeta(Pn) (Pn)->idPeta
 #define Gerbang(Pn) (Pn)->Gerbang
-#define Succ(Pn) (Pn)->Succ
-#define Next(Pn) (Pn)->Next
+#define Graph_Succ(Pn) (Pn)->Graph_Succ
+#define Graph_Next(Pn) (Pn)->Graph_Next
 
 /* ----- KONSTRUKTOR ----- */
 void BacaGraph(Graph* G, char* sumber); 
