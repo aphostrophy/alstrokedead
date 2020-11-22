@@ -11,7 +11,7 @@
 #include "../Header/wahana.h"
 #include "../Header/bintree.h"
 #include "../Header/arrayTriplet.h"
-#include "../Header/linkedlist.h"
+#include "../Header/list_linkedlist.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,6 +45,7 @@ JAM time ;
 Wahana wahana;
 Kata CKata;
 boolean EndKata;
+ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk load game bisa dilakukan add upgrade manual
 char ChoosenWahana;
 Kata NamaSaveFile; Kata NamaLoadFile; 
 
@@ -464,7 +465,7 @@ void HandleUpgrade(){
 	if (bangunan != '*'){
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
-		// PrintAvailableUpgrade(bangunan);
+		PrintAvailableUpgrade(bangunan);
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;

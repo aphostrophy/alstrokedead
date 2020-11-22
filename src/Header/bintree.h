@@ -4,11 +4,12 @@
 #define _TREE_
 
 #include <string.h>
-#include "../Header/boolean.h"
+#include "./boolean.h"
+#include "./mesinkata.h"
+#include "./list_linkedlist.h"
 
 #define bintree_Nil NULL
 
-typedef char string[100];
 typedef int bintree_infotype;
 
 typedef struct tNode *addrNode;
@@ -21,12 +22,14 @@ typedef struct tNode{
 typedef addrNode BinTree;
 
 extern BinTree listUpgrade[10];
-extern string arrNamaWahana[10];
-extern string arrUpgrade[10];
+extern Kata arrNamaWahana[10];
+extern Kata arrUpgrade[10];
 
 #define Akar(P) (P)->info
 #define Left(P) (P)->left
 #define Right(P) (P)->right
+
+void bacaUpgrade(char* namaFile);
 
 void BuatTree(BinTree parent, BinTree l, BinTree r);
 
@@ -65,12 +68,16 @@ boolean isElement(BinTree P, bintree_infotype X);
 /*fungsi untuk mengecek apakah X parent dari Y atau bukan */
 boolean isChild(BinTree parent, BinTree child);
 
+int findIndex(char id);
+
 void PrintTree(BinTree P, int h);
 
 void PrintUpgradeWahana(char id);
 
-void PrintAvailableUpgrade(char id);
+void PrintAvailableUpgrade(char id, ListNode **head);
 
-void moveUpgrade(char id, string upgrade);
+void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head);
+
+void moveUpgrade(char id, Kata upgrade);
 
 #endif
