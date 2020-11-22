@@ -4,9 +4,11 @@
 
 int main() {
     Graph G;
-    infotypePeta PA;
-    PA.room = 2;
-    Absis(PA.p) = 3;
-    Ordinat(PA.p) = 4;
-    CreateGraph(PA,&G);
+    InitGraph(&G,"./file/graph.txt");
+    if (First(G) != Nil) {
+        printf("Berhasil!");
+    }
+    else {
+        printf("lol no");
+    }
 }
