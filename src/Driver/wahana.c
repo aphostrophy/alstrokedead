@@ -116,22 +116,6 @@ void bacaWahana(Wahana *W, char* namaFile) {
 	}
 }
 
-Kata copyKata(Kata in) {
-    Kata out;
-    // printf("%s %d\n", CKata.TabKata, CKata.Length);
-    out.Length = in.Length;
-    for(int i = 0; i < in.Length; i++) {
-        out.TabKata[i] = in.TabKata[i];
-    }
-    return out;
-}
-
-void printKata(Kata in) {
-    for(int i = 0; i < in.Length; i++) {
-        printf("%c", in.TabKata[i]);
-    }
-}
-
 /* SELEKTOR */
 Kata getNama(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {

@@ -9,7 +9,13 @@
 #include "../Header/arrayPair.h"
 #include "../Header/jam.h"
 #include "../Header/wahana.h"
+<<<<<<< HEAD
 #include "../Header/graph.h"
+=======
+#include "../Header/bintree.h"
+#include "../Header/arrayTriplet.h"
+#include "../Header/list_linkedlist.h"
+>>>>>>> fb6365646c423034f8bcc3ffd6b6d0c8ad558dd0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,6 +47,7 @@ JAM time ;
 Wahana wahana;
 Kata CKata;
 boolean EndKata;
+ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk load game bisa dilakukan add upgrade manual
 char ChoosenWahana;
 Graph denah;
 
@@ -250,6 +257,7 @@ void HandleBuy() {
 			Push(&aksi,StackEl.TabKata);
 			count_aksi = count_aksi + 1;
 			need_time = need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
+			Pair_Cost(Inventory,materialIndex) += jumlah_int;
 			
 		} else{ // Uang tidak cukup
 			printf("Uang tidak cukup! Tekan apapun untuk melanjutkan\n");
@@ -364,7 +372,7 @@ void HandleBuild(){
 				} else {
 					Pair_Cost(need_material,materialIndex) = Pair_Cost(need_material,materialIndex) + banyakAmberdibutuhkan ;
 					need_money = need_money + Pair_Cost(HargaBuild,bangunanIndex);
-					Elmt(map[PbuildMap],PbuildX,PbuildY) = 'X';
+					Elmt(map[PbuildMap],PbuildX,PbuildY) = Bangunan.TabKata[0];
 					sprintf(SbuildX, "%d", PbuildX); sprintf(SbuildY, "%d", PbuildY); sprintf(SbuildMap, "%d", PbuildMap); sprintf(SbuildY, "%d", PbuildY);
 					strcpy(StackEl.TabKata,""); StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," ");StackEl.Length++; strcat(StackEl.TabKata,SbuildX);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildY);strcat(StackEl.TabKata," "); strcat(StackEl.TabKata,SbuildMap);
 					Push(&aksi,StackEl.TabKata);
@@ -394,6 +402,10 @@ void HandleUpgrade(){
 	if (bangunan != '*'){
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
+<<<<<<< HEAD
+=======
+		PrintAvailableUpgrade(bangunan);
+>>>>>>> fb6365646c423034f8bcc3ffd6b6d0c8ad558dd0
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;
@@ -457,6 +469,7 @@ void HandleUndo(){
 			need_money = need_money - n*Pair_Cost(Materials,materialIndex);
 			count_aksi = count_aksi - 1;
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
+			Pair_Cost(Inventory,materialIndex) -= n;
 			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
 			// Kurangi waktu yang dibutuhkan dari buy
 		} else if (x[0] == 'b' && x[2] == 'i') {
@@ -504,7 +517,7 @@ void HandleExecution(){
 			strcpy(Benda.TabKata, benda);  Benda.Length = strlen(benda);
 			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
 			int materialIndex = ArrayPair_SearchByItem(Materials,Benda);
-			Pair_Cost(Inventory,materialIndex) += n; // Menambah jumlah barang di inventory
+			// Pair_Cost(Inventory,materialIndex) += n; // Menambah jumlah barang di inventory
 		} else if (x[0] == 'b' && x[2] == 'i') {
 			int PbuildX; int PbuildY; int PbuildMap; char bangunan[100];
 			AkuisisiBuild(x,&PbuildX,&PbuildY,&PbuildMap,bangunan);

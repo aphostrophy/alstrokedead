@@ -1,6 +1,7 @@
 #include "../Header/linkedlist.h"
 #include "../Header/mesinkar.h"
 #include "../Header/mesinkata.h"
+#include "../Header/list_linkedlist.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -15,6 +16,11 @@ void CreateEmpty_LinkedList (List *L){
 }
 /* I.S. sembarang             */
 /* F.S. Terbentuk list kosong */
+
+List CreateEmpty_LinkedListReturn(){
+    List L;
+    First_LinkedList(L)=Nil_LinkedList;
+}
 
 /****************** Manajemen Memori ******************/
 linkedlist_address Alokasi_LinkedList (linkedlist_infotype X){

@@ -147,3 +147,19 @@ Kata KataConcat(Kata K1, Kata K2){
     K1.Length = K1.Length + K2.Length;
     return K1;
 }
+
+Kata copyKata(Kata in) {
+    Kata out;
+    // printf("%s %d\n", CKata.TabKata, CKata.Length);
+    out.Length = in.Length;
+    for(int i = 0; i < in.Length; i++) {
+        out.TabKata[i] = in.TabKata[i];
+    }
+    return out;
+}
+
+void printKata(Kata in) {
+    for(int i = 0; i < in.Length; i++) {
+        printf("%c", in.TabKata[i]);
+    }
+}

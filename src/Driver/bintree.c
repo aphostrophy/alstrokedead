@@ -3,14 +3,44 @@
 #include "string.h"
 #include "../Header/bintree.h"
 #include "../Header/wahana.h"
+#include "../Header/mesinkar.h"
+#include "../Header/mesinkata.h"
+#include "../Header/list_linkedlist.h"
 
 BinTree listUpgrade[10];
 BinTree treeUpgrade[10];
 
-string arrNamaWahanaUpgrade[10] = {"Sky Coaster", "Pirate Ship", "Tornado", "Carousel", "Haunted House", "Ferris Wheel", "Giant Swings", "Gyro Drop"};
-char idWahanaUpgrade[8] = {'S', 'P', 'T', 'C', 'H', 'F','G','Y'};
-string arrUpgrade[10] = {"Money-Up-S", "Money-Up-M", "Money-Up-XL", "capacity-up-S", "capacity-up-M", "capacity-up-XL", "speed-up-S", "speed-up-M", "speed-up-XL"};
+Kata arrNamaWahanaUpgrade[10];
+Kata idWahanaUpgrade[8];
+Kata arrUpgrade[10];
 int levelWahana[10] = {1, 1, 1, 1, 1, 1, 1, 1};
+
+void bacaUpgrade(char* namaFile) {
+    int idx = 0;
+    START(namaFile);
+    while(!EOP) {
+        IgnoreBlank();
+        int i = 0;
+        while(!EOL) {
+            if(CC == '\n' || CC == '.') break;
+            CKata.TabKata[i] = CC;
+            ADV();
+            i++;
+        }
+        if(CC == '.') break;
+        CKata.Length = i;
+        if (idx < 8) {
+            idWahanaUpgrade[idx] = CKata;
+        }
+        else if(idx < 16) {
+            arrNamaWahanaUpgrade[idx-8] = CKata;
+        } else if(idx < 25) {
+            arrUpgrade[idx-16] = CKata;
+        }
+        idx++;
+        ADV();
+    }
+}
 
 void buatTree(BinTree parent,BinTree l, BinTree r){
     Left(parent) = l;
@@ -120,10 +150,10 @@ boolean IsBiner(BinTree P)
 
 
 /*fungsi untuk mencari bahan makanan */
-int findIndex(string namaWahana){
+int bintree_findIndex(char id){
     int ret = -1;
     for (int i = 0; i < 8 && ret == -1; i++){
-        if (strcmp(namaWahana, arrNamaWahanaUpgrade[i]) == 0){
+        if (id == idWahanaUpgrade[i].TabKata[0]){
             ret = i;
         }
     }
@@ -156,9 +186,9 @@ void PrintTreeUtil(BinTree P, int h, int level){
     if(IsTreeEmpty(P)) return;
 
     if(level == 1) {
-        printf("%s\n", arrNamaWahanaUpgrade[Akar(P)]);
+        printKata(arrNamaWahanaUpgrade[Akar(P)]); printf("\n");
     } else {
-        printf("%s\n", arrUpgrade[Akar(P)]);
+        printKata(arrUpgrade[Akar(P)]); printf("\n");
     }
   
     if(!IsTreeEmpty(Left(P))){
@@ -200,7 +230,7 @@ A
 void PrintUpgradeWahana(char id) {
     int res;
     for(int i = 0; i < 8; i++) {
-        if(id == idWahanaUpgrade[i]) {
+        if(id == idWahanaUpgrade[i].TabKata[0]) {
             res = i;
             break;
         }
@@ -212,12 +242,12 @@ void PrintUpgradeWahana(char id) {
     }
 }
 
-void moveUpgrade(char id, string upgrade) {
+void moveUpgrade(char id, Kata upgrade) {
     BinTree res_upgrade, res_wahana;
     int idx;
     // Mencari wahana
     for(int i = 0; i < 8; i++) {
-        if(id == idWahanaUpgrade[i]) {
+        if(id == idWahanaUpgrade[i].TabKata[0]) {
             idx = i;
             res_wahana = listUpgrade[i];
             break;
@@ -225,7 +255,7 @@ void moveUpgrade(char id, string upgrade) {
     }
 
     for(int i = 0; i < 9; i++) {
-        if(strcmp(upgrade, arrUpgrade[i]) == 0) {
+        if(IsKataSama(upgrade, arrUpgrade[i])) {
             res_upgrade = treeUpgrade[i];
         }
     }
@@ -233,25 +263,50 @@ void moveUpgrade(char id, string upgrade) {
     if(isChild(res_wahana, res_upgrade)) {
         listUpgrade[idx] = res_upgrade;
         levelWahana[idx]++;
-        PrintAvailableUpgrade(id);
     } else {
         printf("Invalid Upgrade!!\n");
     }
 }
 
-void PrintAvailableUpgrade(char id) {
-    BinTree res;
+void PrintAvailableUpgrade(char id, ListNode **head) {
+    BinTree P;
     for(int i = 0; i < 8; i++) {
-        if(id == idWahanaUpgrade[i]) {
-            res = listUpgrade[i];
+        if(id == idWahanaUpgrade[i].TabKata[0]) {
+            P = listUpgrade[i];
             break;
         }
     }
-    if(IsTreeOneElmt(res)) {
+
+    ListNode *current=*head;
+    if(current==NULL){
+        printf("Available Upgrade :\n");
+        printf("- "); printKata(arrUpgrade[Akar(Left(P))]); printf("\n");
+        printf("- "); printKata(arrUpgrade[Akar(Right(P))]); printf("\n");    
+    } else {
+        if(IsKataSama(current->data, arrUpgrade[Akar(Left(P))])) {
+            PrintAvailableUpgradeRecursion(Left(P), (&current->next));
+        } else if(IsKataSama(current->data, arrUpgrade[Akar(Right(P))])) {
+            PrintAvailableUpgradeRecursion(Right(P), (&current->next));
+        }
+    }
+    
+}
+
+void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head) {
+    if(IsTreeOneElmt(P)) {
         printf("Tidak ada upgrade lagi!!\n");
     } else {
-        printf("Available Upgrade :\n");
-        printf("- %s\n", arrUpgrade[Akar(Left(res))]);
-        printf("- %s\n", arrUpgrade[Akar(Right(res))]);
+        ListNode *current=*head;
+        if(current==NULL){
+            printf("Available Upgrade :\n");
+            printf("- "); printKata(arrUpgrade[Akar(Left(P))]); printf("\n");
+            printf("- "); printKata(arrUpgrade[Akar(Right(P))]); printf("\n");    
+        } else {
+            if(IsKataSama(current->data, arrUpgrade[Akar(Left(P))])) {
+                PrintAvailableUpgradeRecursion(Left(P), (&current->next));
+            } else if(IsKataSama(current->data, arrUpgrade[Akar(Right(P))])) {
+                PrintAvailableUpgradeRecursion(Right(P), (&current->next));
+            }
+        }
     }
 }
