@@ -1,4 +1,4 @@
-/* File : stackt.h */
+/* File : stackt2.h */
 /* deklarasi stack yang diimplementasi dengan tabel kontigu dan ukuran sama */
 /* TOP adalah alamat elemen puncak */
 /* Implementasi dalam bahasa C dengan alokasi statik */
@@ -6,6 +6,8 @@
 #define stackt_H
 
 #include "boolean.h"
+#include "mesinkar.h"
+#include "mesinkata.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -13,7 +15,7 @@
 #define MaxEl 10
 /* Nil adalah stack dengan elemen kosong . */
 
-typedef char infotype[100];
+typedef Kata infotype;
 typedef int address;   /* indeks tabel */
 
 /* Contoh deklarasi variabel bertype stack dengan ciri TOP : */
@@ -31,6 +33,8 @@ typedef struct {
 /* Definisi akses dengan Selektor : Set dan Get */
 #define Top(S) (S).TOP
 #define InfoTop(S) (S).T[(S).TOP]
+#define InfoTopKata(S) (S).T[(S).TOP].TabKata
+#define InfoTopLength(S) (S).T[(S).TOP].Length
 
 /* ************ Prototype ************ */
 /* *** Konstruktor/Kreator *** */
@@ -73,5 +77,6 @@ void PrintStack(Stack S);
 void AkuisisiBuy(infotype S, int* N, char benda[100]);
 void AkuisisiBuild(infotype S, int* buildX, int* buildY, int* buildMap, char bangunan[100]);
 void AkuisisiUpgrade(infotype S, int* N, char benda[100]);
-
+void AkuisisiBuyV2(infotype S, int* Nbenda, Kata* benda);
+void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* bangunan);
 #endif
