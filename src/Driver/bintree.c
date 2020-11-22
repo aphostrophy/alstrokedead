@@ -11,7 +11,7 @@ BinTree listUpgrade[10];
 BinTree treeUpgrade[10];
 
 Kata arrNamaWahanaUpgrade[10];
-char idWahanaUpgrade[8] = {'S', 'P', 'T', 'C', 'H', 'F','G','Y'};
+Kata idWahanaUpgrade[8];
 Kata arrUpgrade[10];
 int levelWahana[10] = {1, 1, 1, 1, 1, 1, 1, 1};
 
@@ -29,10 +29,13 @@ void bacaUpgrade(char* namaFile) {
         }
         if(CC == '.') break;
         CKata.Length = i;
-        if(idx < 8) {
-            arrNamaWahanaUpgrade[idx] = CKata;
-        } else if(idx < 17) {
-            arrUpgrade[idx-8] = CKata;
+        if (idx < 8) {
+            idWahanaUpgrade[idx] = CKata;
+        }
+        else if(idx < 16) {
+            arrNamaWahanaUpgrade[idx-8] = CKata;
+        } else if(idx < 25) {
+            arrUpgrade[idx-16] = CKata;
         }
         idx++;
         ADV();
@@ -147,10 +150,10 @@ boolean IsBiner(BinTree P)
 
 
 /*fungsi untuk mencari bahan makanan */
-int findIndex(Kata namaWahana){
+int bintree_findIndex(char id){
     int ret = -1;
     for (int i = 0; i < 8 && ret == -1; i++){
-        if (IsKataSama(namaWahana, arrNamaWahanaUpgrade[i])){
+        if (id == idWahanaUpgrade[i].TabKata[0]){
             ret = i;
         }
     }
@@ -227,7 +230,7 @@ A
 void PrintUpgradeWahana(char id) {
     int res;
     for(int i = 0; i < 8; i++) {
-        if(id == idWahanaUpgrade[i]) {
+        if(id == idWahanaUpgrade[i].TabKata[0]) {
             res = i;
             break;
         }
@@ -244,7 +247,7 @@ void moveUpgrade(char id, Kata upgrade) {
     int idx;
     // Mencari wahana
     for(int i = 0; i < 8; i++) {
-        if(id == idWahanaUpgrade[i]) {
+        if(id == idWahanaUpgrade[i].TabKata[0]) {
             idx = i;
             res_wahana = listUpgrade[i];
             break;
@@ -268,7 +271,7 @@ void moveUpgrade(char id, Kata upgrade) {
 void PrintAvailableUpgrade(char id, ListNode **head) {
     BinTree P;
     for(int i = 0; i < 8; i++) {
-        if(id == idWahanaUpgrade[i]) {
+        if(id == idWahanaUpgrade[i].TabKata[0]) {
             P = listUpgrade[i];
             break;
         }
