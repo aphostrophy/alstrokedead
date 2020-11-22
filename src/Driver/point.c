@@ -22,7 +22,7 @@ void BacaPOINT (POINT * P){
 /* I.S. Sembarang */
 /* F.S. P terdefinisi */
     int X, Y;
-    scanf("%f %f", &X, &Y);
+    scanf("%d %d", &X, &Y);
     Absis(*P) = X;
     Ordinat(*P) = Y;
 }
@@ -35,7 +35,7 @@ void TulisPOINT (POINT P){
 */
 /* I.S. P terdefinisi */
 /* F.S. P tertulis di layar dengan format "(X,Y)" */
-    printf("(%.2f,%.2f)", Absis(P), Ordinat(P));
+    printf("(%d,%d)", Absis(P), Ordinat(P));
 }
 
 /* *** Kelompok operasi relasional terhadap POINT *** */
