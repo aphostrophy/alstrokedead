@@ -185,6 +185,21 @@ int KataToInt(Kata in){
         hasil = hasil + (int)in.TabKata[i]-48;
     }
     return hasil;
+  
+void IntToKataRei(int in, Kata* Nilai) {
+    char StringNilai[100];
+    sprintf(StringNilai, "%d", in);
+    (*Nilai).Length=0; strcpy((*Nilai).TabKata,"");
+    int len = 1;
+    while (in / 10 != 0) {
+        len = len +1 ;
+        in = in /10 ;
+    }
+    (*Nilai).Length = len;
+    
+    for (int i = 0 ; i < len ; i++){
+        (*Nilai).TabKata[i] = StringNilai[i];
+    }
 }
 
 Kata IntToKata(int in){
