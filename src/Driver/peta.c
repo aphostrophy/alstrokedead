@@ -444,13 +444,15 @@ void HandleBuild(){
 
 void HandleUpgrade(){
 	// char action[100] ; char method[100] ; char upgrade[100]; 
+	Kata Action, Nama_Upgrade, StackEl;
+	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
 	Kata Action, Nama_Wahana, StackEl;
 	char bangunan = getBangunanSekitar();
 	if (bangunan != '*'){
+		int indexWahana = bintree_findIndex(bangunan);
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
-		// PrintAvailableUpgrade(bangunan);
-		PrintAvailableUpgrade(bangunan);
+		PrintAvailableUpgrade(bangunan, &link[indexWahana]);
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;
@@ -484,18 +486,24 @@ void HandleUpgrade(){
 		if(IsKataSama(Action, UPGRADE)){
 			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
 			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
+			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length++;
 			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
 			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
-			printKata(bahan);printf("\n");
+			printKata(bahan);printf(": ");
 			printf("%d",Triplet_Cost(UpgradeCosts,id));printf("\n");
-			printf("%d",inventorySupply);
+			printf("You have %d\n",inventorySupply);
 			if(inventorySupply>=Triplet_Cost(UpgradeCosts,id)){
-				StackEl.Length=0;strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Upgrade);
-				Push(&aksi,StackEl);
+				addUpgrade(&link[indexWahana], Nama_Upgrade);
+				Pair_Cost(Inventory,idInventory) = inventorySupply - Triplet_Cost(UpgradeCosts,id);
+				StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
+				Push(&aksi,StackEl.TabKata);
 			} else{
 				printf("Not enough materials");
 			}
 			getchar();
+			//Validasi di sini, tapi belum ,soalnya g tau dmn :v
+			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
+			Push(&aksi,StackEl.TabKata);
 		} else{
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
 			getchar();
@@ -507,7 +515,6 @@ void HandleUpgrade(){
 		printf("Tidak ada wahana di sekitar Anda");
 		getchar();
 	}
-
 }
 
 void HandleUndo(){
@@ -717,6 +724,22 @@ void SetupMainMenu(){
 	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
 	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
+
+	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
+	BuildTree();
+	bacaUpgrade("../Saves/Upgrade.txt");
+	Absis(playerpos) = 1;
+	Ordinat(playerpos)= 1;
+	BacaGraph(&denah,"../file/graph.txt");
+	state = MAIN_DAY;
+	CopyMATRIKS(map[cmap], &mapRoom);
+	CreateEmpty(&aksi);
+	count_aksi = 0 ;
+	need_money = 0 ;
+	pmoney = 10000 ;
+	Hour(time) = 9 ;
+	Minute(time) = 0 ;
+	bacaWahana(&wahana, "../file/wahana.txt");
   BacaGraph(&denah,"../file/graph.txt");
 	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
 	BuildTree();

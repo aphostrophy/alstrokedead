@@ -149,7 +149,6 @@ boolean IsBiner(BinTree P)
 }
 
 
-/*fungsi untuk mencari bahan makanan */
 int bintree_findIndex(char id){
     int ret = -1;
     for (int i = 0; i < 8 && ret == -1; i++){

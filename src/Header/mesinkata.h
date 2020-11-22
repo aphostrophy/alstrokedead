@@ -57,6 +57,9 @@ Kata KataConcat(Kata K1,Kata K2);
 Kata copyKata(Kata in);
 
 void printKata(Kata in);
+
+Kata lowerCaseKata(Kata in);
+
 void IntToKataRei(int in, Kata* Nilai);
 Kata IntToKata(int in);
 #endif
