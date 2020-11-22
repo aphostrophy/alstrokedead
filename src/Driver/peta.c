@@ -31,7 +31,7 @@
 // =======================================================================================================
 
 // =========================Pendefinisian global variabel yang akan dipakai===============================
-char namaPlayer[100];
+Kata namaPlayer;
 int cmap;
 int state;
 MATRIKS map[5], mapRoom;
@@ -46,13 +46,58 @@ Wahana wahana;
 Kata CKata;
 boolean EndKata;
 char ChoosenWahana;
+Kata NamaSaveFile; Kata NamaLoadFile; 
+
+struct SaveDat {
+    int cmap;
+	int state;
+	POINT playerpos;
+	int pmoney;
+	JAM time;
+	Wahana wahana;
+	int count_aksi, need_money, need_time;
+	TabInt Inventory;
+	Stack aksi;
+	// Dan Masih banyak lagi menunggu yang belum
+};
 
 // Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
 
 // ==================================== Fungsi Main Menu  ================================================
 
+void SaveGame (){
 
+}
+
+void SetupLoadGame (FILE *loadfile){
+	struct SaveDat TempSave;
+	fread(&TempSave, sizeof(struct SaveDat), 1, loadfile);
+	cmap = TempSave.cmap;
+	state = TempSave.state;
+	playerpos = TempSave.playerpos;
+	pmoney = TempSave.pmoney;
+	wahana = TempSave.wahana;
+	count_aksi = TempSave.count_aksi; need_money = TempSave.need_money; need_time = TempSave.need_time;
+	Inventory = TempSave.Inventory;
+	aksi = TempSave.aksi;
+	time = TempSave.time;
+	fclose(loadfile);
+	CopyMATRIKS(map[cmap], &mapRoom);
+}
+
+void SetupNewGame (){
+	cmap = 0;
+	state = MAIN_DAY;
+	Absis(playerpos) = 1; Ordinat(playerpos)= 1;
+	pmoney = 10000 ;
+	bacaWahana(&wahana, "../file/wahana.txt");
+	count_aksi = 0 ; need_money = 0 ;
+	ArrayPair_MakeEmpty(&Inventory); ArrayPair_BacaIsi(&Inventory, "../Saves/Inventory.txt");
+	CreateEmpty(&aksi);	
+	Hour(time) = 9 ; Minute(time) = 0 ;
+	CopyMATRIKS(map[cmap], &mapRoom);
+}
 // =======================================================================================================
 
 
@@ -211,7 +256,7 @@ void PrintMainDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
-	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer, pmoney, Durasi(time, tutup));
+	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer.TabKata, pmoney, Durasi(time, tutup));
 	printf("%s","Jam : ");
 	TulisJAM(time);
 	printf("\n");
@@ -649,7 +694,7 @@ void PrintPreparationDay() {
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
 
-	printf("Nama : %s		Uang: %d		Waktu sebelum buka: %d menit\n", "stranger", pmoney, Durasi(time, buka));
+	printf("Nama : %s		Uang: %d		Waktu sebelum buka: %d menit\n", namaPlayer.TabKata, pmoney, Durasi(time, buka));
 	printf("Material yang dibutuhkan: ");ArrayPair_TulisIsiTab(need_material);printf("\n");
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, need_time);
 	printf("%s","Jam : ");
@@ -712,12 +757,9 @@ void InputOffice() {
 
 
 // =========================================Fungsi Umum===================================================
-void GameSetup (){
+void SetupMainMenu(){
 	// Setup awal untuk memulai game
-	strcpy(namaPlayer,"");
-	cmap = 0;
 	ArrayPair_MakeEmpty(&Materials);
-	ArrayPair_MakeEmpty(&Inventory);
 	ArrayPair_MakeEmpty(&need_material);
 	ArrayPair_MakeEmpty(&HargaBuild);
 	ArrayPair_MakeEmpty(&MaterialBuild);
@@ -728,25 +770,15 @@ void GameSetup (){
 	BacaMATRIKS(&map[2], "../file/2.txt");
 	BacaMATRIKS(&map[3], "../file/3.txt");
 	ArrayPair_BacaIsi(&Materials, "../Saves/Materials.txt");
-	ArrayPair_BacaIsi(&Inventory, "../Saves/Inventory.txt");
 	ArrayPair_BacaIsi(&need_material, "../Saves/Inventory.txt");
 	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
 	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
 	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
 	BuildTree();
-	Absis(playerpos) = 1;
-	Ordinat(playerpos)= 1;
-	state = MAIN_DAY;
-	CopyMATRIKS(map[cmap], &mapRoom);
-	CreateEmpty(&aksi);
-	count_aksi = 0 ;
-	need_money = 0 ;
-	pmoney = 10000 ;
-	Hour(time) = 9 ;
-	Minute(time) = 0 ;
-	bacaWahana(&wahana, "../file/wahana.txt");
+	state = MAIN_MENU;
 }
+
 
 void PrintJudul (){
 	// printf("%s\n","==================================================================");
@@ -874,13 +906,19 @@ void BacaInput(){
 			for(int i=0;i<NAMA.Length;i++){
 				printf("%c", NAMA.TabKata[i]);
 			}
+			strcpy(namaPlayer.TabKata,""); namaPlayer.Length = 0;
+			namaPlayer = KataConcat(namaPlayer,NAMA);
 			printf(" semoga senang :)");
 			getchar();
-			state = MAIN_DAY;
+			SetupNewGame();
+	
 		}
 		break;
 	case LOAD_GAME: ; //Semicolon for Label Handling
 		Kata NAME;
+		Kata FILEPATH;
+		FILEPATH.Length = 9;
+		FILEPATH.TabKata[0] = '.'; FILEPATH.TabKata[1] = '.'; FILEPATH.TabKata[2] ='/';  FILEPATH.TabKata[3] ='S';  FILEPATH.TabKata[4] ='a';  FILEPATH.TabKata[5] = 'v'; FILEPATH.TabKata[6] ='e';  FILEPATH.TabKata[7] ='s';  FILEPATH.TabKata[8] ='/'; 
 		STARTBUY();
 		while(!EOL){
 			IgnoreBlank();
@@ -901,13 +939,22 @@ void BacaInput(){
 		if(IsKataSama(NAMA,EXIT)) {
 			state = MAIN_MENU;
 		} else {
-			// strcpy(namaPlayer, name);
-			printf("Selamat bermain %s semoga senang :)");
-			for(int i=0;i<NAMA.Length;i++){
-				printf("%c", NAMA.TabKata[i]);
+			NamaLoadFile.Length = 0;
+			strcpy(NamaLoadFile.TabKata,""); NamaLoadFile = KataConcat(NamaLoadFile,FILEPATH); NamaLoadFile = KataConcat(NamaLoadFile,NAMA);
+			FILE *loadfile;
+			loadfile = fopen(NamaLoadFile.TabKata, "r");
+			if (loadfile){
+				if (loadfile== NULL){ 
+					printf("Error File Content, Press anything to continue"); getchar();
+				} else {
+					printf("file Opened");
+					SetupLoadGame(loadfile);
+					state = MAIN_MENU;
+				} 
+			} else {
+				printf("Invalid File Name, Press anything to continue"); getchar();
 			}
-			getchar();
-			state = MAIN_DAY;
+
 		}
 		break;
 	case MAIN_DAY:
@@ -1011,6 +1058,6 @@ void UserInterface(){
 // =======================================================================================================
 
 int main(){
-	GameSetup();
+	SetupMainMenu();
 	UserInterface();
 }

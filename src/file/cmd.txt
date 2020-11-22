@@ -1,5 +1,5 @@
 // Windows
-gcc input.c matriks.c mesinkar.c mesinkata.c stackt.c point.c peta.c jam.c arrayPair.c pair.c wahana.c
+gcc input.c matriks.c mesinkar.c mesinkata.c stackt.c point.c peta.c jam.c arrayPair.c pair.c wahana.c arrayTriplet.c triplet.c bintree.c linkedlist.c
 
 // Untuk linux
 gcc Input.c matriks.c mesinkar.c mesinkata.c stackt.c point.c peta.c arrayPair.c pair.c arrayTriplet.c triplet.c jam.c wahana.c bintree.c linkedlist.c -lm -lncurses
