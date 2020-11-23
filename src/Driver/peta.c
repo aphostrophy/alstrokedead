@@ -41,9 +41,10 @@ int pmoney;
 Stack aksi;
 int count_aksi, need_money, need_time;
 TabInt Materials, Inventory, need_material, HargaBuild, MaterialBuild, ActionTime;
+Triplet_TabInt UpgradeCosts;
 JAM time ;
 Wahana wahana;
-Kata CKata;
+Kata CKata,EXIT;
 boolean EndKata;
 ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk load game bisa dilakukan add upgrade manual
 char ChoosenWahana;
@@ -444,13 +445,14 @@ void HandleBuild(){
 
 void HandleUpgrade(){
 	// char action[100] ; char method[100] ; char upgrade[100]; 
-	Kata Action, Nama_Wahana, StackEl;
+	Kata Action, Nama_Upgrade, StackEl;
+	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
 	char bangunan = getBangunanSekitar();
 	if (bangunan != '*'){
+		int indexWahana = bintree_findIndex(bangunan);
 		printf("Selamat Datang ke Menu Upgrade\n");
 		printf("Daftar Upgrade: \n");
-		// PrintAvailableUpgrade(bangunan);
-		PrintAvailableUpgrade(bangunan);
+		PrintAvailableUpgrade(bangunan, &link[indexWahana]);
 		// Ambil upgrade dari si bangunan dengan state sekarang
 		printf("Masukkan Upgrade yang ingin dilakukan: ");
 		Kata UPGRADE;
@@ -473,7 +475,7 @@ void HandleUpgrade(){
 			if(kata_ke==1){
 				Action = CKata;
 			} else if(kata_ke==2){
-				Nama_Wahana = CKata;
+				Nama_Upgrade = CKata;
 			}
 			if(CC=='\n'){
 				break;
@@ -484,13 +486,16 @@ void HandleUpgrade(){
 		if(IsKataSama(Action, UPGRADE)){
 			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
 			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
+			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length++;
 			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
 			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
-			printKata(bahan);printf("\n");
+			printKata(bahan);printf(": ");
 			printf("%d",Triplet_Cost(UpgradeCosts,id));printf("\n");
-			printf("%d",inventorySupply);
+			printf("You have %d\n",inventorySupply);
 			if(inventorySupply>=Triplet_Cost(UpgradeCosts,id)){
-				StackEl.Length=0;strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Upgrade);
+				addUpgrade(&link[indexWahana], Nama_Upgrade);
+				Pair_Cost(Inventory,idInventory) = inventorySupply - Triplet_Cost(UpgradeCosts,id);
+				StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
 				Push(&aksi,StackEl);
 			} else{
 				printf("Not enough materials");
@@ -507,7 +512,6 @@ void HandleUpgrade(){
 		printf("Tidak ada wahana di sekitar Anda");
 		getchar();
 	}
-
 }
 
 void HandleUndo(){
@@ -708,6 +712,7 @@ void SetupMainMenu(){
 	ArrayPair_MakeEmpty(&HargaBuild);
 	ArrayPair_MakeEmpty(&MaterialBuild);
 	ArrayPair_MakeEmpty(&ActionTime);
+	ArrayTriplet_MakeEmpty(&UpgradeCosts);
 	BacaMATRIKS(&map[1], "../file/1.txt");
 	BacaMATRIKS(&map[0], "../file/0.txt");
 	BacaMATRIKS(&map[2], "../file/2.txt");
@@ -717,6 +722,22 @@ void SetupMainMenu(){
 	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
 	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
+
+	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
+	BuildTree();
+	bacaUpgrade("../Saves/Upgrade.txt");
+	Absis(playerpos) = 1;
+	Ordinat(playerpos)= 1;
+	BacaGraph(&denah,"../file/graph.txt");
+	state = MAIN_DAY;
+	CopyMATRIKS(map[cmap], &mapRoom);
+	CreateEmpty(&aksi);
+	count_aksi = 0 ;
+	need_money = 0 ;
+	pmoney = 10000 ;
+	Hour(time) = 9 ;
+	Minute(time) = 0 ;
+	bacaWahana(&wahana, "../file/wahana.txt");
   BacaGraph(&denah,"../file/graph.txt");
 	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
 	BuildTree();
@@ -828,6 +849,7 @@ void BacaInput(){
 	case LOAD_GAME: ; //Semicolon for Label Handling
 		Kata NAME;
 		Kata FILEPATH;
+		Kata EXIT; EXIT.TabKata[0] = 'E' ; EXIT.TabKata[1] = 'X' ; EXIT.TabKata[2] = 'I' ; EXIT.TabKata[3] = 'T' ; EXIT.Length = 4;
 		FILEPATH.Length = 9;
 		FILEPATH.TabKata[0] = '.'; FILEPATH.TabKata[1] = '.'; FILEPATH.TabKata[2] ='/';  FILEPATH.TabKata[3] ='S';  FILEPATH.TabKata[4] ='a';  FILEPATH.TabKata[5] = 'v'; FILEPATH.TabKata[6] ='e';  FILEPATH.TabKata[7] ='s';  FILEPATH.TabKata[8] ='/'; 
 		STARTBUY();

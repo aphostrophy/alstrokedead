@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 
 #define NMax 100
 #define BLANK ' '
@@ -129,13 +128,14 @@ boolean IsKataSama (Kata K1, Kata K2){
    if(K1.Length!=K2.Length){
       return false;
    } else{
-      while(i<K1.Length){
-         if(tolower(K1.TabKata[i])!=tolower(K2.TabKata[i])){
-             return false;
-         }
-         i++;
-      }
-      return true;
+        Kata K1_Low = lowerCaseKata(K1); Kata K2_Low = lowerCaseKata(K2);
+        while(i<K1.Length){
+            if(K1_Low.TabKata[i]!=K2_Low.TabKata[i]){
+                return false;
+            }
+            i++;
+        }
+        return true;
    }
 }
 
@@ -164,6 +164,29 @@ void printKata(Kata in) {
     }
 }
 
+Kata lowerCaseKata(Kata in){
+    Kata out;
+    for(int i = 0; i < in.Length; i++){
+        int asciiValue = (int)in.TabKata[i];
+        if(asciiValue>=65 && asciiValue<=90){
+            out.TabKata[i] = (char)asciiValue+32;
+        } else{
+            out.TabKata[i] = (char)asciiValue;
+        }
+    }
+    out.Length = in.Length;
+    return out;
+}
+
+int KataToInt(Kata in){
+    int hasil=0;
+    for(int i = 0; i < in.Length; i++){
+        hasil = hasil * 10;
+        hasil = hasil + (int)in.TabKata[i]-48;
+    }
+    return hasil;
+}
+  
 void IntToKataRei(int in, Kata* Nilai) {
     char StringNilai[100];
     sprintf(StringNilai, "%d", in);

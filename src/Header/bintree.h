@@ -35,7 +35,7 @@ void BuatTree(BinTree parent, BinTree l, BinTree r);
 
 void BuildTree();
 /* I.S P adalah tree kosong */
-/* F.S P adalah tree berisi bahan makanan dari restoran engi kitchen */
+/* F.S P adalah tree berisi daftar upgrade dari wahana-wahana wangky */
 
 /* Manajemen Memory */
 addrNode AlokNode(bintree_infotype X);
@@ -61,6 +61,8 @@ boolean IsUnerRight(BinTree P);
 /* Mengirimkan true jika pohon biner tidak kosong P adalah pohon unerright: hanya mempunyai subpohon kanan*/
 boolean IsBiner(BinTree P);
 /* Mengirimkan true jika pohon biner tidak kosong P adalah pohon biner: mempunyai subpohon kiri dan subpohon kanan*/
+
+int bintree_findIndex(char id);
 
 /*fungsi untuk mengecek apakah ada suatu elemen x pada sebuah binary tree P*/
 boolean isElement(BinTree P, bintree_infotype X);
