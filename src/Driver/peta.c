@@ -230,8 +230,8 @@ void PrintMainDay() {
 		Absis(CurrentPos.p) = Absis(playerpos);
 		Ordinat(CurrentPos.p) = Ordinat(playerpos);
 		adrPeta P = SearchPeta(denah,CurrentPos);
-		adrTerowongan T = Trail(P);
-		P = T->Graph_Succ;
+		adrTerowongan T = Gerbang(P);
+		P = Graph_Succ(T);
 		cmap = idPeta(P).map;
 		Absis(playerpos) = Absis(idPeta(P).p);
 		Ordinat(playerpos) = Ordinat(idPeta(P).p);
@@ -651,8 +651,8 @@ void PrintPreparationDay() {
 		Absis(CurrentPos.p) = Absis(playerpos);
 		Ordinat(CurrentPos.p) = Ordinat(playerpos);
 		adrPeta P = SearchPeta(denah,CurrentPos);
-		adrTerowongan T = Trail(P);
-		P = T->Graph_Succ;
+		adrTerowongan T = Gerbang(P);
+		P = Graph_Succ(T);
 		cmap = idPeta(P).map;
 		Absis(playerpos) = Absis(idPeta(P).p);
 		Ordinat(playerpos) = Ordinat(idPeta(P).p);
