@@ -475,7 +475,7 @@ void HandleUpgrade(){
 			if(kata_ke==1){
 				Action = CKata;
 			} else if(kata_ke==2){
-				Nama_Wahana = CKata;
+				Nama_Upgrade = CKata;
 			}
 			if(CC=='\n'){
 				break;
@@ -501,9 +501,6 @@ void HandleUpgrade(){
 				printf("Not enough materials");
 			}
 			getchar();
-			//Validasi di sini, tapi belum ,soalnya g tau dmn :v
-			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
-			Push(&aksi,StackEl);
 		} else{
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
 			getchar();
