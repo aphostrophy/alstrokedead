@@ -677,7 +677,7 @@ void InputOffice() {
 	char input[100];
 	Kata INPUT;
 	Kata EXIT; EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T';
-	Kata REPORT; REPORT.TabKata[0] = 'R'; REPORT.TabKata[1] = 'E'; REPORT.TabKata[2] = 'P'; REPORT.TabKata[3] = 'O'; REPORT.TabKata[4] = 'R'; REPORT.TabKata[5] = 'T';
+	Kata REPORT; REPORT.TabKata[0] = 'R'; REPORT.TabKata[1] = 'E'; REPORT.TabKata[2] = 'P'; REPORT.TabKata[3] = 'O'; REPORT.TabKata[4] = 'R'; REPORT.TabKata[5] = 'T'; REPORT.Length = 6;
 	Kata DETAILS; DETAILS.TabKata[0] = 'D'; DETAILS.TabKata[1] = 'E'; DETAILS.TabKata[2] = 'T'; DETAILS.TabKata[3] = 'A'; DETAILS.TabKata[4] = 'I'; DETAILS.TabKata[5] = 'L'; DETAILS.TabKata[6] = 'S'; DETAILS.Length=7;
 	Kata Office; Office.TabKata[0] = 'o'; Office.TabKata[1] = 'f'; Office.TabKata[2] = 'f'; Office.TabKata[3] = 'i'; Office.TabKata[4] = 'c'; Office.TabKata[5] = 'e'; Office.Length = 6;
 	STARTBUY();
