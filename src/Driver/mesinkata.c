@@ -185,6 +185,7 @@ int KataToInt(Kata in){
         hasil = hasil + (int)in.TabKata[i]-48;
     }
     return hasil;
+}
   
 void IntToKataRei(int in, Kata* Nilai) {
     char StringNilai[100];

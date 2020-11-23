@@ -41,9 +41,10 @@ int pmoney;
 Stack aksi;
 int count_aksi, need_money, need_time;
 TabInt Materials, Inventory, need_material, HargaBuild, MaterialBuild, ActionTime;
+Triplet_TabInt UpgradeCosts;
 JAM time ;
 Wahana wahana;
-Kata CKata;
+Kata CKata,EXIT;
 boolean EndKata;
 ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk load game bisa dilakukan add upgrade manual
 char ChoosenWahana;
@@ -230,7 +231,7 @@ void PrintMainDay() {
 		Ordinat(CurrentPos.p) = Ordinat(playerpos);
 		adrPeta P = SearchPeta(denah,CurrentPos);
 		adrTerowongan T = Trail(P);
-		P = T->Succ;
+		P = T->Graph_Succ;
 		cmap = idPeta(P).map;
 		Absis(playerpos) = Absis(idPeta(P).p);
 		Ordinat(playerpos) = Ordinat(idPeta(P).p);
@@ -446,7 +447,6 @@ void HandleUpgrade(){
 	// char action[100] ; char method[100] ; char upgrade[100]; 
 	Kata Action, Nama_Upgrade, StackEl;
 	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
-	Kata Action, Nama_Wahana, StackEl;
 	char bangunan = getBangunanSekitar();
 	if (bangunan != '*'){
 		int indexWahana = bintree_findIndex(bangunan);
@@ -475,7 +475,7 @@ void HandleUpgrade(){
 			if(kata_ke==1){
 				Action = CKata;
 			} else if(kata_ke==2){
-				Nama_Wahana = CKata;
+				Nama_Upgrade = CKata;
 			}
 			if(CC=='\n'){
 				break;
@@ -496,14 +496,11 @@ void HandleUpgrade(){
 				addUpgrade(&link[indexWahana], Nama_Upgrade);
 				Pair_Cost(Inventory,idInventory) = inventorySupply - Triplet_Cost(UpgradeCosts,id);
 				StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
-				Push(&aksi,StackEl.TabKata);
+				Push(&aksi,StackEl);
 			} else{
 				printf("Not enough materials");
 			}
 			getchar();
-			//Validasi di sini, tapi belum ,soalnya g tau dmn :v
-			strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Nama_Wahana);
-			Push(&aksi,StackEl.TabKata);
 		} else{
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
 			getchar();
@@ -655,7 +652,7 @@ void PrintPreparationDay() {
 		Ordinat(CurrentPos.p) = Ordinat(playerpos);
 		adrPeta P = SearchPeta(denah,CurrentPos);
 		adrTerowongan T = Trail(P);
-		P = T->Succ;
+		P = T->Graph_Succ;
 		cmap = idPeta(P).map;
 		Absis(playerpos) = Absis(idPeta(P).p);
 		Ordinat(playerpos) = Ordinat(idPeta(P).p);
@@ -715,6 +712,7 @@ void SetupMainMenu(){
 	ArrayPair_MakeEmpty(&HargaBuild);
 	ArrayPair_MakeEmpty(&MaterialBuild);
 	ArrayPair_MakeEmpty(&ActionTime);
+	ArrayTriplet_MakeEmpty(&UpgradeCosts);
 	BacaMATRIKS(&map[1], "../file/1.txt");
 	BacaMATRIKS(&map[0], "../file/0.txt");
 	BacaMATRIKS(&map[2], "../file/2.txt");
@@ -851,6 +849,7 @@ void BacaInput(){
 	case LOAD_GAME: ; //Semicolon for Label Handling
 		Kata NAME;
 		Kata FILEPATH;
+		Kata EXIT; EXIT.TabKata[0] = 'E' ; EXIT.TabKata[1] = 'X' ; EXIT.TabKata[2] = 'I' ; EXIT.TabKata[3] = 'T' ; EXIT.Length = 4;
 		FILEPATH.Length = 9;
 		FILEPATH.TabKata[0] = '.'; FILEPATH.TabKata[1] = '.'; FILEPATH.TabKata[2] ='/';  FILEPATH.TabKata[3] ='S';  FILEPATH.TabKata[4] ='a';  FILEPATH.TabKata[5] = 'v'; FILEPATH.TabKata[6] ='e';  FILEPATH.TabKata[7] ='s';  FILEPATH.TabKata[8] ='/'; 
 		STARTBUY();
