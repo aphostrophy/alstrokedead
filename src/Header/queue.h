@@ -13,7 +13,7 @@
 typedef int kesabaran;
 typedef int ptime;
 typedef int prio;
-typedef char wahana;
+typedef char wahana_que;
 typedef struct { char L[3] ; kesabaran S ;  ptime T; prio X; int ID; char W;} pengunjung;
 
 typedef int address;  

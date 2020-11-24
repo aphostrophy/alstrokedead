@@ -34,23 +34,23 @@ void Dealokasi_Queue (Queue *Q){
 
 void GenerateQueue (Queue * Q){
     int i,j;
-    char wahana[9]={'S','P','T','C','H','F','B','G','-'};
+    char wahana_que[9]={'S','P','T','C','H','F','B','G','-'};
     MakeEmpty_Queue(Q,10);
     // srand(time(0));
     for (i=0;i<5;i++){
         for (j=0;j<3;j++){
             if (j==0){
-                (*Q).P[i].L[j]=wahana[rand() % 8];
+                (*Q).P[i].L[j]=wahana_que[rand() % 8];
             }
             else{
-                (*Q).P[i].L[j]=wahana[rand() % 9];
+                (*Q).P[i].L[j]=wahana_que[rand() % 9];
             }
         }
         while((*Q).P[i].L[1]==(*Q).P[i].L[0] || (*Q).P[i].L[1]==(*Q).P[i].L[2]){
-            (*Q).P[i].L[1]=wahana[rand() % 9];
+            (*Q).P[i].L[1]=wahana_que[rand() % 9];
         }
         while((*Q).P[i].L[2]==(*Q).P[i].L[0]){
-            (*Q).P[i].L[2]=wahana[rand() % 9];
+            (*Q).P[i].L[2]=wahana_que[rand() % 9];
         }
 
         if ((*Q).P[i].L[1]=='-'){

@@ -232,30 +232,30 @@ void InputMainDay (int inpt) {
 	} else if (inpt == INPUT_4){
 		char S = getBangunanSekitar();
 		if (S=='A'){
-			string input;
-			scanf("%s",&input);
-			if (input=="serve gyro drop"){
+			char input;
+			scanf("%c",&input); getchar();
+			if (input=='g'){
 				Serve(&QGLOBAL,&MGLOBAL,'G',wahana,pmoney);
 			}
-			else if (input=="serve ferris wheel"){
+			else if (input=='f'){
 				Serve(&QGLOBAL,&MGLOBAL,'F',wahana,pmoney);
 			}
-			else if (input=="serve haunted house"){
+			else if (input=='h'){
 				Serve(&QGLOBAL,&MGLOBAL,'H',wahana,pmoney);
 			}
-			else if (input=="serve sky coaster"){
+			else if (input=='s'){
 				Serve(&QGLOBAL,&MGLOBAL,'S',wahana,pmoney);
 			}	
-			else if (input=="serve sky pirate ship"){
+			else if (input=='p'){
 				Serve(&QGLOBAL,&MGLOBAL,'P',wahana,pmoney);
 			}
-			else if (input=="serve bumper car"){
+			else if (input=='b'){
 				Serve(&QGLOBAL,&MGLOBAL,'B',wahana,pmoney);
 			}
-			else if (input=="serve carousel"){
+			else if (input=='c'){
 				Serve(&QGLOBAL,&MGLOBAL,'C',wahana,pmoney);
 			}	
-			else if (input=="serve tornado"){
+			else if (input=='t'){
 				Serve(&QGLOBAL,&MGLOBAL,'T',wahana,pmoney);
 			}
 		}
