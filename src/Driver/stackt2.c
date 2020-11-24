@@ -15,8 +15,8 @@
 /* *** Konstruktor/Kreator *** */
 void CreateEmpty (Stack *S){
   /* I.S. sembarang; */
-  /* F.S. Membuat sebuah stack S yang kosong berkapasitas MaxEl */
-  /* jadi indeksnya antara 0.. MaxEl */
+  /* F.S. Membuat sebuah stack S yang kosong berkapasitas MaxEl_Stack */
+  /* jadi indeksnya antara 0.. MaxEl_Stack */
   /* Ciri stack kosong : TOP berStack_Nilai Stack_Nil */
   Top(*S) = Stack_Nil ;
 }
@@ -30,7 +30,7 @@ boolean IsEmptyStack (Stack S) {
 
 boolean IsFull (Stack S){
   /* Mengirim true jika tabel penampung Stack_Nilai elemen stack penuh */
-  return (Top(S)==MaxEl-1);
+  return (Top(S)==MaxEl_Stack-1);
 }
 
 

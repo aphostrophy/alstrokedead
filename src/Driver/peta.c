@@ -13,6 +13,7 @@
 #include "../Header/bintree.h"
 #include "../Header/arrayTriplet.h"
 #include "../Header/list_linkedlist.h"
+#include "../Header/queue.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,7 +49,9 @@ Kata CKata,EXIT;
 boolean EndKata;
 ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk load game bisa dilakukan add upgrade manual
 char ChoosenWahana;
-Kata NamaSaveFile; Kata NamaLoadFile; 
+Kata NamaSaveFile; Kata NamaLoadFile;
+Queue MGLOBAL;
+Queue QGLOBAL; 
 struct SaveDat {
     int cmap;
 	int state;
@@ -59,6 +62,8 @@ struct SaveDat {
 	int count_aksi, need_money, need_time;
 	TabInt Inventory;
 	Stack aksi;
+	Queue MGLOBAL;
+	Queue QGLOBAL;
 	// Dan Masih banyak lagi menunggu yang belum
 };
 Graph denah;
@@ -92,6 +97,8 @@ void SetupLoadGame (FILE *loadfile){
 void SetupNewGame (){
 	cmap = 0;
 	state = MAIN_DAY;
+	GenerateQueue(&QGLOBAL);
+	MakeEmpty_Queue(&MGLOBAL, 10);
 	Absis(playerpos) = 1; Ordinat(playerpos)= 1;
 	pmoney = 10000 ;
 	bacaWahana(&wahana, "../file/wahana.txt");
@@ -112,7 +119,9 @@ void MaintoPrepDay(){
 		}
 	}
 	// Kosongkan Antrian , nunggu Hera
+	EmptyQueue(&QGLOBAL);
 	// Kosongkan Array orang sedang naik Wahana
+	EmptyQueue(&MGLOBAL);
 }
 void PrepToMainDay(){
 	infotype x;
@@ -125,6 +134,7 @@ void PrepToMainDay(){
 		Pair_Cost(need_material,i) = 0 ;
 	} 
 	count_aksi = 0 ;
+	GenerateQueue(&QGLOBAL);
 }
 // =========================================Fungsi MainDay================================================
 
@@ -146,6 +156,9 @@ void UpdateWaktu(int n){
 					getchar();
 				}
 			}
+			ReduceTime(&MGLOBAL,n);
+			LeaveQueueS(&QGLOBAL);
+			LeaveQueueT(&MGLOBAL,&QGLOBAL,wahana);
 		}
 	}
 	
@@ -216,6 +229,36 @@ void InputMainDay (int inpt) {
 		char id = getBangunanSekitar();
 		RepairWahana(&wahana, id);
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,Repair)));
+	} else if (inpt == INPUT_4){
+		char S = getBangunanSekitar();
+		if (S=='A'){
+			char input;
+			scanf("%c",&input); getchar();
+			if (input=='g'){
+				Serve(&QGLOBAL,&MGLOBAL,'G',wahana,pmoney);
+			}
+			else if (input=='f'){
+				Serve(&QGLOBAL,&MGLOBAL,'F',wahana,pmoney);
+			}
+			else if (input=='h'){
+				Serve(&QGLOBAL,&MGLOBAL,'H',wahana,pmoney);
+			}
+			else if (input=='s'){
+				Serve(&QGLOBAL,&MGLOBAL,'S',wahana,pmoney);
+			}	
+			else if (input=='p'){
+				Serve(&QGLOBAL,&MGLOBAL,'P',wahana,pmoney);
+			}
+			else if (input=='b'){
+				Serve(&QGLOBAL,&MGLOBAL,'B',wahana,pmoney);
+			}
+			else if (input=='c'){
+				Serve(&QGLOBAL,&MGLOBAL,'C',wahana,pmoney);
+			}	
+			else if (input=='t'){
+				Serve(&QGLOBAL,&MGLOBAL,'T',wahana,pmoney);
+			}
+		}
 	}
 }
 
@@ -245,6 +288,10 @@ void PrintMainDay() {
 	printf("\n");
 	printBrokenWahana(&wahana);
 	printf("%s\n","");
+	printf("=======================Queue antrian pengunjung===================================\n\n");
+	PrintQueue(QGLOBAL);
+	printf("=====================Queue pengunjung yang sedang naik wahana=====================\n\n");
+	PrintQueue(MGLOBAL);
 	// Masih harus ngeprint data data seperti queue , broken wahana dll
 }
 
