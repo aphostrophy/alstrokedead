@@ -56,5 +56,6 @@ void printBrokenWahana(Wahana *W);
 Kata copyKata(Kata in);
 void makeEmpty(Kata* in);
 void printKata(Kata in);
+InfoWahana getWahanabyID(Wahana *W,char id);
 
 #endif
