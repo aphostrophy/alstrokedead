@@ -62,4 +62,5 @@ Kata lowerCaseKata(Kata in);
 
 void IntToKataRei(int in, Kata* Nilai);
 Kata IntToKata(int in);
+int KataToInt(Kata in);
 #endif

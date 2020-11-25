@@ -25,9 +25,17 @@ int addUpgrade( ListNode **head, Kata data )
 
 void removeUpgrade( ListNode **head )
 {
-    ListNode* temp = *head;
-    *head = temp->next;
-    free(temp);
+    ListNode *current=*head , *prev;
+        if(current==NULL){
+            printf("There is nothing to remove from upgrades");
+        } else{
+            while(current->next!=NULL){
+                prev = current;
+                current=current->next;
+            }
+            prev->next = NULL;
+            free(current);
+        }
 }
 
 void printUpgrades( ListNode **head )

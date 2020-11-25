@@ -174,3 +174,21 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
   
 }
 
+void AkuisisiUpgrade(Kata K, char *idWahana, Kata *Nama_Upgrade){
+  int i=0;int j=0;
+  while(K.TabKata[i]!=' '){
+    i++;
+  }
+  i++;
+  *idWahana = K.TabKata[i];
+  i++;
+  while(K.TabKata[i]==' '){ //Pengaman
+    i++;
+  }
+  while(i < K.Length){
+    Nama_Upgrade->TabKata[j] = K.TabKata[i];
+    i++;j++;
+  }
+  Nama_Upgrade->Length=j;
+}
+

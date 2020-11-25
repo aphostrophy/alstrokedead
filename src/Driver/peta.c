@@ -339,7 +339,7 @@ void HandleBuy() {
 		kata_ke++;
 		IgnoreBlank();
     }
-	jumlah_int = atoi(Jumlah.TabKata);
+	jumlah_int = KataToInt(Jumlah);
 	int materialIndex = ArrayPair_SearchByItem(Materials,Barang);
 	if(IsKataSama(Action,BUY) && materialIndex != IdxUndef){
 		if(pmoney>=jumlah_int*Pair_Cost(Materials,materialIndex)+need_money){
@@ -596,7 +596,16 @@ void HandleUndo(){
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUILD));
 			
 		} else if (x.TabKata[0] == 'u'){
-			printf("upgrade"); getchar();
+			char idWahana;Kata Nama_Upgrade;
+			AkuisisiUpgrade(x, &idWahana, &Nama_Upgrade);
+			int idxNode = bintree_findIndex(idWahana);
+			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
+			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
+			int materialRefund = Triplet_Cost(UpgradeCosts,id);
+			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
+			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
+			Pair_Cost(Inventory,idInventory) = Pair_Cost(Inventory,idInventory) +materialRefund; 
+			removeUpgrade(&link[idxNode]);
 		}
 	}
 }
