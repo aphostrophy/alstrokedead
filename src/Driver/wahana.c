@@ -5,33 +5,7 @@
 #include "../Header/mesinkar.h"
 #include "../Header/mesinkata.h"
 
-string arrNamaWahana[10] = {"SkyCoaster", "PirateShip", "Tornado", "Carousel", "HauntedHouse", "FerrisWheel", "BumperCars", "GyroDrop"};
-string idWahana[8] = {'S', 'P', 'T', 'C', 'H', 'F','B','G'};
-int arrHargaWahana[8] = {10000, 15000, 50000, 40000, 20000, 10000, 75000, 50000};
-int durasiWahana[8] = {20, 15, 10, 10, 25, 20, 15, 10};
-int arrKapasitas[8] = {8, 6, 4, 8, 2, 6, 4, 8};
-string arrDeskripsi[8] = {"Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi"};
-
-/* KONSTUKTOR */
-// void makeListWahana(Wahana *W) {
-//     int i;
-//     for(i = 0; i < 8; i++) {
-//         strcpy((*W).TI[i].id, idWahana[i]);
-//         strcpy((*W).TI[i].nama, arrNamaWahana[i]);
-//         (*W).TI[i].harga = arrHargaWahana[i];
-//         (*W).TI[i].durasi = durasiWahana[i];
-//         (*W).TI[i].kapasitas = arrKapasitas[i];
-//         (*W).TI[i].status = 'N'; //inisiasi dengan not build
-//         strcpy((*W).TI[i].deskripsi, arrDeskripsi[i]);
-
-//         //inisiasi jumlah pengunjung dan penghasilan dengan 0
-//         (*W).TI[i].inside = 0;
-//         (*W).TI[i].pengunjung = 0;
-//         (*W).TI[i].total_pengunjung = 0;
-//         (*W).TI[i].penghasilan = 0;
-//         (*W).TI[i].total_penghasilan = 0;
-//     }
-// }
+Kata arrWahanaGood[8];
 
 void bacaWahana(Wahana *W, char* namaFile) {
     /* I.S. List Wahana valid dan namafile valid
@@ -205,6 +179,7 @@ int getTotalPenghasilan(Wahana *W, char id) {
     }
 }
 
+/* FUNGSIONALITAS */
 void printDetailWahana(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id.TabKata[0] == id) {
@@ -247,6 +222,28 @@ int countBrokenWahana(Wahana *W) {
         }
     }
     return res;
+}
+
+int countWahanaGood(Wahana *W) {
+    int count = 0;
+    int i;
+    for(i = 0; i < 8; i++) {
+        if((*W).TI[i].status == 'G') {
+            count++;
+        }
+    }
+    return count;
+}
+
+void makeListWahanaGood(Wahana *W) {
+    int idx = 0;
+    int i;
+    for(i = 0; i < 8; i++) {
+        if((*W).TI[i].status == 'G') {
+            Kata[idx] = copyKata((*W).TI[i].id);
+            idx++;
+        }
+    }
 }
 
 void printBrokenWahana(Wahana *W) {
