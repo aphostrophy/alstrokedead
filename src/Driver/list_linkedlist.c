@@ -29,12 +29,19 @@ void removeUpgrade( ListNode **head )
         if(current==NULL){
             printf("There is nothing to remove from upgrades");
         } else{
+            prev = current;
             while(current->next!=NULL){
                 prev = current;
                 current=current->next;
             }
-            prev->next = NULL;
-            free(current);
+            if(prev==current){
+                prev->next = NULL; // 
+                *head = NULL;
+            }else{
+                prev->next = NULL;
+                free(current);
+            }
+
         }
 }
 

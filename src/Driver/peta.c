@@ -42,7 +42,7 @@ int pmoney;
 Stack aksi;
 int count_aksi, need_money, need_time;
 TabInt Materials, Inventory, need_material, HargaBuild, MaterialBuild, ActionTime;
-Triplet_TabInt UpgradeCosts;
+Triplet_TabInt UpgradeCosts, UpgradeEffect;
 JAM time ;
 Wahana wahana;
 Kata CKata,EXIT;
@@ -62,6 +62,7 @@ struct SaveDat {
 	int count_aksi, need_money, need_time;
 	TabInt Inventory, need_material;
 	Stack aksi;
+	ListNode *link[20]; 
 	Queue MGLOBAL;
 	Queue QGLOBAL;
 	MATRIKS map[5];
@@ -85,6 +86,7 @@ void SetupSaveGame (FILE *savefile){
 	TempSave.Inventory = Inventory;
 	TempSave.aksi = aksi;
 	TempSave.time = time;
+	// TempSave->link[20] = Masalah besar
 	TempSave.QGLOBAL = QGLOBAL;
 	TempSave.MGLOBAL = MGLOBAL;
 	TempSave.need_material = need_material;
@@ -135,6 +137,7 @@ void SetupLoadGame (FILE *loadfile){
 	Inventory = TempSave.Inventory;
 	aksi = TempSave.aksi;
 	time = TempSave.time;
+	link[20] = (&TempSave)->link[20];
 	need_material = TempSave.need_material;
 	for (int i = 0; i < 5; i++) map[i] = TempSave.map[i];
 	QGLOBAL = TempSave.QGLOBAL;
@@ -171,6 +174,7 @@ void PrepToMainDay(){
 	} 
 	count_aksi = 0 ;
 	GenerateQueue(&QGLOBAL);
+	MakeEmpty_Queue(&MGLOBAL,10);
 }
 void MaintoPrepDay(){
 	// Prepare Everything
@@ -181,7 +185,7 @@ void MaintoPrepDay(){
 	}
 	// Kosongkan Antrian , nunggu Hera
 	EmptyQueue(&QGLOBAL);
-	// Kosongkan Array orang sedang naik Wahana
+	// // Kosongkan Array orang sedang naik Wahana
 	EmptyQueue(&MGLOBAL);
 }
 // =======================================================================================================
@@ -687,6 +691,32 @@ void HandleExecution(){
 			Elmt(map[PbuildMap],PbuildX,PbuildY) = Bangunan.TabKata[0];
 			(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].status ='G';
 		} else if (x.TabKata[0] == 'u'){
+			Kata KAPASITAS; KAPASITAS.TabKata[0] = 'K';KAPASITAS.TabKata[1] = 'A';KAPASITAS.TabKata[2] = 'P';KAPASITAS.TabKata[3] = 'A';KAPASITAS.TabKata[4] = 'S';KAPASITAS.TabKata[5] = 'I';KAPASITAS.TabKata[6] = 'T';KAPASITAS.TabKata[8] = 'A';KAPASITAS.TabKata[9] = 'S'; KAPASITAS.Length = 9;
+			Kata HARGA; HARGA.TabKata[0] = 'H'; HARGA.TabKata[1] = 'A'; HARGA.TabKata[2] = 'R' ; HARGA.TabKata[3] = 'G'; HARGA.TabKata[4] = 'A'; HARGA.Length = 5;
+			Kata DURASI; DURASI.TabKata[0] = 'D'; DURASI.TabKata[1] = 'U'; DURASI.TabKata[2] = 'R' ; DURASI.TabKata[3] = 'A'; DURASI.TabKata[4] = 'S'; DURASI.TabKata[5] = 'I'; DURASI.Length = 6;
+			char idWahana;Kata Nama_Upgrade;
+			AkuisisiUpgrade(x, &idWahana, &Nama_Upgrade);
+
+			int idxTripletBahan = ArrayTriplet_SearchByNama(UpgradeEffect, Nama_Upgrade);
+
+			if(IsKataSama(Triplet_Bahan(UpgradeEffect,idxTripletBahan),HARGA)){
+				printf("Harga");
+				int idxTripletEffect = ArrayTriplet_SearchByNama(UpgradeEffect,Nama_Upgrade);
+				wahana.TI[GetIndex(&wahana, idWahana)].harga += Triplet_Cost(UpgradeEffect,idxTripletEffect);
+				printf("%d",Triplet_Cost(UpgradeEffect,idxTripletEffect));
+			} else if(IsKataSama(Triplet_Bahan(UpgradeEffect,idxTripletBahan),KAPASITAS)){
+				printf("Kapasitas");
+				int idxTripletEffect = ArrayTriplet_SearchByNama(UpgradeEffect,Nama_Upgrade);
+				wahana.TI[GetIndex(&wahana, idWahana)].kapasitas += Triplet_Cost(UpgradeEffect,idxTripletEffect);
+				printf("%d",Triplet_Cost(UpgradeEffect,idxTripletEffect));
+			} else if(IsKataSama(Triplet_Bahan(UpgradeEffect,idxTripletBahan),DURASI)){
+				printf("Durasi");
+				int idxTripletEffect = ArrayTriplet_SearchByNama(UpgradeEffect,Nama_Upgrade);
+				wahana.TI[GetIndex(&wahana, idWahana)].durasi -= Triplet_Cost(UpgradeEffect,idxTripletEffect);
+				printf("%d",Triplet_Cost(UpgradeEffect,idxTripletEffect));
+			}
+
+
 			printf("upgrade"); getchar();
 		}
 	}
@@ -719,6 +749,8 @@ void InputPreparationDay (int inpt) {
 		Hour(time) = 9 ;
 		Minute(time) = 0;
 		while(!IsEmptyStack(aksi)){
+			printf("A");
+			getchar();
 			HandleUndo();
 		}
 		PrepToMainDay();
@@ -840,6 +872,7 @@ void SetupMainMenu(){
 	ArrayPair_MakeEmpty(&HargaBuild);
 	ArrayPair_MakeEmpty(&MaterialBuild);
 	ArrayPair_MakeEmpty(&ActionTime);
+	ArrayTriplet_MakeEmpty(&UpgradeEffect);
 	ArrayTriplet_MakeEmpty(&UpgradeCosts);
 	BacaMATRIKS(&map[1], "../file/1.txt");
 	BacaMATRIKS(&map[0], "../file/0.txt");
@@ -849,6 +882,7 @@ void SetupMainMenu(){
 	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
 	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
+	ArrayTriplet_BacaIsi(&UpgradeEffect, "../Saves/UpgradeEffect.txt");
 	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
 	BuildTree();
 	bacaUpgrade("../Saves/Upgrade.txt");
@@ -901,14 +935,16 @@ void PrintMain(){
 		// List menu office diprint dan dipilih
 		printf("\nSELAMAT DATANG DI OFFICE WILLY WANGKY'S WORLD!!!\n\n");
 		break;
-	case OFFICE_DETAIL:
-		printDetailWahana(&wahana, ChoosenWahana);
+	case OFFICE_DETAIL: ;
+		int idxLink = bintree_findIndex(ChoosenWahana);
+		printDetailWahana(&wahana, ChoosenWahana,&link[idxLink]);
 		break;
 	case OFFICE_REPORT:
 		printReportWahana(&wahana, ChoosenWahana);
 		break;
-	case DETAIL_WAHANA:
-		printDetailWahana(&wahana, ChoosenWahana);	
+	case DETAIL_WAHANA: ;
+		int indexLink = bintree_findIndex(ChoosenWahana);
+		printDetailWahana(&wahana, ChoosenWahana,&link[indexLink]);	
 		break;
 	case INVENTORY:
 		printf("Inventory Anda\n");
@@ -926,7 +962,7 @@ void BacaInput(){
 	Kata EXIT;
 	EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length=4;
 	int inpt;
-	char input[100]; char name[100]; 
+	// char input[100]; char name[100]; 
 	switch (state) {
 	case MAIN_MENU: ;
 		Kata NEWGAME; Kata LOADGAME; Kata INPUT;
@@ -985,7 +1021,8 @@ void BacaInput(){
 			for(int i=0;i<NAMA.Length;i++){
 				printf("%c", NAMA.TabKata[i]);
 			}
-			strcpy(namaPlayer.TabKata,""); namaPlayer.Length = 0;
+			// strcpy(namaPlayer.TabKata,""); 
+			namaPlayer.Length = 0;
 			namaPlayer = KataConcat(namaPlayer,NAMA);
 			printf(" semoga senang :)");
 			getchar();
@@ -1017,7 +1054,8 @@ void BacaInput(){
 			state = MAIN_MENU;
 		} else {
 			NamaLoadFile.Length = 0;
-			strcpy(NamaLoadFile.TabKata,""); NamaLoadFile = KataConcat(NamaLoadFile,FILEPATH); NamaLoadFile = KataConcat(NamaLoadFile,NAMA);
+			// strcpy(NamaLoadFile.TabKata,"");
+			NamaLoadFile = KataConcat(NamaLoadFile,FILEPATH); NamaLoadFile = KataConcat(NamaLoadFile,NAMA);
 			FILE *loadfile;
 			loadfile = fopen(NamaLoadFile.TabKata, "r");
 			if (loadfile){
