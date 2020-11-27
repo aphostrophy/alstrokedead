@@ -60,10 +60,11 @@ struct SaveDat {
 	JAM time;
 	Wahana wahana;
 	int count_aksi, need_money, need_time;
-	TabInt Inventory;
+	TabInt Inventory, need_material;
 	Stack aksi;
 	Queue MGLOBAL;
 	Queue QGLOBAL;
+	MATRIKS map[5];
 	// Dan Masih banyak lagi menunggu yang belum
 };
 Graph denah;
@@ -73,28 +74,78 @@ Graph denah;
 
 
 // ==================================== Fungsi Main Menu  ================================================
+void SetupSaveGame (FILE *savefile){
+	struct SaveDat TempSave;
+	TempSave.cmap = cmap;
+	TempSave.state = state;
+	TempSave.playerpos = playerpos;
+	TempSave.pmoney = pmoney;
+	TempSave.wahana = wahana;
+	TempSave.count_aksi = count_aksi ; TempSave.need_money = need_money; TempSave.need_time = need_time;
+	TempSave.Inventory = Inventory;
+	TempSave.aksi = aksi;
+	TempSave.time = time;
+	TempSave.QGLOBAL = QGLOBAL;
+	TempSave.MGLOBAL = MGLOBAL;
+	TempSave.need_material = need_material;
+	for (int i = 0; i < 5; i++) TempSave.map[i] = map[i];
+	
+	fwrite(&TempSave, sizeof(struct SaveDat), 1, savefile);
+	if(fwrite != 0){
+		printf("Contents to file written successfully!"); getchar();
+	} else { 
+		printf("Error writing file!"); getchar();
+	}
+	fclose(savefile);
+}
 
-void SaveGame (){
+void HandleSaveGame (){
+	Kata FILEPATH;
+	FILEPATH.Length = 9;
+	FILEPATH.TabKata[0] = '.'; FILEPATH.TabKata[1] = '.'; FILEPATH.TabKata[2] ='/';  FILEPATH.TabKata[3] ='S';  FILEPATH.TabKata[4] ='a';  FILEPATH.TabKata[5] = 'v'; FILEPATH.TabKata[6] ='e';  FILEPATH.TabKata[7] ='s';  FILEPATH.TabKata[8] ='/'; 
+
+	NamaSaveFile.Length = 0;
+	strcpy(NamaSaveFile.TabKata,""); NamaSaveFile = KataConcat(NamaSaveFile,FILEPATH); NamaSaveFile = KataConcat(NamaSaveFile,namaPlayer);
+	FILE *savefile;
+	savefile = fopen(NamaSaveFile.TabKata, "w");
+	if (savefile){
+		if (savefile== NULL){ 
+			fclose(savefile);
+			printf("Error File Content, Press anything to continue"); getchar();
+		} else {
+			SetupSaveGame(savefile);
+		} 
+	} else {
+		fclose(savefile);
+		printf("Invalid File Name, Press anything to continue"); getchar();
+	}
 
 }
+
 
 void SetupLoadGame (FILE *loadfile){
 	struct SaveDat TempSave;
 	fread(&TempSave, sizeof(struct SaveDat), 1, loadfile);
-	cmap = TempSave.cmap;
-	state = TempSave.state;
-	playerpos = TempSave.playerpos;
-	pmoney = TempSave.pmoney;
+	cmap = TempSave.cmap; 	
+	state = TempSave.state;		
+	playerpos = TempSave.playerpos;	
+	pmoney = TempSave.pmoney;	
 	wahana = TempSave.wahana;
 	count_aksi = TempSave.count_aksi; need_money = TempSave.need_money; need_time = TempSave.need_time;
 	Inventory = TempSave.Inventory;
 	aksi = TempSave.aksi;
 	time = TempSave.time;
+	need_material = TempSave.need_material;
+	for (int i = 0; i < 5; i++) map[i] = TempSave.map[i];
+	QGLOBAL = TempSave.QGLOBAL;
+	MGLOBAL = TempSave.MGLOBAL;
 	fclose(loadfile);
 	CopyMATRIKS(map[cmap], &mapRoom);
 }
 
 void SetupNewGame (){
+	ArrayPair_MakeEmpty(&need_material);
+	ArrayPair_BacaIsi(&need_material, "../Saves/Inventory.txt");
 	cmap = 0;
 	state = MAIN_DAY;
 	GenerateQueue(&QGLOBAL);
@@ -110,7 +161,17 @@ void SetupNewGame (){
 }
 // =======================================================================================================
 
-
+// =================================Fungsi Transisi Day ==================================================
+void PrepToMainDay(){
+	
+	need_money = 0;
+	need_time = 0;
+	for (int i = ArrayPair_GetFirstIdx(Inventory) ; i <= ArrayPair_GetLastIdx(Inventory) ; i ++){ 
+		Pair_Cost(need_material,i) = 0 ;
+	} 
+	count_aksi = 0 ;
+	GenerateQueue(&QGLOBAL);
+}
 void MaintoPrepDay(){
 	// Prepare Everything
 	for (int i = 0 ; i < 8 ; i++){
@@ -123,21 +184,9 @@ void MaintoPrepDay(){
 	// Kosongkan Array orang sedang naik Wahana
 	EmptyQueue(&MGLOBAL);
 }
-void PrepToMainDay(){
-	infotype x;
-	while(!IsEmptyStack(aksi)){
-		Pop(&aksi,&x);
-	}
-	need_money = 0;
-	need_time = 0;
-	for (int i = ArrayPair_GetFirstIdx(Inventory) ; i <= ArrayPair_GetLastIdx(Inventory) ; i ++){ 
-		Pair_Cost(need_material,i) = 0 ;
-	} 
-	count_aksi = 0 ;
-	GenerateQueue(&QGLOBAL);
-}
-// =========================================Fungsi MainDay================================================
+// =======================================================================================================
 
+// =========================================Fungsi MainDay================================================
 
 void UpdateWaktu(int n){
 	time = NextNMenit(time,n);
@@ -297,7 +346,11 @@ void PrintMainDay() {
 
 // =======================================================================================================
 
+
+
 // ========================================Fungsi Preparation Day=========================================
+
+
 void HandleBuy() {
 	Kata Action, StackEl, Barang, Jumlah;
 	int jumlah_int;
@@ -466,10 +519,8 @@ void HandleBuild(){
 					need_money = need_money + Pair_Cost(HargaBuild,bangunanIndex);
 					Elmt(map[PbuildMap],PbuildX,PbuildY) = Bangunan.TabKata[0]; 
 					IntToKataRei(PbuildX,&SbuildX); IntToKataRei(PbuildY,&SbuildY); IntToKataRei(PbuildMap,&SbuildMap);
-					printf("%d",SbuildX.Length); getchar();
 					StackEl.Length=0; strcpy(StackEl.TabKata,""); StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildX); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildY); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildMap);
 					// printf("%s",StackEl.TabKata); getchar();
-					printKata(StackEl); getchar();
 					Push(&aksi,StackEl);
 					count_aksi = count_aksi + 1;
 					(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].status ='O';
@@ -658,6 +709,9 @@ void InputPreparationDay (int inpt) {
 		state = MAIN_DAY;
 		Hour(time) = 9 ;
 		Minute(time) = 0;
+		while(!IsEmptyStack(aksi)){
+			HandleUndo();
+		}
 		PrepToMainDay();
 	} else if (inpt == INPUT_b){
 		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY))){
@@ -683,7 +737,9 @@ void InputPreparationDay (int inpt) {
 		HandleUndo();
 	} else if (inpt == INPUT_2){
 		HandleExecution();
-	}
+	} else if (inpt == INPUT_7){
+		HandleSaveGame();
+	} 
 }
 
 
@@ -723,7 +779,7 @@ void PrintPreparationDay() {
 void InputOffice() {
 	char input[100];
 	Kata INPUT;
-	Kata EXIT; EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T';
+	Kata EXIT; EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length = 4;
 	Kata REPORT; REPORT.TabKata[0] = 'R'; REPORT.TabKata[1] = 'E'; REPORT.TabKata[2] = 'P'; REPORT.TabKata[3] = 'O'; REPORT.TabKata[4] = 'R'; REPORT.TabKata[5] = 'T'; REPORT.Length = 6;
 	Kata DETAILS; DETAILS.TabKata[0] = 'D'; DETAILS.TabKata[1] = 'E'; DETAILS.TabKata[2] = 'T'; DETAILS.TabKata[3] = 'A'; DETAILS.TabKata[4] = 'I'; DETAILS.TabKata[5] = 'L'; DETAILS.TabKata[6] = 'S'; DETAILS.Length=7;
 	Kata Office; Office.TabKata[0] = 'o'; Office.TabKata[1] = 'f'; Office.TabKata[2] = 'f'; Office.TabKata[3] = 'i'; Office.TabKata[4] = 'c'; Office.TabKata[5] = 'e'; Office.Length = 6;
@@ -772,7 +828,6 @@ void InputOffice() {
 void SetupMainMenu(){
 	// Setup awal untuk memulai game
 	ArrayPair_MakeEmpty(&Materials);
-	ArrayPair_MakeEmpty(&need_material);
 	ArrayPair_MakeEmpty(&HargaBuild);
 	ArrayPair_MakeEmpty(&MaterialBuild);
 	ArrayPair_MakeEmpty(&ActionTime);
@@ -782,7 +837,6 @@ void SetupMainMenu(){
 	BacaMATRIKS(&map[2], "../file/2.txt");
 	BacaMATRIKS(&map[3], "../file/3.txt");
 	ArrayPair_BacaIsi(&Materials, "../Saves/Materials.txt");
-	ArrayPair_BacaIsi(&need_material, "../Saves/Inventory.txt");
 	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
 	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
 	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
@@ -858,6 +912,7 @@ void PrintMain(){
 }
 
 
+
 void BacaInput(){
 	Kata EXIT;
 	EXIT.TabKata[0] = 'E'; EXIT.TabKata[1] = 'X'; EXIT.TabKata[2] = 'I'; EXIT.TabKata[3] = 'T'; EXIT.Length=4;
@@ -930,7 +985,6 @@ void BacaInput(){
 		}
 		break;
 	case LOAD_GAME: ; //Semicolon for Label Handling
-		Kata NAME;
 		Kata FILEPATH;
 		Kata EXIT; EXIT.TabKata[0] = 'E' ; EXIT.TabKata[1] = 'X' ; EXIT.TabKata[2] = 'I' ; EXIT.TabKata[3] = 'T' ; EXIT.Length = 4;
 		FILEPATH.Length = 9;
@@ -950,8 +1004,6 @@ void BacaInput(){
 			NAMA.Length = i;
 			break;
 		}
-		// scanf("%s", &name);
-		// getchar();
 		if(IsKataSama(NAMA,EXIT)) {
 			state = MAIN_MENU;
 		} else {
@@ -963,9 +1015,8 @@ void BacaInput(){
 				if (loadfile== NULL){ 
 					printf("Error File Content, Press anything to continue"); getchar();
 				} else {
-					printf("file Opened");
 					SetupLoadGame(loadfile);
-					state = MAIN_MENU;
+					namaPlayer.Length = 0;  namaPlayer = KataConcat(namaPlayer,NAMA);
 				} 
 			} else {
 				printf("Invalid File Name, Press anything to continue"); getchar();
