@@ -255,7 +255,7 @@ void makeListWahanaGood(Wahana *W) {
     int i;
     for(i = 0; i < 8; i++) {
         if((*W).TI[i].status == 'G') {
-            Kata[idx] = copyKata((*W).TI[i].id);
+            arrWahanaGood[idx] = copyKata((*W).TI[i].id);
             idx++;
         }
     }

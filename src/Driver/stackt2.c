@@ -90,7 +90,7 @@ void AkuisisiBuyV2(infotype S, int* Nbenda, Kata* benda){
     i++; j++;
   }
   (N).Length = cnt ;
-  *Nbenda = atoi(N.TabKata);
+  *Nbenda = KataToInt(N);
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -122,7 +122,9 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
     i++; j++;
   }
   (Xbuild).Length = cnt ;
-  *buildX = atoi(Xbuild.TabKata);
+  printf("AAAAAAAAAAAAAA");printKata(Xbuild);getchar();
+  *buildX = KataToInt(Xbuild);
+  printf("%d",*buildX);printf("\n");
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -133,7 +135,8 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
     i++; j++;
   }
   (Ybuild).Length = cnt ;
-  *buildY = atoi(Ybuild.TabKata);
+  *buildY = KataToInt(Ybuild);
+  printf("%d",*buildY);printf("\n");
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -144,7 +147,8 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
     i++; j++;
   }
   (Mapbuild).Length = cnt ;
-  *buildMap = atoi(Mapbuild.TabKata);
+  *buildMap = KataToInt(Mapbuild);
+  printf("%d",*buildMap);printf("\n");
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -156,7 +160,8 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
   } 
 
   (SsizeX).Length = cnt ;
-  *sizeX = atoi(SsizeX.TabKata);
+  *sizeX = KataToInt(SsizeX);
+  printf("%d",*buildX);printf("\n");
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -167,7 +172,8 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
     i++; j++;
   }
   (SsizeY).Length = cnt ;
-  *sizeY = atoi(SsizeY.TabKata);
+  *sizeY = KataToInt(SsizeY);
+  printf("%d",*sizeY);printf("\n");
   cnt = 0 ; j = 0 ;
 
 }

@@ -143,20 +143,23 @@ void SetupLoadGame (FILE *loadfile){
 	time = TempSave.time;
 	
 	for(int i=0;i<20;i++){
+		Kata SENTINEL; SENTINEL.TabKata[0]='X';SENTINEL.Length=1;
 		int y=10;
 		int index=0;int realLength=0;
-		while(index<TempSave.link[i].Length){
-			Kata data;
-			realLength = 0;
-			while(TempSave.link[i].TabKata[index]!=' ' && index<TempSave.link[i].Length){
-				data.TabKata[realLength] = TempSave.link[i].TabKata[index];
-				index++;
-				realLength++;
+		if(!IsKataSama(TempSave.link[i],SENTINEL)){
+			while(index<TempSave.link[i].Length){
+				Kata data;
+				realLength = 0;
+				while(TempSave.link[i].TabKata[index]!=' ' && index<TempSave.link[i].Length){
+					data.TabKata[realLength] = TempSave.link[i].TabKata[index];
+					index++;
+					realLength++;
+				}
+				data.Length = realLength;
+				addUpgrade(&link[i],data);
+				index++; //Untuk skip spasi
+				if(TempSave.link[i].TabKata[index]=='X') break;
 			}
-			data.Length = realLength;
-			addUpgrade(&link[i],data);
-			index++; //Untuk skip spasi
-			if(TempSave.link[i].TabKata[index]=='X') break;
 		}
 	}
 
@@ -255,12 +258,14 @@ boolean IsBisaDibangun (int PbuildX, int PbuildY, int sizeX, int sizeY ){
 		boolean bisaDibangun = true ;
 		for (int i = PbuildX; i < PbuildX + sizeX; i++) {
 			for (int j = PbuildY; j < PbuildY + sizeY; j++){
-				if ((Elmt(mapRoom,i,j)!='-') || ((i==Absis(playerpos)) && (j==Ordinat(playerpos)))){
+				printf("%c",Elmt(mapRoom,i,j));printf(" ");
+				if ((Elmt(mapRoom,i,j)!='-')){
 					bisaDibangun = false;
 				}
 			}
-		return bisaDibangun;
+			printf("\n");
 		}
+		return bisaDibangun;
 	}
 }
 
@@ -650,7 +655,6 @@ void HandleUpgrade(){
 			} else{
 				printf("Not enough materials");
 			}
-			getchar();
 		} else{
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
 			getchar();
