@@ -51,6 +51,7 @@ void printListWahana(Wahana *W);
 void printDetailWahana(Wahana *W, char id, ListNode **head);
 void printReportWahana(Wahana *W, char id);
 void printNotBuilded(Wahana *W);
+InfoWahana getWahanabyID(Wahana *W,char id);
 int GetIndex(Wahana *W, char id);
 int countBrokenWahana(Wahana *W);
 void printBrokenWahana(Wahana *W);
