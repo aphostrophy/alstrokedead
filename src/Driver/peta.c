@@ -884,11 +884,10 @@ void PrintPreparationDay() {
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, need_time);
 	printf("Jam : ");
 	TulisJAM(time);
-	printf("\n");
 	printf("\n");printf("==================================================================");
 	printf("\n");printf("Stack of Your Action");
-	PrintStack(aksi);
-	printf("\n");printf("==================================================================");
+	printf("\n");PrintStack(aksi);
+	printf("==================================================================");printf("\n");
 }
 
 void InputOffice() {
@@ -1193,9 +1192,9 @@ void PrintFooter(){
 		break;
 	case PREPARATION_DAY:
 		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","	Preparation Day");
-		printf("%s\n","	w : atas a : kiri  s : bawah  d: kanan i: masuk ke main day");
-		printf("%s\n"," b: buy l : build k : upgrade j : undo 2 : execute 1 : inventory" ); 
+		printf("%s\n","Preparation Day");
+		printf("%s\n","w : atas a : kiri  s : bawah  d: kanan i: masuk ke main day");
+		printf("%s\n","b: buy l : build k : upgrade j : undo 2 : execute 1 : inventory" ); 
 		break;
 	case INVENTORY:
 		printf("%s\n","				Tombol aksi						 	 ");
