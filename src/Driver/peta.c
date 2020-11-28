@@ -614,13 +614,12 @@ void HandleUpgrade(){
 			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
 			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length++;
 			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
+			IdxType idNeed = ArrayPair_SearchByItem(need_material,bahan);
 			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
-			printKata(bahan);printf(": ");
-			printf("%d",Triplet_Cost(UpgradeCosts,id));printf("\n");
-			printf("You have %d\n",inventorySupply);
-			if(inventorySupply>=Triplet_Cost(UpgradeCosts,id)){
+			int needMaterial = Pair_Cost(need_material,idNeed);
+			if(inventorySupply>=needMaterial){
 				addUpgrade(&link[indexWahana], Nama_Upgrade);
-				Pair_Cost(Inventory,idInventory) = inventorySupply - Triplet_Cost(UpgradeCosts,id);
+				Pair_Cost(need_material,idNeed) = needMaterial + Triplet_Cost(UpgradeCosts,id);
 				StackEl.Length=0; StackEl.TabKata[0] ='X';
 				StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
 				Push(&aksi,StackEl);
