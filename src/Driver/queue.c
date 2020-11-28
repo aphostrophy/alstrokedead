@@ -33,6 +33,59 @@ void Dealokasi_Queue (Queue *Q){
 }
 
 
+boolean IsDouble(char W, char L[3]){
+    int count=0;
+    for(int i=0;i<3;i++){
+        if (L[i]==W){
+            return true;
+        }
+    }
+    return false;
+}
+
+// void GenerateListWahana(pengunjung *X,Wahana LW){
+//     int idx=0;
+//     char wahana_queue[9];
+//     for(int i=0;i<9;i++){
+//         wahana_queue[i]='-';
+//     }
+//     for(int i=0;i<8;i++){
+//         if (LW.TI[i].status=='G'){
+//             wahana_queue[idx]=LW.TI[i].id.TabKata[0];
+//             idx=idx+1;
+//         }
+//     }
+//     idx = idx-1;
+//     if(idx != -1){
+//         for(int j=0;j<3;j++){
+//             if(j==0){
+//                 (*X).L[j]=wahana_queue[rand() % (idx + 1 - 0) + 0];
+//             }
+//             else{
+//                 (*X).L[j]=wahana_queue[rand() % ((idx+1) + 1 - 0) + 0];
+//             }
+//         }
+//     }
+//     else{
+//         printf("aduh");
+//     }
+// }
+
+// void GenerateQueue(Queue * Q, Wahana LW){
+//     for (int i=0;i<5;i++){
+//         pengunjung X;
+//         X.ID=(i+1);
+//         // GenerateListWahana(&X,LW);
+//         // while (IsDouble(X.L)){
+//         //     GenerateListWahana(&X,LW);
+//         // }
+//         X.S=5;
+//         X.T=-1;
+//         X.W='-';
+//         X.X=(i+1);
+//         (*Q).P[i]=X;
+//     }
+// }
 
 void GenerateQueue (Queue * Q, Wahana LW){
     int i,j;
@@ -41,29 +94,33 @@ void GenerateQueue (Queue * Q, Wahana LW){
     for(int i=0;i<9;i++){
         wahana_queue[i]='-';
     }
+    
     for(int i=0;i<8;i++){
         if (LW.TI[i].status=='G'){
             wahana_queue[idx]=LW.TI[i].id.TabKata[0];
             idx=idx+1;
         }
     }
+
+    idx = idx-1;
     MakeEmpty_Queue(Q,10);
-    if (idx != 0){ 
-        // srand(time(0));
+    if (idx !=0){ 
+        srand(time(0));
         for (i=0;i<5;i++){
+            char prev;
             for (j=0;j<3;j++){
                 if (j==0){
-                    (*Q).P[i].L[j]=wahana_queue[rand() % idx];
+                    (*Q).P[i].L[j]=wahana_queue[rand() % (idx + 1 - 0) + 0];
                 }
                 else{
-                    (*Q).P[i].L[j]=wahana_queue[rand() % (idx+1)];
+                    char W = wahana_queue[rand() % ((idx+1) + 1 - 0) + 0];
+                    if(IsDouble(W,(*Q).P[i].L)){
+                        (*Q).P[i].L[j]= '-';
+                    }
+                    else{
+                        (*Q).P[i].L[j]= W;
+                    }                
                 }
-            }
-            while((*Q).P[i].L[1]==(*Q).P[i].L[0] || (*Q).P[i].L[1]==(*Q).P[i].L[2]){
-                (*Q).P[i].L[1]=wahana_queue[rand() % (idx+1)];
-            }
-            while((*Q).P[i].L[2]==(*Q).P[i].L[0]){
-                (*Q).P[i].L[2]=wahana_queue[rand() % (idx+1)];
             }
 
             if ((*Q).P[i].L[1]=='-'){

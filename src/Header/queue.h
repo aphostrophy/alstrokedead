@@ -51,5 +51,6 @@ void Serve(Queue *Q, Queue *M, char W,Wahana *LW, int *pmoney);
 void LeaveQueueT(Queue *M, Queue *Q, Wahana W);
 void ManageTime(int time, Queue *Q, Queue *M,Wahana LW);
 boolean IsWahanaInList(char W, Queue Q);
+boolean IsDouble(char W, char L[3]);
 
 #endif

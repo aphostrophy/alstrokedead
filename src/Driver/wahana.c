@@ -215,21 +215,21 @@ int getTotalPenghasilan(Wahana *W, char id) {
     }
 }
 
-void printDetailWahana(Wahana *W, char id, ListNode **head) {
-    for(int i = 0; i < 8; i++) {
-        if((*W).TI[i].id.TabKata[0] == id) {
-            printKata((*W).TI[i].id); printf("\n");
-            printKata((*W).TI[i].nama); printf("\n");
-            printf("Harga Tiket Wahana : %d\n", (*W).TI[i].harga);
-            printf("Durasi Wahana : %d\n", (*W).TI[i].durasi);
-            printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
-            printf("Status Wahana : %c\n", (*W).TI[i].status);
-            printKata((*W).TI[i].deskripsi); printf("\n");
-            printUpgrades(head);printf("\n");
-            break;
-        }
-    }
-}
+// void printDetailWahana(Wahana *W, char id, ListNode **head) {
+//     for(int i = 0; i < 8; i++) {
+//         if((*W).TI[i].id.TabKata[0] == id) {
+//             printKata((*W).TI[i].id); printf("\n");
+//             printKata((*W).TI[i].nama); printf("\n");
+//             printf("Harga Tiket Wahana : %d\n", (*W).TI[i].harga);
+//             printf("Durasi Wahana : %d\n", (*W).TI[i].durasi);
+//             printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
+//             printf("Status Wahana : %c\n", (*W).TI[i].status);
+//             printKata((*W).TI[i].deskripsi); printf("\n");
+//             printUpgrades(head);printf("\n");
+//             break;
+//         }
+//     }
+// }
 
 void printReportWahana(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
