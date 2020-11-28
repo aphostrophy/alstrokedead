@@ -173,7 +173,7 @@ void SetupNewGame (){
 	ArrayPair_BacaIsi(&need_material, "../Saves/Inventory.txt");
 	cmap = 0;
 	state = MAIN_DAY;
-	GenerateQueue(&QGLOBAL);
+	GenerateQueue(&QGLOBAL,wahana);
 	MakeEmpty_Queue(&MGLOBAL, 10);
 	Absis(playerpos) = 1; Ordinat(playerpos)= 1;
 	pmoney = 10000 ;
@@ -195,7 +195,7 @@ void PrepToMainDay(){
 		Pair_Cost(need_material,i) = 0 ;
 	} 
 	count_aksi = 0 ;
-	GenerateQueue(&QGLOBAL);
+	GenerateQueue(&QGLOBAL,wahana);
 	MakeEmpty_Queue(&MGLOBAL,10);
 }
 void MaintoPrepDay(){
@@ -231,7 +231,7 @@ void UpdateWaktu(int n){
 					getchar();
 				}
 			}
-			ReduceTime(&MGLOBAL,n);
+			ReduceTime(&MGLOBAL,n,wahana);
 			LeaveQueueS(&QGLOBAL);
 			LeaveQueueT(&MGLOBAL,&QGLOBAL,wahana);
 		}
@@ -269,12 +269,62 @@ void RepairWahana(Wahana *W, char id) {
     }
 }
 
+void HandleServe(){
+	Kata Action, Nama_Wahana;
+    char bangunan = getBangunanSekitar();
+    if(bangunan=='A'){
+        printf("Mau serve untuk wahana apa? :");
+        Kata SERVE;
+        int kata_ke = 1;
+        SERVE.TabKata[0] = 's';SERVE.TabKata[1] = 'e';SERVE.TabKata[2] = 'r';SERVE.TabKata[3] = 'v';SERVE.TabKata[4] = 'e';
+        SERVE.Length = 5;
+        STARTBUY();
+        while(!EOP){
+            int i = 0;
+            CKata.Length=0;
+            while(CC!=BLANK){
+                CKata.TabKata[i] = CC;
+                if(CC=='\n'){
+                    break;
+                }
+                i++;
+                CKata.Length=i;
+                ADV();
+            }
+            if(kata_ke==1){
+                Action = CKata;
+            } else if(kata_ke==2){
+                Nama_Wahana = CKata;
+            }
+            if(CC=='\n'){
+                break;
+            }
+            kata_ke++;
+            IgnoreBlank();
+        }
+        if(IsKataSama(Action, SERVE)){
+            Serve(&QGLOBAL,&MGLOBAL,Nama_Wahana.TabKata[0],&wahana,&pmoney);
+			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,SERVE)));
+        }
+        else{
+            printf("Command salah! Tekan apapun untuk melanjutkan\n");
+            getchar();
+        }
+    }
+    else{
+		printf("Tidak ada wahana di sekitar Anda");
+		getchar();       
+    }
+}
+
 void InputMainDay (int inpt) {
+	JAM tutup; Hour(tutup) = 21; Minute(tutup) = 0;
 	// Mengelola input yang diterima konsol saat main day dan tindakan yang dilakukan setelah input itu
 	Kata W; W.TabKata[0] = 'w'; W.Length = 1;
 	Kata A; A.TabKata[0] = 'a'; A.Length = 1;
 	Kata S; S.TabKata[0] = 's'; S.Length = 1;
 	Kata D; D.TabKata[0] = 'd'; D.Length = 1;
+	Kata SERVE; SERVE.TabKata[0] = 's';SERVE.TabKata[1] = 'e';SERVE.TabKata[2] = 'r';SERVE.TabKata[3] = 'v';SERVE.TabKata[4] = 'e'; SERVE.Length = 5;
 	Kata Detail; Detail.TabKata[0] = 'd'; Detail.TabKata[1] = 'e'; Detail.TabKata[2] = 't'; Detail.TabKata[3] = 'a'; Detail.TabKata[4] = 'i'; Detail.TabKata[5] = 'l'; Detail.Length = 6;
 	Kata Repair; Repair.TabKata[0] = 'r'; Repair.TabKata[1] = 'e'; Repair.TabKata[2] = 'p'; Repair.TabKata[3] = 'a'; Repair.TabKata[4] = 'i'; Repair.TabKata[5] = 'r'; Repair.Length = 6;
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
@@ -305,34 +355,10 @@ void InputMainDay (int inpt) {
 		RepairWahana(&wahana, id);
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,Repair)));
 	} else if (inpt == INPUT_4){
-		char S = getBangunanSekitar();
-		if (S=='A'){
-			char input;
-			scanf("%c",&input); getchar();
-			if (input=='g'){
-				Serve(&QGLOBAL,&MGLOBAL,'G',wahana,pmoney);
-			}
-			else if (input=='f'){
-				Serve(&QGLOBAL,&MGLOBAL,'F',wahana,pmoney);
-			}
-			else if (input=='h'){
-				Serve(&QGLOBAL,&MGLOBAL,'H',wahana,pmoney);
-			}
-			else if (input=='s'){
-				Serve(&QGLOBAL,&MGLOBAL,'S',wahana,pmoney);
-			}	
-			else if (input=='p'){
-				Serve(&QGLOBAL,&MGLOBAL,'P',wahana,pmoney);
-			}
-			else if (input=='b'){
-				Serve(&QGLOBAL,&MGLOBAL,'B',wahana,pmoney);
-			}
-			else if (input=='c'){
-				Serve(&QGLOBAL,&MGLOBAL,'C',wahana,pmoney);
-			}	
-			else if (input=='t'){
-				Serve(&QGLOBAL,&MGLOBAL,'T',wahana,pmoney);
-			}
+		if (Durasi(time, tutup) >= Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,SERVE))){
+			HandleServe();
+		} else {
+			printf("Waktu tidak mencukupi untuk serve!"); getchar();
 		}
 	}
 }
@@ -357,7 +383,7 @@ void PrintMainDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
-	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer.TabKata, pmoney, Durasi(time, tutup));
+	printf("Nama : %s 	Uang: %d	Waktu tersisa: %ld menit\n ", namaPlayer.TabKata, pmoney, Durasi(time, tutup));
 	printf("%s","Jam : ");
 	TulisJAM(time);
 	printf("\n");
@@ -830,7 +856,7 @@ void PrintPreparationDay() {
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("%s\n","");
 
-	printf("Nama : %s		Uang: %d		Waktu sebelum buka: %d menit\n", namaPlayer.TabKata, pmoney, Durasi(time, buka));
+	printf("Nama : %s		Uang: %d		Waktu sebelum buka: %ld menit\n", namaPlayer.TabKata, pmoney, Durasi(time, buka));
 	printf("Material yang dibutuhkan: ");ArrayPair_TulisIsiTab(need_material);printf("\n");
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, need_time);
 	printf("%s","Jam : ");

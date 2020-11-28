@@ -11,44 +11,49 @@ Queue M;
 int pmoney=50000;
 
 void HandleServe(){
-	// char action[100] ; char method[100] ; char upgrade[100]; 
 	Kata Action, Nama_Wahana;
-	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
-    printf("Mau serve untuk wahana apa? : ");
-    Kata SERVE;
-    int kata_ke = 1;
-    SERVE.TabKata[0] = 's';SERVE.TabKata[1] = 'e';SERVE.TabKata[2] = 'r';SERVE.TabKata[3] = 'v';SERVE.TabKata[4] = 'e';
-    SERVE.Length = 5;
-    STARTBUY();
-    while(!EOP){
-        int i = 0;
-        CKata.Length=0;
-        while(CC!=BLANK){
-            CKata.TabKata[i] = CC;
+    char bangunan = getBangunanSekitar();
+    if(bangunan=='A'){
+        printf("Mau serve untuk wahana apa? :");
+        Kata SERVE;
+        int kata_ke = 1;
+        SERVE.TabKata[0] = 's';SERVE.TabKata[1] = 'e';SERVE.TabKata[2] = 'r';SERVE.TabKata[3] = 'v';SERVE.TabKata[4] = 'e';
+        SERVE.Length = 5;
+        STARTBUY();
+        while(!EOP){
+            int i = 0;
+            CKata.Length=0;
+            while(CC!=BLANK){
+                CKata.TabKata[i] = CC;
+                if(CC=='\n'){
+                    break;
+                }
+                i++;
+                CKata.Length=i;
+                ADV();
+            }
+            if(kata_ke==1){
+                Action = CKata;
+            } else if(kata_ke==2){
+                Nama_Wahana = CKata;
+            }
             if(CC=='\n'){
                 break;
             }
-            i++;
-            CKata.Length=i;
-            ADV();
+            kata_ke++;
+            IgnoreBlank();
         }
-        if(kata_ke==1){
-            Action = CKata;
-        } else if(kata_ke==2){
-            Nama_Wahana = CKata;
+        if(IsKataSama(Action, SERVE)){
+            Serve(&Q,&M,Nama_Wahana.TabKata[0],&LW,&pmoney);
         }
-        if(CC=='\n'){
-            break;
+        else{
+            printf("Command salah! Tekan apapun untuk melanjutkan\n");
+            getchar();
         }
-        kata_ke++;
-        IgnoreBlank();
-    }
-    if(IsKataSama(Action, SERVE)){
-        Serve(&Q,&M,Nama_Wahana.TabKata[0],&LW,&pmoney);
     }
     else{
-        printf("Command salah! Tekan apapun untuk melanjutkan\n");
-        getchar();
+		printf("Tidak ada wahana di sekitar Anda");
+		getchar();       
     }
     // Validasi apakah yang diketik benar benar "upgrade"
     // Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup untuk upgrade

@@ -48,32 +48,37 @@ void GenerateQueue (Queue * Q, Wahana LW){
         }
     }
     MakeEmpty_Queue(Q,10);
-    // srand(time(0));
-    for (i=0;i<5;i++){
-        for (j=0;j<3;j++){
-            if (j==0){
-                (*Q).P[i].L[j]=wahana_queue[rand() % idx];
+    if (idx != 0){ 
+        // srand(time(0));
+        for (i=0;i<5;i++){
+            for (j=0;j<3;j++){
+                if (j==0){
+                    (*Q).P[i].L[j]=wahana_queue[rand() % idx];
+                }
+                else{
+                    (*Q).P[i].L[j]=wahana_queue[rand() % (idx+1)];
+                }
             }
-            else{
-                (*Q).P[i].L[j]=wahana_queue[rand() % (idx+1)];
+            while((*Q).P[i].L[1]==(*Q).P[i].L[0] || (*Q).P[i].L[1]==(*Q).P[i].L[2]){
+                (*Q).P[i].L[1]=wahana_queue[rand() % (idx+1)];
             }
-        }
-        while((*Q).P[i].L[1]==(*Q).P[i].L[0] || (*Q).P[i].L[1]==(*Q).P[i].L[2]){
-            (*Q).P[i].L[1]=wahana_queue[rand() % (idx+1)];
-        }
-        while((*Q).P[i].L[2]==(*Q).P[i].L[0]){
-            (*Q).P[i].L[2]=wahana_queue[rand() % (idx+1)];
-        }
+            while((*Q).P[i].L[2]==(*Q).P[i].L[0]){
+                (*Q).P[i].L[2]=wahana_queue[rand() % (idx+1)];
+            }
 
-        if ((*Q).P[i].L[1]=='-'){
-            (*Q).P[i].L[2]=='-';
+            if ((*Q).P[i].L[1]=='-'){
+                (*Q).P[i].L[2]=='-';
+            }
+            (*Q).P[i].S = 5;
+            (*Q).P[i].X = (i+1);
+            (*Q).P[i].T = 0;
+            (*Q).P[i].ID = (i+1); 
+            (*Q).P[i].W = '-';
+            Tail(*Q)=Tail(*Q)+1;
         }
-        (*Q).P[i].S = 5;
-        (*Q).P[i].X = (i+1);
-        (*Q).P[i].T = 0;
-        (*Q).P[i].ID = (i+1); 
-        (*Q).P[i].W = '-';
-        Tail(*Q)=Tail(*Q)+1;
+    }
+    else{
+        printf("Belum ada wahana yang dibangun\n");
     }
 }
 
@@ -300,7 +305,7 @@ void Serve(Queue *Q, Queue *M, char W,Wahana *LW, int *pmoney){
     if (getStatus(LW,W)!='B' && (getInside(LW,W)!=getKapasitas(LW,W))){
         pengunjung X;
 
-        // //Dequeues
+        // //Dequeue
         Dequeue(Q,&X);
         DequeueWahana(&X,W);
 
@@ -332,4 +337,8 @@ void ManageTime(int time, Queue *Q, Queue *M,Wahana LW){
     LeaveQueueS(Q);
     LeaveQueueT(M,Q,LW);
 }
+
+
+
+//============================BATAS SUCI=================================================
 
