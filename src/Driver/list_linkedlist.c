@@ -49,9 +49,8 @@ void printUpgrades( ListNode **head )
 {
     for( ListNode *current =*head; current != NULL; current = current->next ) //Mark pakai NULL
     {
-        printKata(current->data);printf("->");
+        printKata(current->data);printf(" ");
     }
-    printf( "%s", "NULL" );
 }
 
 int upgradeLength(ListNode **head)

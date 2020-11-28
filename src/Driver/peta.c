@@ -16,7 +16,6 @@
 #include "../Header/queue.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 // =======================================================================================================
 
 // ======================================Pendefinisian State di dalam Game================================
@@ -143,20 +142,23 @@ void SetupLoadGame (FILE *loadfile){
 	time = TempSave.time;
 	
 	for(int i=0;i<20;i++){
+		Kata SENTINEL; SENTINEL.TabKata[0]='X';SENTINEL.Length=1;
 		int y=10;
 		int index=0;int realLength=0;
-		while(index<TempSave.link[i].Length){
-			Kata data;
-			realLength = 0;
-			while(TempSave.link[i].TabKata[index]!=' ' && index<TempSave.link[i].Length){
-				data.TabKata[realLength] = TempSave.link[i].TabKata[index];
-				index++;
-				realLength++;
+		if(!IsKataSama(TempSave.link[i],SENTINEL)){
+			while(index<TempSave.link[i].Length){
+				Kata data;
+				realLength = 0;
+				while(TempSave.link[i].TabKata[index]!=' ' && index<TempSave.link[i].Length){
+					data.TabKata[realLength] = TempSave.link[i].TabKata[index];
+					index++;
+					realLength++;
+				}
+				data.Length = realLength;
+				addUpgrade(&link[i],data);
+				index++; //Untuk skip spasi
+				if(TempSave.link[i].TabKata[index]=='X') break;
 			}
-			data.Length = realLength;
-			addUpgrade(&link[i],data);
-			index++; //Untuk skip spasi
-			if(TempSave.link[i].TabKata[index]=='X') break;
 		}
 	}
 
@@ -255,12 +257,14 @@ boolean IsBisaDibangun (int PbuildX, int PbuildY, int sizeX, int sizeY ){
 		boolean bisaDibangun = true ;
 		for (int i = PbuildX; i < PbuildX + sizeX; i++) {
 			for (int j = PbuildY; j < PbuildY + sizeY; j++){
-				if ((Elmt(mapRoom,i,j)!='-') || ((i==Absis(playerpos)) && (j==Ordinat(playerpos)))){
+				printf("%c",Elmt(mapRoom,i,j));printf(" ");
+				if ((Elmt(mapRoom,i,j)!='-')){
 					bisaDibangun = false;
 				}
 			}
-		return bisaDibangun;
+			printf("\n");
 		}
+		return bisaDibangun;
 	}
 }
 
@@ -372,13 +376,13 @@ void PrintMainDay() {
 	}
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
-	printf("%s\n","");
+	printf("\n");
 	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer.TabKata, pmoney, Durasi(time, tutup));
-	printf("%s","Jam : ");
+	printf("Jam : ");
 	TulisJAM(time);
 	printf("\n");
 	printBrokenWahana(&wahana);
-	printf("%s\n","");
+	printf("\n");
 	printf("=======================Queue antrian pengunjung===================================\n\n");
 	PrintQueue(QGLOBAL);
 	printf("=====================Queue pengunjung yang sedang naik wahana=====================\n\n");
@@ -395,6 +399,7 @@ void PrintMainDay() {
 
 void HandleBuy() {
 	Kata Action, StackEl, Barang, Jumlah;
+	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
 	int jumlah_int;
 
 	printf("Selamat Datang ke Menu Pembelian\n");
@@ -440,7 +445,7 @@ void HandleBuy() {
 		if(pmoney>=jumlah_int*Pair_Cost(Materials,materialIndex)+need_money){
 			need_money = need_money + jumlah_int*Pair_Cost(Materials,materialIndex);
 			StackEl.Length=0; StackEl.TabKata[0] ='X';
-			StackEl = KataConcat(StackEl,Action);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Jumlah);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Barang);
+			StackEl = KataConcat(StackEl,Action);StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Jumlah);StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Barang);
 			// printf("%d",Jumlah.Length); printf("%s",Action.TabKata); printf("%s",Barang.TabKata); 
 			Push(&aksi,StackEl);
 			count_aksi = count_aksi + 1;
@@ -561,6 +566,7 @@ void HandleBuild(){
 				} else if (Pair_Cost(Inventory,materialIndex) < banyakAmberdibutuhkan){
 					printf("Bahan Bangunan Tidak Mencukupi!");getchar();
 				} else {
+					Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
 					Pair_Cost(need_material,materialIndex) = Pair_Cost(need_material,materialIndex) + banyakAmberdibutuhkan ;
 					need_money = need_money + Pair_Cost(HargaBuild,bangunanIndex);
 					for (int i = PbuildX; i < PbuildX + sizeBaris; i++) {
@@ -568,10 +574,10 @@ void HandleBuild(){
 							Elmt(map[PbuildMap],i,j) = Bangunan.TabKata[0]; 
 						}
 					}
-					IntToKataRei(PbuildX,&SbuildX); IntToKataRei(PbuildY,&SbuildY); IntToKataRei(PbuildMap,&SbuildMap); IntToKataRei(sizeBaris,&SsizeBaris); IntToKataRei(sizeKolom,&SsizeKolom);
+					SbuildX = IntToKata(PbuildX); SbuildY = IntToKata(PbuildY); SbuildMap = IntToKata(PbuildMap); SsizeBaris = IntToKata(sizeBaris); SsizeKolom = IntToKata(sizeKolom);
 					StackEl.Length=0; StackEl.TabKata[0]='X';
-					StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildX); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildY); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildMap); strcat(StackEl.TabKata," "); StackEl.Length++;
-					StackEl = KataConcat(StackEl,SsizeBaris); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SsizeKolom);
+					StackEl = KataConcat(StackEl,Method); StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Bangunan); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildX); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildY); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildMap); StackEl = KataConcat(StackEl,SPASI);
+					StackEl = KataConcat(StackEl,SsizeBaris); StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,SsizeKolom);
 					// printf("%s",StackEl.TabKata); getchar();
 					Push(&aksi,StackEl);
 					count_aksi = count_aksi + 1;
@@ -636,7 +642,7 @@ void HandleUpgrade(){
 		if(IsKataSama(Action, UPGRADE)){
 			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
 			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
-			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length++;
+			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length=0;
 			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
 			IdxType idNeed = ArrayPair_SearchByItem(need_material,bahan);
 			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
@@ -650,7 +656,6 @@ void HandleUpgrade(){
 			} else{
 				printf("Not enough materials");
 			}
-			getchar();
 		} else{
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
 			getchar();
@@ -872,18 +877,18 @@ void PrintPreparationDay() {
 	}
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
-	printf("%s\n","");
+	printf("\n");
 
 	printf("Nama : %s		Uang: %d		Waktu sebelum buka: %d menit\n", namaPlayer.TabKata, pmoney, Durasi(time, buka));
 	printf("Material yang dibutuhkan: ");ArrayPair_TulisIsiTab(need_material);printf("\n");
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, need_time);
-	printf("%s","Jam : ");
+	printf("Jam : ");
 	TulisJAM(time);
-	printf("%s\n","");
-	printf("%s\n","==================================================================");
-	printf("%s\n","Stack of Your Action");
+	printf("\n");
+	printf("\n");printf("==================================================================");
+	printf("\n");printf("Stack of Your Action");
 	PrintStack(aksi);
-	printf("%s\n","==================================================================");
+	printf("\n");printf("==================================================================");
 }
 
 void InputOffice() {
@@ -964,15 +969,15 @@ void PrintJudul (){
 	// printf("%s\n","==================================================================");
 	// printf("%s\n","==================================================================");  
 	// printf("%s\n","*     __    __ _ _ _         __    __                  _          ");
-	// printf("%s\n","*    / / /\ \ (_| | |_   _  / / /\ \ \__ _ _ __   __ _| | ___   _ ");   
-	// printf("%s\n","*    \ \/  \/ | | | | | | | \ \/  \/ / _` | '_ \ / _` | |/ | | | |");   
-	// printf("%s\n","*     \  /\  /| | | | |_| |  \  /\  | (_| | | | | (_| |   <| |_| |");   
-	// printf("%s\n","*      \/  \/ |_|_|_|\__, |   \/  \/ \__,_|_| |_|\__, |_|\_\\__, |");   
+	// printf("%s\n","*    / / /\\ \\ (_| | |_   _  / / /\\ \\ \\__ _ _ __   __ _| | ___   _ ");   
+	// printf("%s\n","*    \\ \\/  \\/ | | | | | | | \\ \\/  \\/ / _` | '_ \\ / _` | |/ | | | |");   
+	// printf("%s\n","*     \\  /\\  /| | | | |_| |  \\  /\\  | (_| | | | | (_| |   <| |_| |");   
+	// printf("%s\n","*      \\/  \\/ |_|_|_|\\__, |   \\/  \\/ \\__,_|_| |_|\\__, |_|\\_ \\__, |");   
 	// printf("%s\n","*               __   |___/         _     _       |___/      |___/ ");   
-	// printf("%s\n","*              / / /\ \ \___  _ __| | __| |                       ");   
-	// printf("%s\n","*              \ \/  \/ / _ \| '__| |/ _` |                       ");   
-	// printf("%s\n","*               \  /\  | (_) | |  | | (_| |                       ");   
-	// printf("%s\n","*                \/  \/ \___/|_|  |_|\__,_|                       ");   
+	// printf("%s\n","*              / / /\\ \\ \\___  _ __| | __| |                       ");   
+	// printf("%s\n","*              \\ \\/  \\/ / _ \\| '__| |/ _` |                       ");   
+	// printf("%s\n","*               \\  /\\  | (_) | |  | | (_| |                       ");   
+	// printf("%s\n","*                \\/  \\/ \\___/|_|  |_|\\__,_|                       ");   
 	// printf("%s\n","*                                                                 ");
 	printf("%s\n","==================================================================");
 	printf("%s\n","			Willy Wangky World						 ");
