@@ -147,6 +147,15 @@ int getInside(Wahana *W, char id) {
     }
 }
 
+InfoWahana getWahanabyID(Wahana *W,char id){
+    for(int i = 0; i < 8; i++) {
+        if((*W).TI[i].id.TabKata[0] == id) {
+            return (*W).TI[i];
+            break;
+        }
+    }
+}
+
 int getPengunjung(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id.TabKata[0] == id) {

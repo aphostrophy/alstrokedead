@@ -15,7 +15,7 @@
 //     return c;
 // }
 
-// // == LINUX (DEBIAN BASED) //
+// == LINUX (DEBIAN BASED) //
 
 #include "../Header/Input.h"
 #include <stdio.h>
@@ -53,17 +53,17 @@ char getch_(int echo)
   return ch;
 }
 
-/* Read 1 character without echo */
+// /* Read 1 character without echo */
 char getch() 
 {
   return getch_(0);
 }
 
-/* Read 1 character with echo */
-char getche(void) 
-{
-  return getch_(1);
-}
+// /* Read 1 character with echo */
+// char getche(void) 
+// {
+//   return getch_(1);
+// }
 
 int GetInput(){
     int c;

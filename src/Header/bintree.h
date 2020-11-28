@@ -35,7 +35,7 @@ void BuatTree(BinTree parent, BinTree l, BinTree r);
 
 void BuildTree();
 /* I.S P adalah tree kosong */
-/* F.S P adalah tree berisi bahan makanan dari restoran engi kitchen */
+/* F.S P adalah tree berisi daftar upgrade dari wahana-wahana wangky */
 
 /* Manajemen Memory */
 addrNode AlokNode(bintree_infotype X);
