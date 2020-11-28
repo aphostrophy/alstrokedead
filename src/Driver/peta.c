@@ -376,13 +376,13 @@ void PrintMainDay() {
 	}
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
-	printf("%s\n","");
+	printf("\n");
 	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer.TabKata, pmoney, Durasi(time, tutup));
-	printf("%s","Jam : ");
+	printf("Jam : ");
 	TulisJAM(time);
 	printf("\n");
 	printBrokenWahana(&wahana);
-	printf("%s\n","");
+	printf("\n");
 	printf("=======================Queue antrian pengunjung===================================\n\n");
 	PrintQueue(QGLOBAL);
 	printf("=====================Queue pengunjung yang sedang naik wahana=====================\n\n");
@@ -877,18 +877,18 @@ void PrintPreparationDay() {
 	}
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
-	printf("%s\n","");
+	printf("\n");
 
 	printf("Nama : %s		Uang: %d		Waktu sebelum buka: %d menit\n", namaPlayer.TabKata, pmoney, Durasi(time, buka));
 	printf("Material yang dibutuhkan: ");ArrayPair_TulisIsiTab(need_material);printf("\n");
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, need_time);
-	printf("%s","Jam : ");
+	printf("Jam : ");
 	TulisJAM(time);
-	printf("%s\n","");
-	printf("%s\n","==================================================================");
-	printf("%s\n","Stack of Your Action");
+	printf("\n");
+	printf("\n");printf("==================================================================");
+	printf("\n");printf("Stack of Your Action");
 	PrintStack(aksi);
-	printf("%s\n","==================================================================");
+	printf("\n");printf("==================================================================");
 }
 
 void InputOffice() {
@@ -969,15 +969,15 @@ void PrintJudul (){
 	// printf("%s\n","==================================================================");
 	// printf("%s\n","==================================================================");  
 	// printf("%s\n","*     __    __ _ _ _         __    __                  _          ");
-	// printf("%s\n","*    / / /\ \ (_| | |_   _  / / /\ \ \__ _ _ __   __ _| | ___   _ ");   
-	// printf("%s\n","*    \ \/  \/ | | | | | | | \ \/  \/ / _` | '_ \ / _` | |/ | | | |");   
-	// printf("%s\n","*     \  /\  /| | | | |_| |  \  /\  | (_| | | | | (_| |   <| |_| |");   
-	// printf("%s\n","*      \/  \/ |_|_|_|\__, |   \/  \/ \__,_|_| |_|\__, |_|\_\\__, |");   
+	// printf("%s\n","*    / / /\\ \\ (_| | |_   _  / / /\\ \\ \\__ _ _ __   __ _| | ___   _ ");   
+	// printf("%s\n","*    \\ \\/  \\/ | | | | | | | \\ \\/  \\/ / _` | '_ \\ / _` | |/ | | | |");   
+	// printf("%s\n","*     \\  /\\  /| | | | |_| |  \\  /\\  | (_| | | | | (_| |   <| |_| |");   
+	// printf("%s\n","*      \\/  \\/ |_|_|_|\\__, |   \\/  \\/ \\__,_|_| |_|\\__, |_|\\_ \\__, |");   
 	// printf("%s\n","*               __   |___/         _     _       |___/      |___/ ");   
-	// printf("%s\n","*              / / /\ \ \___  _ __| | __| |                       ");   
-	// printf("%s\n","*              \ \/  \/ / _ \| '__| |/ _` |                       ");   
-	// printf("%s\n","*               \  /\  | (_) | |  | | (_| |                       ");   
-	// printf("%s\n","*                \/  \/ \___/|_|  |_|\__,_|                       ");   
+	// printf("%s\n","*              / / /\\ \\ \\___  _ __| | __| |                       ");   
+	// printf("%s\n","*              \\ \\/  \\/ / _ \\| '__| |/ _` |                       ");   
+	// printf("%s\n","*               \\  /\\  | (_) | |  | | (_| |                       ");   
+	// printf("%s\n","*                \\/  \\/ \\___/|_|  |_|\\__,_|                       ");   
 	// printf("%s\n","*                                                                 ");
 	printf("%s\n","==================================================================");
 	printf("%s\n","			Willy Wangky World						 ");
