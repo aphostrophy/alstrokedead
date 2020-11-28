@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "string.h"
 #include "../Header/bintree.h"
 #include "../Header/wahana.h"
 #include "../Header/mesinkar.h"
@@ -116,39 +115,6 @@ boolean IsTreeOneElmt(BinTree P)
     }
 }
 
-boolean IsUnerLeft(BinTree P)
-/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon unerleft: hanya mempunyai subpohon kiri */
-{
-    if (!IsTreeEmpty(P)) {
-        if (Left(P) != bintree_Nil && Right(P) == bintree_Nil) 
-            return true;
-        return false;
-    }
-    return false;
-}
-
-boolean IsUnerRight(BinTree P)
-/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon unerright: hanya mempunyai subpohon kanan*/
-{
-    if (!IsTreeEmpty(P)){
-        if (Right(P) != bintree_Nil && Left(P) == bintree_Nil)
-            return true;
-        return false;
-    }
-    return false;
-}
-
-boolean IsBiner(BinTree P)
-/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon biner: mempunyai subpohon kiri dan subpohon kanan*/
-{
-    if (!IsTreeEmpty(P)) {
-        if (Left(P) != bintree_Nil && Right(P) != bintree_Nil) return true;
-        return false; 
-    }
-    return false;
-}
-
-
 int bintree_findIndex(char id){
     int ret = -1;
     for (int i = 0; i < 8 && ret == -1; i++){
@@ -238,32 +204,6 @@ void PrintUpgradeWahana(char id) {
         printf("Tidak ada lagi upgrade yang bisa dilakukan!!\n");
     } else {
         PrintTreeUtil(listUpgrade[res], 2, levelWahana[res]);
-    }
-}
-
-void moveUpgrade(char id, Kata upgrade) {
-    BinTree res_upgrade, res_wahana;
-    int idx;
-    // Mencari wahana
-    for(int i = 0; i < 8; i++) {
-        if(id == idWahanaUpgrade[i].TabKata[0]) {
-            idx = i;
-            res_wahana = listUpgrade[i];
-            break;
-        }
-    }
-
-    for(int i = 0; i < 9; i++) {
-        if(IsKataSama(upgrade, arrUpgrade[i])) {
-            res_upgrade = treeUpgrade[i];
-        }
-    }
-    
-    if(isChild(res_wahana, res_upgrade)) {
-        listUpgrade[idx] = res_upgrade;
-        levelWahana[idx]++;
-    } else {
-        printf("Invalid Upgrade!!\n");
     }
 }
 

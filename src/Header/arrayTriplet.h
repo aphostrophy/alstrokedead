@@ -4,7 +4,6 @@
 /* Banyaknya elemen didefinisikan secara implisit, memori tabel statik */
 
 // ACTION / BARANG disimpan dalam Triplet
-// Contoh: [P1, P2, P3, ...] dengan misal P1.item = "makan" dan P1.cost = 5
 
 
 #ifndef ARRAYPOSTRI_H

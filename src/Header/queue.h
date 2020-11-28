@@ -3,7 +3,6 @@
 #define queue_H
 
 #include "boolean.h"
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 

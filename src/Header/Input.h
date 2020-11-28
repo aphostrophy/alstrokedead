@@ -15,7 +15,7 @@
 // UNCOMMENT ALL OF THE ABOVE IF YOU ARE IN MS-DOS BASED OS
 
 // LINUX (DEBIAN BASED)
-#include <termios.h>
+// #include <termios.h>
 #include <stdio.h>
 #include <stdlib.h>
 #define clrscr() printf("\033c")

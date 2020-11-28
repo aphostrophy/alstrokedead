@@ -1,38 +1,11 @@
 #include <stdio.h>
-#include <string.h>
 #include "../Header/boolean.h"
 #include "../Header/wahana.h"
 #include "../Header/mesinkar.h"
 #include "../Header/mesinkata.h"
 #include "../Header/list_linkedlist.h"
 
-string arrNamaWahana[10] = {"SkyCoaster", "PirateShip", "Tornado", "Carousel", "HauntedHouse", "FerrisWheel", "BumperCars", "GyroDrop"};
-string idWahana[8] = {'S', 'P', 'T', 'C', 'H', 'F','B','G'};
-int arrHargaWahana[8] = {10000, 15000, 50000, 40000, 20000, 10000, 75000, 50000};
-int durasiWahana[8] = {20, 15, 10, 10, 25, 20, 15, 10};
-int arrKapasitas[8] = {8, 6, 4, 8, 2, 6, 4, 8};
-string arrDeskripsi[8] = {"Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi", "Ini Deskripsi"};
-
-/* KONSTUKTOR */
-// void makeListWahana(Wahana *W) {
-//     int i;
-//     for(i = 0; i < 8; i++) {
-//         strcpy((*W).TI[i].id, idWahana[i]);
-//         strcpy((*W).TI[i].nama, arrNamaWahana[i]);
-//         (*W).TI[i].harga = arrHargaWahana[i];
-//         (*W).TI[i].durasi = durasiWahana[i];
-//         (*W).TI[i].kapasitas = arrKapasitas[i];
-//         (*W).TI[i].status = 'N'; //inisiasi dengan not build
-//         strcpy((*W).TI[i].deskripsi, arrDeskripsi[i]);
-
-//         //inisiasi jumlah pengunjung dan penghasilan dengan 0
-//         (*W).TI[i].inside = 0;
-//         (*W).TI[i].pengunjung = 0;
-//         (*W).TI[i].total_pengunjung = 0;
-//         (*W).TI[i].penghasilan = 0;
-//         (*W).TI[i].total_penghasilan = 0;
-//     }
-// }
+Kata arrWahanaGood[8];
 
 void bacaWahana(Wahana *W, char* namaFile) {
     /* I.S. List Wahana valid dan namafile valid
@@ -73,15 +46,15 @@ void bacaWahana(Wahana *W, char* namaFile) {
                 break;
             case 3:
                 bil1 = copyKata(CKata);
-                harga = atoi(bil1.TabKata);
+                harga = KataToInt(bil1);
                 break;
             case 4:
                 bil2 = copyKata(CKata);
-                durasi = atoi(bil2.TabKata);
+                durasi = KataToInt(bil2);
                 break;
             case 5:
                 bil3 = copyKata(CKata);
-                kapasitas = atoi(bil3.TabKata);
+                kapasitas = KataToInt(bil3);
                 break;
             case 6:
                 deskripsi = copyKata(CKata);
@@ -101,7 +74,8 @@ void bacaWahana(Wahana *W, char* namaFile) {
                 (*W).TI[infoKe].total_pengunjung = 0;
                 (*W).TI[infoKe].penghasilan = 0;
                 (*W).TI[infoKe].total_penghasilan = 0;
-
+                (*W).TI[infoKe].panjang = 0;
+                (*W).TI[infoKe].lebar = 0;
                 kataKe = 0;
                 infoKe++;
                 break;
@@ -215,7 +189,10 @@ int getTotalPenghasilan(Wahana *W, char id) {
     }
 }
 
+
+/* FUNGSIONALITAS */
 void printDetailWahana(Wahana *W, char id, ListNode **head) {
+
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id.TabKata[0] == id) {
             printKata((*W).TI[i].id); printf("\n");
@@ -224,6 +201,7 @@ void printDetailWahana(Wahana *W, char id, ListNode **head) {
             printf("Durasi Wahana : %d\n", (*W).TI[i].durasi);
             printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
             printf("Status Wahana : %c\n", (*W).TI[i].status);
+            printf("Ukuran Wahana : ( %d x %d ) \n", (*W).TI[i].lebar,(*W).TI[i].panjang);
             printKata((*W).TI[i].deskripsi); printf("\n");
             printUpgrades(head);printf("\n");
             break;
@@ -258,6 +236,28 @@ int countBrokenWahana(Wahana *W) {
         }
     }
     return res;
+}
+
+int countWahanaGood(Wahana *W) {
+    int count = 0;
+    int i;
+    for(i = 0; i < 8; i++) {
+        if((*W).TI[i].status == 'G') {
+            count++;
+        }
+    }
+    return count;
+}
+
+void makeListWahanaGood(Wahana *W) {
+    int idx = 0;
+    int i;
+    for(i = 0; i < 8; i++) {
+        if((*W).TI[i].status == 'G') {
+            arrWahanaGood[idx] = copyKata((*W).TI[i].id);
+            idx++;
+        }
+    }
 }
 
 void printBrokenWahana(Wahana *W) {

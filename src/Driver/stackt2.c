@@ -8,7 +8,6 @@
 #include "../Header/mesinkata.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 
 /* ************ Prototype ************ */
@@ -42,11 +41,6 @@ void Push (Stack * S, infotype X){
   
   Top(*S) = Top(*S) +1 ;
   InfoTop(*S) = copyKata(X);
-  // Kata KOSONG ;
-  // KOSONG.TabKata= ""; KOSONG.Length = 0;
-  // InfoTopKata(*S)[0] = "" ;
-  // InfoTopLength(*S) = 0 ;
-  // InfoTop(*S) = KataConcat(InfoTop(*S),X);
 }
 
 
@@ -81,18 +75,26 @@ void PrintStack(Stack S){
   Kata X;
 	while (!(IsEmptyStack(S))){
 		Pop(&S,&X);
-    printKata(X);
+    // printKata(X);
+    if (X.TabKata[0] == 'b' && X.TabKata[2] == 'y'){
+			int n; Kata Benda;
+			AkuisisiBuyV2(X,&n,&Benda);
+      printf("Beli %s sejumlah %d",Benda.TabKata,n);
+		} else if (X.TabKata[0] == 'b' && X.TabKata[2] == 'i') {
+			int PbuildX; int PbuildY; int PbuildMap; Kata Bangunan; int sizeBaris; int sizeKolom;
+			AkuisisiBuildV2(X,&PbuildX,&PbuildY,&PbuildMap,&Bangunan,&sizeBaris,&sizeKolom);
+			printf("Membangun "); printKata(Bangunan);
+      printf(" di titik(%d,%d) pada peta %d dengan ukuran (%dx%d)",Bangunan.TabKata,PbuildX,PbuildY,PbuildMap,sizeBaris,sizeKolom);
+		} else if (X.TabKata[0] == 'u'){
+			char idWahana;Kata Nama_Upgrade;
+			AkuisisiUpgrade(X, &idWahana, &Nama_Upgrade);
+      printf("Mengupgrade "); printKata(Nama_Upgrade);
+      printf(" di wahana dengan id %c",Nama_Upgrade.TabKata,idWahana);
+	  }
     printf("\n");
-	}
+  }
 }
 
-// void AkuisisiBuy(infotype S, int* N, char benda[100]){
-//   char *token = strtok(S, " ");
-//   token = strtok(NULL, " ");
-//   *N = atoi(token);
-//   token = strtok(NULL, " ");
-//   strcpy(benda,token);
-// }
 
 void AkuisisiBuyV2(infotype S, int* Nbenda, Kata* benda){
   Kata N;
@@ -103,7 +105,7 @@ void AkuisisiBuyV2(infotype S, int* Nbenda, Kata* benda){
     i++; j++;
   }
   (N).Length = cnt ;
-  *Nbenda = atoi(N.TabKata);
+  *Nbenda = KataToInt(N);
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -116,21 +118,9 @@ void AkuisisiBuyV2(infotype S, int* Nbenda, Kata* benda){
   (*benda).Length = cnt ;
 }
 
-// void AkuisisiBuild(infotype S, int* buildX, int* buildY, int* buildMap, char bangunan[100]){
-//   char *token = strtok(S, " ");
-//   token = strtok(NULL, " ");
-//   strcpy(bangunan,token);
-//   token = strtok(NULL, " ");
-//   *buildX = atoi(token);
-//   token = strtok(NULL, " ");
-//   *buildY = atoi(token);
-//   token = strtok(NULL, " ");
-//   *buildMap = atoi(token);
-// }
-
-void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* bangunan){
+void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* bangunan, int* sizeX, int* sizeY){
   int i = 6 ; int j = 0 ; int cnt = 0;
-  Kata Xbuild; Kata Ybuild; Kata Mapbuild;
+  Kata Xbuild; Kata Ybuild; Kata Mapbuild; Kata SsizeX; Kata SsizeY;
   while (S.TabKata[i] != ' ' &&i < S.Length) {
     cnt = cnt + 1;
     (*bangunan).TabKata[j] = S.TabKata[i];
@@ -143,11 +133,11 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
   }
   while (S.TabKata[i] != ' ' && i < S.Length) {
     cnt = cnt + 1;
-    (Xbuild).TabKata[j] = S.TabKata[i];
+    Xbuild.TabKata[j] = S.TabKata[i];
     i++; j++;
   }
-  (Xbuild).Length = cnt ;
-  *buildX = atoi(Xbuild.TabKata);
+  Xbuild.Length = cnt ;
+  *buildX = KataToInt(Xbuild);
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -158,7 +148,7 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
     i++; j++;
   }
   (Ybuild).Length = cnt ;
-  *buildY = atoi(Ybuild.TabKata);
+  *buildY = KataToInt(Ybuild);
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -169,9 +159,31 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
     i++; j++;
   }
   (Mapbuild).Length = cnt ;
-  *buildMap = atoi(Mapbuild.TabKata);
+  *buildMap = KataToInt(Mapbuild);
   cnt = 0 ; j = 0 ;
-  
+  while (S.TabKata[i] == ' ') {
+    i++;
+  }
+  while (S.TabKata[i] != ' ' && i < S.Length) {
+    cnt = cnt + 1;
+    (SsizeX).TabKata[j] = S.TabKata[i];
+    i++; j++;
+  } 
+
+  (SsizeX).Length = cnt ;
+  *sizeX = KataToInt(SsizeX);
+  cnt = 0 ; j = 0 ;
+  while (S.TabKata[i] == ' ') {
+    i++;
+  }
+  while (S.TabKata[i] != ' ' && i < S.Length) {
+    cnt = cnt + 1;
+    (SsizeY).TabKata[j] = S.TabKata[i];
+    i++; j++;
+  }
+  (SsizeY).Length = cnt ;
+  *sizeY = KataToInt(SsizeY);
+  cnt = 0 ; j = 0 ;
 }
 
 void AkuisisiUpgrade(Kata K, char *idWahana, Kata *Nama_Upgrade){
