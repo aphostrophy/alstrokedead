@@ -86,9 +86,11 @@ void SetupSaveGame (FILE *savefile){
 	TempSave.Inventory = Inventory;
 	TempSave.aksi = aksi;
 	TempSave.time = time;
-	// for( int i = 0; i < 20;i++){
-	// 	TempSave.link[i] = saveUpgrade(&link[i]);
-	// }
+	for( int i = 0; i < 20;i++){
+		printf("Save File");printf("\n");
+		printKata(saveUpgrade(&link[i]));printf("\n");
+		TempSave.link[i] = saveUpgrade(&link[i]);
+	}
 	TempSave.QGLOBAL = QGLOBAL;
 	TempSave.MGLOBAL = MGLOBAL;
 	TempSave.need_material = need_material;
@@ -140,23 +142,23 @@ void SetupLoadGame (FILE *loadfile){
 	aksi = TempSave.aksi;
 	time = TempSave.time;
 	
-	// for(int i=0;i<20;i++){
-	// 	Kata data;
-	// 	while(TempSave.link[i].Length>0){ // Handle kasus link[i] kosong
-	// 		int index=0;
-	// 		while(TempSave.link[i].TabKata[index]!=' '){
-	// 			if(TempSave.link[i].TabKata[index]=='X'){ //break
-	// 				break;
-	// 			}
-	// 			data.TabKata[index] = TempSave.link[i].TabKata[index];
-	// 		}
-	// 		if(TempSave.link[i].TabKata[index]=='X'){ //super break
-	// 			break;
-	// 		}
-	// 		data.Length = index;
-	// 		addUpgrade(&link[i],data);
-	// 	}
-	// }
+	for(int i=0;i<20;i++){
+		int y=10;
+		int index=0;int realLength=0;
+		while(index<TempSave.link[i].Length){
+			Kata data;
+			realLength = 0;
+			while(TempSave.link[i].TabKata[index]!=' ' && index<TempSave.link[i].Length){
+				data.TabKata[realLength] = TempSave.link[i].TabKata[index];
+				index++;
+				realLength++;
+			}
+			data.Length = realLength;
+			addUpgrade(&link[i],data);
+			index++; //Untuk skip spasi
+			if(TempSave.link[i].TabKata[index]=='X') break;
+		}
+	}
 
 	need_material = TempSave.need_material;
 	for (int i = 0; i < 5; i++) map[i] = TempSave.map[i];
@@ -1154,7 +1156,7 @@ void PrintFooter(){
 		printf("%s\n","	Tekan apapun untuk kembali ke Main Phase");
 		break;
 	case NEW_GAME:
-		printf("%s\n","			Masukkan Nama Bisa Pake Spasi, Ketikkan 'Exit' untuk keluar	");
+		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");
 		break;
 	case LOAD_GAME:
 		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");

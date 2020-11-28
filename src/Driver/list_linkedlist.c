@@ -66,12 +66,12 @@ int upgradeLength(ListNode **head)
 
 Kata saveUpgrade( ListNode **head)
 {
-    Kata allUpgrades;
+    Kata allUpgrades;allUpgrades.TabKata[0]='a';allUpgrades.Length=0;
     Kata SENTINEL; SENTINEL.TabKata[0]='X';SENTINEL.Length = 1;
     Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
     for( ListNode *current=*head; current !=NULL; current= current->next){
-        KataConcat(allUpgrades,current->data);KataConcat(allUpgrades,SPASI);
+        allUpgrades = KataConcat(allUpgrades,current->data);allUpgrades = KataConcat(allUpgrades,SPASI);
     }
-    KataConcat(allUpgrades, SENTINEL);
+    allUpgrades = KataConcat(allUpgrades, SENTINEL);
     return allUpgrades;
 }

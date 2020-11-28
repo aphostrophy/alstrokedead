@@ -20,6 +20,6 @@ void printUpgrades( ListNode **head );
 
 Kata saveUpgrade( ListNode **head);
 
-int upgradeLength(ListNode **head)
+int upgradeLength(ListNode **head);
 
 #endif
