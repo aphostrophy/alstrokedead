@@ -75,9 +75,24 @@ void PrintStack(Stack S){
   Kata X;
 	while (!(IsEmptyStack(S))){
 		Pop(&S,&X);
-    printKata(X);
+    // printKata(X);
+    if (X.TabKata[0] == 'b' && X.TabKata[2] == 'y'){
+			int n; Kata Benda;
+			AkuisisiBuyV2(X,&n,&Benda);
+      printf("Beli %s sejumlah %d",Benda.TabKata,n);
+		} else if (X.TabKata[0] == 'b' && X.TabKata[2] == 'i') {
+			int PbuildX; int PbuildY; int PbuildMap; Kata Bangunan; int sizeBaris; int sizeKolom;
+			AkuisisiBuildV2(X,&PbuildX,&PbuildY,&PbuildMap,&Bangunan,&sizeBaris,&sizeKolom);
+			printf("Membangun "); printKata(Bangunan);
+      printf(" di titik(%d,%d) pada peta %d dengan ukuran (%dx%d)",Bangunan.TabKata,PbuildX,PbuildY,PbuildMap,sizeBaris,sizeKolom);
+		} else if (X.TabKata[0] == 'u'){
+			char idWahana;Kata Nama_Upgrade;
+			AkuisisiUpgrade(X, &idWahana, &Nama_Upgrade);
+      printf("Mengupgrade "); printKata(Nama_Upgrade);
+      printf(" di wahana dengan id %c",Nama_Upgrade.TabKata,idWahana);
+	  }
     printf("\n");
-	}
+  }
 }
 
 
