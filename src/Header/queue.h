@@ -50,5 +50,6 @@ void GeneratePengunjung(pengunjung *P, int ID,int prio, Wahana LW);
 void Serve(Queue *Q, Queue *M, char W,Wahana *LW, int *pmoney);
 void LeaveQueueT(Queue *M, Queue *Q, Wahana W);
 void ManageTime(int time, Queue *Q, Queue *M,Wahana LW);
+boolean IsWahanaInList(char W, Queue Q);
 
 #endif

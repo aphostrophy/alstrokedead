@@ -303,8 +303,14 @@ void HandleServe(){
             IgnoreBlank();
         }
         if(IsKataSama(Action, SERVE)){
-            Serve(&QGLOBAL,&MGLOBAL,Nama_Wahana.TabKata[0],&wahana,&pmoney);
-			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,SERVE)));
+			if(IsWahanaBenar(Nama_Wahana,wahana)){
+				Serve(&QGLOBAL,&MGLOBAL,Nama_Wahana.TabKata[0],&wahana,&pmoney);
+				UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,SERVE)));
+			}
+			else{
+				printf("Masukan wahana salah! Tekan apapun untuk melanjutkan\n");
+				getchar();				
+			}
         }
         else{
             printf("Command salah! Tekan apapun untuk melanjutkan\n");

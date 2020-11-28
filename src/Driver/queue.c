@@ -301,34 +301,54 @@ void LeaveQueueS(Queue *Q){
     }
 }
 
+boolean IsWahanaInList(char W, Queue Q){
+    boolean isTrue=false;
+    int i=0;
+    while (isTrue==false && i<3){
+        if(W==Q.P[0].L[i]){
+            isTrue=true;
+        }
+        else{
+            i=i+1;
+        }
+    }
+    return isTrue;
+}
+
 void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
-    if (getStatus(LW,W)!='B' && (getInside(LW,W)!=getKapasitas(LW,W))){
-        pengunjung X;
+    if (IsWahanaInList(W,*Q)){
+        if (getStatus(LW,W)!='B' && (getInside(LW,W)!=getKapasitas(LW,W))){
+            pengunjung X;
+            
+            // //Dequeue
+            Dequeue(Q,&X);
+            DequeueWahana(&X,W);
 
-        // //Dequeue
-        Dequeue(Q,&X);
-        DequeueWahana(&X,W);
+            //set durasi bermain pengunjung
+            X.T=getDurasi(LW,W);
 
-        //set durasi bermain pengunjung
-        X.T=getDurasi(LW,W);
+            //masukin pengunjung ke array bermain global
+            Enqueue(M,X);
+        
+            //increment inside wahana
+            InfoWahana N= getWahanabyID(LW,W);
+            N.inside=N.inside+1;
 
-        //masukin pengunjung ke array bermain global
-        Enqueue(M,X);
-    
-        //increment inside wahana
-        InfoWahana N= getWahanabyID(LW,W);
-        N.inside=N.inside+1;
+            //kurangi kesabaran & naikin prioritas orang di antrian
+            ReduceKesabaran(Q);
 
-        //kurangi kesabaran & naikin prioritas orang di antrian
-        ReduceKesabaran(Q);
-
-        //tambah duit
-        *pmoney=*pmoney+getHarga(LW,W);
+            //tambah duit
+            *pmoney=*pmoney+getHarga(LW,W);
+        }
+        else{
+            printf("Maaf wahana rusak atau kapasitasnya sudah penuh");
+            //kurangi kesabaran orang di antrian
+            ReduceKesabaran(Q);    
+        }
     }
     else{
-        printf("Maaf wahana rusak atau kapasitasnya sudah penuh");
-        //kurangi kesabaran orang di antrian
-        ReduceKesabaran(Q);    
+        printf("Masukan wahana salah! Tekan apapun untuk melanjutkan\n");
+        getchar();	
     }
 }
 

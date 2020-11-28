@@ -290,3 +290,17 @@ int GetIndex(Wahana *W, char id ){
         }
     }
 }
+
+boolean IsWahanaBenar(Kata W, Wahana LW){
+    boolean benar = false;
+    int i=0;
+    while (benar==false && i<8){
+        if (IsKataSama(W,LW.TI[i].nama)){
+            benar = true;
+        }
+        else{
+            i=i+1;
+        }
+    }
+    return benar;
+}

@@ -58,5 +58,6 @@ Kata copyKata(Kata in);
 void makeEmpty(Kata* in);
 void printKata(Kata in);
 InfoWahana getWahanabyID(Wahana *W,char id);
+boolean IsWahanaBenar(Kata W, Wahana LW);
 
 #endif
