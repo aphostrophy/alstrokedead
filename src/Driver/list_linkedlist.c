@@ -53,3 +53,25 @@ void printUpgrades( ListNode **head )
     }
     printf( "%s", "NULL" );
 }
+
+int upgradeLength(ListNode **head)
+{
+    int len=0;
+    for( ListNode *current =*head; current != NULL; current = current->next ) //Mark pakai NULL
+    {
+        len++;
+    }
+    return len;
+}
+
+Kata saveUpgrade( ListNode **head)
+{
+    Kata allUpgrades;
+    Kata SENTINEL; SENTINEL.TabKata[0]='X';SENTINEL.Length = 1;
+    Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
+    for( ListNode *current=*head; current !=NULL; current= current->next){
+        KataConcat(allUpgrades,current->data);KataConcat(allUpgrades,SPASI);
+    }
+    KataConcat(allUpgrades, SENTINEL);
+    return allUpgrades;
+}

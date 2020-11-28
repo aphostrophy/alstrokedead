@@ -62,7 +62,7 @@ struct SaveDat {
 	int count_aksi, need_money, need_time;
 	TabInt Inventory, need_material;
 	Stack aksi;
-	ListNode *link[20]; 
+	Kata link[20]; 
 	Queue MGLOBAL;
 	Queue QGLOBAL;
 	MATRIKS map[5];
@@ -86,7 +86,9 @@ void SetupSaveGame (FILE *savefile){
 	TempSave.Inventory = Inventory;
 	TempSave.aksi = aksi;
 	TempSave.time = time;
-	// TempSave->link[20] = Masalah besar
+	// for( int i = 0; i < 20;i++){
+	// 	TempSave.link[i] = saveUpgrade(&link[i]);
+	// }
 	TempSave.QGLOBAL = QGLOBAL;
 	TempSave.MGLOBAL = MGLOBAL;
 	TempSave.need_material = need_material;
@@ -137,7 +139,25 @@ void SetupLoadGame (FILE *loadfile){
 	Inventory = TempSave.Inventory;
 	aksi = TempSave.aksi;
 	time = TempSave.time;
-	link[20] = (&TempSave)->link[20];
+	
+	// for(int i=0;i<20;i++){
+	// 	Kata data;
+	// 	while(TempSave.link[i].Length>0){ // Handle kasus link[i] kosong
+	// 		int index=0;
+	// 		while(TempSave.link[i].TabKata[index]!=' '){
+	// 			if(TempSave.link[i].TabKata[index]=='X'){ //break
+	// 				break;
+	// 			}
+	// 			data.TabKata[index] = TempSave.link[i].TabKata[index];
+	// 		}
+	// 		if(TempSave.link[i].TabKata[index]=='X'){ //super break
+	// 			break;
+	// 		}
+	// 		data.Length = index;
+	// 		addUpgrade(&link[i],data);
+	// 	}
+	// }
+
 	need_material = TempSave.need_material;
 	for (int i = 0; i < 5; i++) map[i] = TempSave.map[i];
 	QGLOBAL = TempSave.QGLOBAL;
