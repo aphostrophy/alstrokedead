@@ -8,17 +8,17 @@
 
 // WINDOWS / MS-DOS
 // #include <conio.h>
-// #include <stdio.h>
-// #include <stdlib.h>
-// #define clrscr() system("cls")
+#include <stdio.h>
+#include <stdlib.h>
+#define clrscr() system("cls")
 
 // UNCOMMENT ALL OF THE ABOVE IF YOU ARE IN MS-DOS BASED OS
 
 // LINUX (DEBIAN BASED)
-#include <termios.h>
-#include <stdio.h>
-#include <stdlib.h>
-#define clrscr() printf("\033c")
+// #include <termios.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #define clrscr() printf("\033c")
 
 // UNCOMMENT ALL OF THE ABOVE IF YOU ARE IN MS-DOS BASED OS
 

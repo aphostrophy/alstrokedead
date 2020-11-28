@@ -101,7 +101,8 @@ void bacaWahana(Wahana *W, char* namaFile) {
                 (*W).TI[infoKe].total_pengunjung = 0;
                 (*W).TI[infoKe].penghasilan = 0;
                 (*W).TI[infoKe].total_penghasilan = 0;
-
+                (*W).TI[infoKe].panjang = 0;
+                (*W).TI[infoKe].lebar = 0;
                 kataKe = 0;
                 infoKe++;
                 break;
@@ -224,6 +225,7 @@ void printDetailWahana(Wahana *W, char id, ListNode **head) {
             printf("Durasi Wahana : %d\n", (*W).TI[i].durasi);
             printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
             printf("Status Wahana : %c\n", (*W).TI[i].status);
+            printf("Ukuran Wahana : ( %d x %d ) \n", (*W).TI[i].lebar,(*W).TI[i].panjang);
             printKata((*W).TI[i].deskripsi); printf("\n");
             printUpgrades(head);printf("\n");
             break;

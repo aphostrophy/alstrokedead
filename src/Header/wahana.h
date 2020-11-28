@@ -23,6 +23,8 @@ typedef struct {
     int total_pengunjung;
     int total_penghasilan;
     List upgrade;
+    int panjang;
+    int lebar;
 } InfoWahana;
 
 typedef struct { 
