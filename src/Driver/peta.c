@@ -50,7 +50,8 @@ ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk
 char ChoosenWahana;
 Kata NamaSaveFile; Kata NamaLoadFile;
 Queue MGLOBAL;
-Queue QGLOBAL; 
+Queue QGLOBAL;
+int NewPengunjung; 
 struct SaveDat {
     int cmap;
 	int state;
@@ -171,6 +172,7 @@ void SetupLoadGame (FILE *loadfile){
 }
 
 void SetupNewGame (){
+	NewPengunjung =1;
 	ArrayPair_MakeEmpty(&need_material);
 	ArrayPair_BacaIsi(&need_material, "../Saves/Inventory.txt");
 	cmap = 0;
@@ -190,14 +192,14 @@ void SetupNewGame (){
 
 // =================================Fungsi Transisi Day ==================================================
 void PrepToMainDay(){
-	
+	NewPengunjung = 1;
 	need_money = 0;
 	need_time = 0;
 	for (int i = ArrayPair_GetFirstIdx(Inventory) ; i <= ArrayPair_GetLastIdx(Inventory) ; i ++){ 
 		Pair_Cost(need_material,i) = 0 ;
 	} 
 	count_aksi = 0 ;
-	// GenerateQueue(&QGLOBAL,wahana);
+	GenerateQueue(&QGLOBAL,wahana);
 	MakeEmpty_Queue(&MGLOBAL,10);
 }
 void MaintoPrepDay(){
@@ -216,6 +218,8 @@ void MaintoPrepDay(){
 
 // =========================================Fungsi MainDay================================================
 
+
+
 void UpdateWaktu(int n){
 	time = NextNMenit(time,n);
 	if (state == MAIN_DAY) {
@@ -233,9 +237,17 @@ void UpdateWaktu(int n){
 					getchar();
 				}
 			}
+
 			ReduceTime(&MGLOBAL,n,wahana);
 			LeaveQueueS(&QGLOBAL);
 			LeaveQueueT(&MGLOBAL,&QGLOBAL,wahana);
+			int pengunjungDatang = rand() % 100;
+			if (pengunjungDatang >= 60 && QGLOBAL.TAIL<3){
+				pengunjung P;
+				GeneratePengunjung(&P,5+NewPengunjung,(QGLOBAL.P[QGLOBAL.TAIL].X+1),wahana);
+				Enqueue(&QGLOBAL,P);
+				NewPengunjung=NewPengunjung+1;
+			}
 		}
 	}
 	

@@ -55,5 +55,6 @@ int countBrokenWahana(Wahana *W);
 void printBrokenWahana(Wahana *W);
 InfoWahana getWahanabyID(Wahana *W,char id);
 boolean IsWahanaBenar(Kata W, Wahana LW);
+void SetZero(Wahana *W);
 
 #endif

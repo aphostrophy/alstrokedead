@@ -43,49 +43,7 @@ boolean IsDouble(char W, char L[3]){
     return false;
 }
 
-// void GenerateListWahana(pengunjung *X,Wahana LW){
-//     int idx=0;
-//     char wahana_queue[9];
-//     for(int i=0;i<9;i++){
-//         wahana_queue[i]='-';
-//     }
-//     for(int i=0;i<8;i++){
-//         if (LW.TI[i].status=='G'){
-//             wahana_queue[idx]=LW.TI[i].id.TabKata[0];
-//             idx=idx+1;
-//         }
-//     }
-//     idx = idx-1;
-//     if(idx != -1){
-//         for(int j=0;j<3;j++){
-//             if(j==0){
-//                 (*X).L[j]=wahana_queue[rand() % (idx + 1 - 0) + 0];
-//             }
-//             else{
-//                 (*X).L[j]=wahana_queue[rand() % ((idx+1) + 1 - 0) + 0];
-//             }
-//         }
-//     }
-//     else{
-//         printf("aduh");
-//     }
-// }
 
-// void GenerateQueue(Queue * Q, Wahana LW){
-//     for (int i=0;i<5;i++){
-//         pengunjung X;
-//         X.ID=(i+1);
-//         // GenerateListWahana(&X,LW);
-//         // while (IsDouble(X.L)){
-//         //     GenerateListWahana(&X,LW);
-//         // }
-//         X.S=5;
-//         X.T=-1;
-//         X.W='-';
-//         X.X=(i+1);
-//         (*Q).P[i]=X;
-//     }
-// }
 
 void GenerateQueue (Queue * Q, Wahana LW){
     int i,j;
@@ -104,38 +62,38 @@ void GenerateQueue (Queue * Q, Wahana LW){
 
     idx = idx-1;
     MakeEmpty_Queue(Q,10);
-    // if (idx !=-1){ 
-    //     srand(time(0));
-    //     for (i=0;i<5;i++){
-    //         for (j=0;j<3;j++){
-    //             if (j==0){
-    //                 (*Q).P[i].L[j]=wahana_queue[rand() % (idx + 1 - 0) + 0];
-    //             }
-    //             else{
-    //                 char W = wahana_queue[rand() % ((idx+1) + 1 - 0) + 0];
-    //                 if(IsDouble(W,(*Q).P[i].L)){
-    //                     (*Q).P[i].L[j]= '-';
-    //                 }
-    //                 else{
-    //                     (*Q).P[i].L[j]= W;
-    //                 }                
-    //             }
-    //         }
+    if (idx !=-1){ 
+        // srand(time(0));
+        for (i=0;i<5;i++){
+            for (j=0;j<3;j++){
+                if (j==0){
+                    (*Q).P[i].L[j]=wahana_queue[rand() % (idx + 1 - 0) + 0];
+                }
+                else{
+                    char W = wahana_queue[rand() % ((idx+1) + 1 - 0) + 0];
+                    if(IsDouble(W,(*Q).P[i].L)){
+                        (*Q).P[i].L[j]= '-';
+                    }
+                    else{
+                        (*Q).P[i].L[j]= W;
+                    }                
+                }
+            }
 
-    //         if ((*Q).P[i].L[1]=='-'){
-    //             (*Q).P[i].L[2]=='-';
-    //         }
-    //         (*Q).P[i].S = 5;
-    //         (*Q).P[i].X = (i+1);
-    //         (*Q).P[i].T = 0;
-    //         (*Q).P[i].ID = (i+1); 
-    //         (*Q).P[i].W = '-';
-    //         Tail(*Q)=Tail(*Q)+1;
-    //     }
-    // }
-    // else{
-    //     printf("Belum ada wahana yang dibangun\n");
-    // }
+            if ((*Q).P[i].L[1]=='-'){
+                (*Q).P[i].L[2]='-';
+            }
+            (*Q).P[i].S = 5;
+            (*Q).P[i].X = (i+1);
+            (*Q).P[i].T = 0;
+            (*Q).P[i].ID = (i+1); 
+            (*Q).P[i].W = '-';
+            Tail(*Q)=Tail(*Q)+1;
+        }
+    }
+    else{
+        printf("Belum ada wahana yang dibangun\n");
+    }
 }
 
 void GeneratePengunjung(pengunjung *P,int ID,int prio, Wahana LW){
@@ -296,7 +254,7 @@ void ReduceTime(Queue *Q,int Time,Wahana LW){
     if(!IsEmpty_Queue(*Q)){
         for(int i=0;i<=(*Q).TAIL;i++){
             InfoWahana WahanaQ = getWahanabyID(&LW,(*Q).P[i].W);
-            if (WahanaQ.status != 'B'){
+            if (WahanaQ.status == 'G'){
                 (*Q).P[i].T = (*Q).P[i].T - Time;
             }   
         }
@@ -363,6 +321,8 @@ boolean IsWahanaInList(char W, Queue Q){
     while (isTrue==false && i<3){
         if(W==Q.P[0].L[i]){
             isTrue=true;
+            printf("ada gan\n");
+            getchar();
         }
         else{
             i=i+1;
@@ -380,6 +340,7 @@ void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
             Dequeue(Q,&X);
             DequeueWahana(&X,W);
 
+            X.W=W;
             //set durasi bermain pengunjung
             X.T=getDurasi(LW,W);
 

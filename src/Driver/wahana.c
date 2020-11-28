@@ -249,6 +249,13 @@ int countWahanaGood(Wahana *W) {
     return count;
 }
 
+void SetZero(Wahana *W){
+    for(int i=0;i<8;i++){
+        (*W).TI[i].pengunjung=0;
+        (*W).TI[i].penghasilan=0;
+    }
+}
+
 void makeListWahanaGood(Wahana *W) {
     int idx = 0;
     int i;
