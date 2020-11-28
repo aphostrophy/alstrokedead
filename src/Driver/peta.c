@@ -110,8 +110,8 @@ void HandleSaveGame (){
 	FILEPATH.Length = 9;
 	FILEPATH.TabKata[0] = '.'; FILEPATH.TabKata[1] = '.'; FILEPATH.TabKata[2] ='/';  FILEPATH.TabKata[3] ='S';  FILEPATH.TabKata[4] ='a';  FILEPATH.TabKata[5] = 'v'; FILEPATH.TabKata[6] ='e';  FILEPATH.TabKata[7] ='s';  FILEPATH.TabKata[8] ='/'; 
 
-	NamaSaveFile.Length = 0;
-	strcpy(NamaSaveFile.TabKata,""); NamaSaveFile = KataConcat(NamaSaveFile,FILEPATH); NamaSaveFile = KataConcat(NamaSaveFile,namaPlayer);
+	NamaSaveFile.Length = 0;NamaSaveFile.TabKata[0]='X'; //Pengganti strcpy;
+	NamaSaveFile = KataConcat(NamaSaveFile,FILEPATH); NamaSaveFile = KataConcat(NamaSaveFile,namaPlayer);
 	FILE *savefile;
 	savefile = fopen(NamaSaveFile.TabKata, "w");
 	if (savefile){
@@ -423,7 +423,8 @@ void HandleBuy() {
 	if(IsKataSama(Action,BUY) && materialIndex != IdxUndef){
 		if(pmoney>=jumlah_int*Pair_Cost(Materials,materialIndex)+need_money){
 			need_money = need_money + jumlah_int*Pair_Cost(Materials,materialIndex);
-			StackEl.Length=0; strcpy(StackEl.TabKata,"");StackEl = KataConcat(StackEl,Action);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Jumlah);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Barang);
+			StackEl.Length=0; StackEl.TabKata[0] ='X';
+			StackEl = KataConcat(StackEl,Action);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Jumlah);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Barang);
 			// printf("%d",Jumlah.Length); printf("%s",Action.TabKata); printf("%s",Barang.TabKata); 
 			Push(&aksi,StackEl);
 			count_aksi = count_aksi + 1;
@@ -545,7 +546,8 @@ void HandleBuild(){
 					need_money = need_money + Pair_Cost(HargaBuild,bangunanIndex);
 					Elmt(map[PbuildMap],PbuildX,PbuildY) = Bangunan.TabKata[0]; 
 					IntToKataRei(PbuildX,&SbuildX); IntToKataRei(PbuildY,&SbuildY); IntToKataRei(PbuildMap,&SbuildMap);
-					StackEl.Length=0; strcpy(StackEl.TabKata,""); StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildX); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildY); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildMap);
+					StackEl.Length=0; StackEl.TabKata[0]='X';
+					StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildX); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildY); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildMap);
 					// printf("%s",StackEl.TabKata); getchar();
 					Push(&aksi,StackEl);
 					count_aksi = count_aksi + 1;
@@ -619,6 +621,7 @@ void HandleUpgrade(){
 			if(inventorySupply>=Triplet_Cost(UpgradeCosts,id)){
 				addUpgrade(&link[indexWahana], Nama_Upgrade);
 				Pair_Cost(Inventory,idInventory) = inventorySupply - Triplet_Cost(UpgradeCosts,id);
+				StackEl.Length=0; StackEl.TabKata[0] ='X';
 				StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
 				Push(&aksi,StackEl);
 			} else{
