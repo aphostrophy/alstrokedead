@@ -273,7 +273,7 @@ void HandleServe(){
 	Kata Action, Nama_Wahana;
     char bangunan = getBangunanSekitar();
     if(bangunan=='A'){
-        printf("Mau serve untuk wahana apa? :");
+        printf("Mau serve untuk wahana apa? : ");
         Kata SERVE;
         int kata_ke = 1;
         SERVE.TabKata[0] = 's';SERVE.TabKata[1] = 'e';SERVE.TabKata[2] = 'r';SERVE.TabKata[3] = 'v';SERVE.TabKata[4] = 'e';
@@ -1166,7 +1166,7 @@ void PrintFooter(){
 		printf("%s\n","				Tombol aksi						 	 ");
 		printf("%s\n","	Main Day");
 		printf("%s\n","	w : Atas   a : kiri   s : bawah   d: kanan   i: masuk ke preparation day");
-		printf("%s\n","	1 : Enter Office  2: Lihat Detail Wahana  3: Repair Wahana");
+		printf("%s\n","	1 : Enter Office  2: Lihat Detail Wahana  3: Repair Wahana 4: Serve");
 		break;
 	case PREPARATION_DAY:
 		printf("%s\n","				Tombol aksi						 	 ");

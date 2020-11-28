@@ -301,7 +301,7 @@ void LeaveQueueS(Queue *Q){
     }
 }
 
-void Serve(Queue *Q, Queue *M, char W,Wahana *LW, int *pmoney){
+void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
     if (getStatus(LW,W)!='B' && (getInside(LW,W)!=getKapasitas(LW,W))){
         pengunjung X;
 
