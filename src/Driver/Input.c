@@ -2,6 +2,8 @@
 // ADT Input1 digunakan untuk membaca masukan yang berupa char seperti WASD dan beberapa input lain.
 // Input lain yang berupa string akan memanfaatkan mesinkar dan mesinkata
 
+#include "../Header/mesinkar.h"
+#include "../Header/mesinkata.h"
 
 // == WINDOWS / MS-DOS
 
@@ -53,11 +55,11 @@ char getch_(int echo)
   return ch;
 }
 
-/* Read 1 character without echo */
-char getch() 
-{
-  return getch_(0);
-}
+// // /* Read 1 character without echo */
+// char getch() 
+// {
+//   return getch_(0);
+// }
 
 /* Read 1 character with echo */
 char getche(void) 
@@ -66,7 +68,29 @@ char getche(void)
 }
 
 int GetInput(){
-    int c;
-    c = getch();
-    return c;
+    Kata c;
+    STARTBUY();
+    while(!EOP && !EOL){
+      int i = 0;
+      CKata.Length=0;
+      while(CC!=BLANK){
+        if(CC=='\r'){
+          CC ='\n';
+        }
+        if(CC=='\n'){
+          break;
+        }
+        CKata.TabKata[i] = CC;
+        i++;
+        CKata.Length=i;
+        // printf("%c",CC);
+        ADV();
+      }
+      c = CKata;
+      if(CC=='\n'){
+        break;
+      }
+      IgnoreBlank();
+    }
+    return (int)c.TabKata[0];
 }

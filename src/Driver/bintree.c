@@ -282,6 +282,7 @@ void PrintAvailableUpgrade(char id, ListNode **head) {
         printf("- "); printKata(arrUpgrade[Akar(Left(P))]); printf("\n");
         printf("- "); printKata(arrUpgrade[Akar(Right(P))]); printf("\n");    
     } else {
+        // printKata(current->data);
         if(IsKataSama(current->data, arrUpgrade[Akar(Left(P))])) {
             PrintAvailableUpgradeRecursion(Left(P), (&current->next));
         } else if(IsKataSama(current->data, arrUpgrade[Akar(Right(P))])) {
@@ -301,6 +302,7 @@ void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head) {
             printf("- "); printKata(arrUpgrade[Akar(Left(P))]); printf("\n");
             printf("- "); printKata(arrUpgrade[Akar(Right(P))]); printf("\n");    
         } else {
+            // printKata(current->data);
             if(IsKataSama(current->data, arrUpgrade[Akar(Left(P))])) {
                 PrintAvailableUpgradeRecursion(Left(P), (&current->next));
             } else if(IsKataSama(current->data, arrUpgrade[Akar(Right(P))])) {

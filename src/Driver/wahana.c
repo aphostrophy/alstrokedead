@@ -4,6 +4,7 @@
 #include "../Header/wahana.h"
 #include "../Header/mesinkar.h"
 #include "../Header/mesinkata.h"
+#include "../Header/list_linkedlist.h"
 
 string arrNamaWahana[10] = {"SkyCoaster", "PirateShip", "Tornado", "Carousel", "HauntedHouse", "FerrisWheel", "BumperCars", "GyroDrop"};
 string idWahana[8] = {'S', 'P', 'T', 'C', 'H', 'F','B','G'};
@@ -214,7 +215,7 @@ int getTotalPenghasilan(Wahana *W, char id) {
     }
 }
 
-void printDetailWahana(Wahana *W, char id) {
+void printDetailWahana(Wahana *W, char id, ListNode **head) {
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id.TabKata[0] == id) {
             printKata((*W).TI[i].id); printf("\n");
@@ -224,6 +225,7 @@ void printDetailWahana(Wahana *W, char id) {
             printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
             printf("Status Wahana : %c\n", (*W).TI[i].status);
             printKata((*W).TI[i].deskripsi); printf("\n");
+            printUpgrades(head);printf("\n");
             break;
         }
     }
