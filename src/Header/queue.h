@@ -35,7 +35,7 @@ boolean IsFull_Queue (Queue Q);
 int NBElmt_Queue (Queue Q);
 void MakeEmpty_Queue (Queue * Q, int Max);
 void Dealokasi_Queue(Queue * Q);
-void GenerateQueue (Queue * Q);
+void GenerateQueue (Queue * Q, Wahana LW);
 void Enqueue (Queue * Q, pengunjung X);
 void Dequeue (Queue * Q, pengunjung * X);
 void DequeueWahana(pengunjung *X,char W);
@@ -44,10 +44,11 @@ void LeaveQueueS(Queue *Q);
 void EmptyQueue(Queue *Q);
 void Enqueue(Queue *Q, pengunjung P);
 void ReduceKesabaran(Queue *Q);
-void ReduceTime(Queue *Q,int Time);
+void ReduceTime(Queue *Q,int Time, Wahana LW);
 boolean isListWahanaEmpty(char L[3]);
-void GeneratePengunjung(pengunjung *P, int ID);
-void Serve(Queue *Q, Queue *M, char W,Wahana LW, int pmoney);
+void GeneratePengunjung(pengunjung *P, int ID,int prio, Wahana LW);
+void Serve(Queue *Q, Queue *M, char W,Wahana *LW, int *pmoney);
 void LeaveQueueT(Queue *M, Queue *Q, Wahana W);
+void ManageTime(int time, Queue *Q, Queue *M,Wahana LW);
 
 #endif
