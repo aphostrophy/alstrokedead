@@ -66,7 +66,6 @@ int main(){
     printListWahana(&LW);
     LW.TI[0].status='G';
     LW.TI[1].status='G';
-    LW.TI[2].status='G';
     LW.TI[3].status='G';
     GenerateQueue(&Q,LW);
     PrintQueue(Q);

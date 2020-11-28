@@ -195,7 +195,7 @@ void PrepToMainDay(){
 		Pair_Cost(need_material,i) = 0 ;
 	} 
 	count_aksi = 0 ;
-	GenerateQueue(&QGLOBAL,wahana);
+	// GenerateQueue(&QGLOBAL,wahana);
 	MakeEmpty_Queue(&MGLOBAL,10);
 }
 void MaintoPrepDay(){

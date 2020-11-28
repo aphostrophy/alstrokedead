@@ -104,39 +104,38 @@ void GenerateQueue (Queue * Q, Wahana LW){
 
     idx = idx-1;
     MakeEmpty_Queue(Q,10);
-    if (idx !=0){ 
-        srand(time(0));
-        for (i=0;i<5;i++){
-            char prev;
-            for (j=0;j<3;j++){
-                if (j==0){
-                    (*Q).P[i].L[j]=wahana_queue[rand() % (idx + 1 - 0) + 0];
-                }
-                else{
-                    char W = wahana_queue[rand() % ((idx+1) + 1 - 0) + 0];
-                    if(IsDouble(W,(*Q).P[i].L)){
-                        (*Q).P[i].L[j]= '-';
-                    }
-                    else{
-                        (*Q).P[i].L[j]= W;
-                    }                
-                }
-            }
+    // if (idx !=-1){ 
+    //     srand(time(0));
+    //     for (i=0;i<5;i++){
+    //         for (j=0;j<3;j++){
+    //             if (j==0){
+    //                 (*Q).P[i].L[j]=wahana_queue[rand() % (idx + 1 - 0) + 0];
+    //             }
+    //             else{
+    //                 char W = wahana_queue[rand() % ((idx+1) + 1 - 0) + 0];
+    //                 if(IsDouble(W,(*Q).P[i].L)){
+    //                     (*Q).P[i].L[j]= '-';
+    //                 }
+    //                 else{
+    //                     (*Q).P[i].L[j]= W;
+    //                 }                
+    //             }
+    //         }
 
-            if ((*Q).P[i].L[1]=='-'){
-                (*Q).P[i].L[2]=='-';
-            }
-            (*Q).P[i].S = 5;
-            (*Q).P[i].X = (i+1);
-            (*Q).P[i].T = 0;
-            (*Q).P[i].ID = (i+1); 
-            (*Q).P[i].W = '-';
-            Tail(*Q)=Tail(*Q)+1;
-        }
-    }
-    else{
-        printf("Belum ada wahana yang dibangun\n");
-    }
+    //         if ((*Q).P[i].L[1]=='-'){
+    //             (*Q).P[i].L[2]=='-';
+    //         }
+    //         (*Q).P[i].S = 5;
+    //         (*Q).P[i].X = (i+1);
+    //         (*Q).P[i].T = 0;
+    //         (*Q).P[i].ID = (i+1); 
+    //         (*Q).P[i].W = '-';
+    //         Tail(*Q)=Tail(*Q)+1;
+    //     }
+    // }
+    // else{
+    //     printf("Belum ada wahana yang dibangun\n");
+    // }
 }
 
 void GeneratePengunjung(pengunjung *P,int ID,int prio, Wahana LW){
