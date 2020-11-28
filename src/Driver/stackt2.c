@@ -89,7 +89,7 @@ void PrintStack(Stack S){
 			char idWahana;Kata Nama_Upgrade;
 			AkuisisiUpgrade(X, &idWahana, &Nama_Upgrade);
       printf("Mengupgrade "); printKata(Nama_Upgrade);
-      printf(" di wahana dengan id %c",Nama_Upgrade.TabKata,idWahana);
+      printf(" di wahana dengan id %c",idWahana);
 	  }
     printf("\n");
   }
