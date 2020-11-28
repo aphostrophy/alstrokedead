@@ -248,6 +248,22 @@ boolean IsBisaDilewati(char c){
 	return (c=='^' || c=='>' || c=='<' || c=='V' || c=='-'|| c=='X' || c=='O');
 }
 
+boolean IsBisaDibangun (int PbuildX, int PbuildY, int sizeX, int sizeY ){
+	if (PbuildX + sizeX > GetLastIdxBrs(mapRoom) || (PbuildY + sizeY > GetLastIdxKol(mapRoom))){
+		return false;
+	} else {
+		boolean bisaDibangun = true ;
+		for (int i = PbuildX; i < PbuildX + sizeX; i++) {
+			for (int j = PbuildY; j < PbuildY + sizeY; j++){
+				if ((Elmt(mapRoom,i,j)!='-') || ((i==Absis(playerpos)) && (j==Ordinat(playerpos)))){
+					bisaDibangun = false;
+				}
+			}
+		return bisaDibangun;
+		}
+	}
+}
+
 char getBangunanSekitar(){
 	if (Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='-'){
 		return Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos));
@@ -447,8 +463,8 @@ void HandleBuy() {
 }
 
 void HandleBuild(){
-	Kata SbuildX; Kata SbuildY; Kata SbuildMap;
-	int PbuildX = 0; int PbuildY = 0; int PbuildMap = cmap;  //Membangun di koordinat (PbuildX,Pbuildy) di peta PbuildMap
+	Kata SbuildX; Kata SbuildY; Kata SbuildMap; Kata SsizeBaris; Kata SsizeKolom;
+	int PbuildX = 0; int PbuildY = 0; int PbuildMap = cmap; int sizeBaris; int sizeKolom;  //Membangun di koordinat (PbuildX,Pbuildy) di peta PbuildMap
 	printf("Selamat Datang ke Menu Pembangunan\n");
 	printf("Ingin membangun diposisi mana (w/a/s/d): \n");
 	Kata Choice,BUILD,StackEl;
@@ -486,7 +502,10 @@ void HandleBuild(){
 		else if (Choice.TabKata[0] == 'a' ){ PbuildX = Absis(playerpos) ; PbuildY = Ordinat(playerpos)-1 ;} 
 		else if (Choice.TabKata[0] == 's' ){ PbuildX = Absis(playerpos) +1 ; PbuildY = Ordinat(playerpos) ;} 
 		else if (Choice.TabKata[0] == 'd' ){ PbuildX = Absis(playerpos)  ; PbuildY = Ordinat(playerpos) + 1 ;}
-		if (IsBisaDilewati(Elmt(mapRoom,PbuildX,PbuildY))){
+		printf("Masukkan Ukuran Wahana dengan titik wasd yang barusan dipilih sebagai koordinat (0.0) bangunan\n");
+		printf("Masukkan dalam bentuk <baris Kolom>: ");
+		scanf("%d %d", &sizeBaris, &sizeKolom); getchar();
+		if (IsBisaDibangun(PbuildX,PbuildY,sizeBaris,sizeKolom)){
 			printf("Daftar Bangunan yang dapat dibangun: \n");
 			printNotBuilded(&wahana);
 			printf("Masukkan Bangunan yang ingin dibangun: ");
@@ -544,10 +563,15 @@ void HandleBuild(){
 				} else {
 					Pair_Cost(need_material,materialIndex) = Pair_Cost(need_material,materialIndex) + banyakAmberdibutuhkan ;
 					need_money = need_money + Pair_Cost(HargaBuild,bangunanIndex);
-					Elmt(map[PbuildMap],PbuildX,PbuildY) = Bangunan.TabKata[0]; 
-					IntToKataRei(PbuildX,&SbuildX); IntToKataRei(PbuildY,&SbuildY); IntToKataRei(PbuildMap,&SbuildMap);
+					for (int i = PbuildX; i < PbuildX + sizeBaris; i++) {
+						for (int j = PbuildY; j < PbuildY + sizeKolom; j++){
+							Elmt(map[PbuildMap],i,j) = Bangunan.TabKata[0]; 
+						}
+					}
+					IntToKataRei(PbuildX,&SbuildX); IntToKataRei(PbuildY,&SbuildY); IntToKataRei(PbuildMap,&SbuildMap); IntToKataRei(sizeBaris,&SsizeBaris); IntToKataRei(sizeKolom,&SsizeKolom);
 					StackEl.Length=0; StackEl.TabKata[0]='X';
-					StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildX); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildY); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildMap);
+					StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildX); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildY); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildMap); strcat(StackEl.TabKata," "); StackEl.Length++;
+					StackEl = KataConcat(StackEl,SsizeBaris); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SsizeKolom);
 					// printf("%s",StackEl.TabKata); getchar();
 					Push(&aksi,StackEl);
 					count_aksi = count_aksi + 1;
@@ -657,8 +681,8 @@ void HandleUndo(){
 			Pair_Cost(Inventory,materialIndex) -= n;
 			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
 		} else if (x.TabKata[0] == 'b' && x.TabKata[2] == 'i') {
-			int PbuildX; int PbuildY; int PbuildMap; Kata Bangunan;
-			AkuisisiBuildV2(x,&PbuildX,&PbuildY,&PbuildMap,&Bangunan);
+			int PbuildX; int PbuildY; int PbuildMap; Kata Bangunan; int sizeBaris; int sizeKolom;
+			AkuisisiBuildV2(x,&PbuildX,&PbuildY,&PbuildMap,&Bangunan,&sizeBaris,&sizeKolom);
 			// printf("%d %d %d %c", PbuildX,PbuildY,PbuildMap,bangunan[0]); getchar(); // Ini gw tes dengan ngeprint wkwk
 			// Kurangi waktu yang dibutuhkan dari buy
 			Kata AMBER;
@@ -671,7 +695,12 @@ void HandleUndo(){
 			Pair_Cost(need_material,materialIndex)= Pair_Cost(need_material,materialIndex) - n;
 			count_aksi = count_aksi - 1;
 			(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].status ='N';
-			Elmt(map[PbuildMap],PbuildX,PbuildY) = '-';
+			printf("%d %d %d %d %d",PbuildX, PbuildY, PbuildMap, sizeBaris, sizeKolom); getchar();
+			for (int i = PbuildX; i < PbuildX + sizeBaris; i++) {
+				for (int j = PbuildY; j < PbuildY + sizeKolom; j++){
+					Elmt(map[PbuildMap],i,j) = '-'; 
+				}
+			}
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUILD));
 			
 		} else if (x.TabKata[0] == 'u'){
@@ -710,10 +739,11 @@ void HandleExecution(){
 			int materialIndex = ArrayPair_SearchByItem(Materials,Benda);
 			// Pair_Cost(Inventory,materialIndex) += n; // Menambah jumlah barang di inventory
 		} else if (x.TabKata[0] == 'b' && x.TabKata[2] == 'i') {
-			int PbuildX; int PbuildY; int PbuildMap; Kata Bangunan;
-			AkuisisiBuildV2(x,&PbuildX,&PbuildY,&PbuildMap,&Bangunan);
-			Elmt(map[PbuildMap],PbuildX,PbuildY) = Bangunan.TabKata[0];
+			int PbuildX; int PbuildY; int PbuildMap; Kata Bangunan; int sizeBaris; int sizeKolom;
+			AkuisisiBuildV2(x,&PbuildX,&PbuildY,&PbuildMap,&Bangunan,&sizeBaris,&sizeKolom);
 			(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].status ='G';
+			(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].panjang = sizeBaris;
+			(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].lebar =sizeKolom;
 		} else if (x.TabKata[0] == 'u'){
 			Kata KAPASITAS; KAPASITAS.TabKata[0] = 'K';KAPASITAS.TabKata[1] = 'A';KAPASITAS.TabKata[2] = 'P';KAPASITAS.TabKata[3] = 'A';KAPASITAS.TabKata[4] = 'S';KAPASITAS.TabKata[5] = 'I';KAPASITAS.TabKata[6] = 'T';KAPASITAS.TabKata[8] = 'A';KAPASITAS.TabKata[9] = 'S'; KAPASITAS.Length = 9;
 			Kata HARGA; HARGA.TabKata[0] = 'H'; HARGA.TabKata[1] = 'A'; HARGA.TabKata[2] = 'R' ; HARGA.TabKata[3] = 'G'; HARGA.TabKata[4] = 'A'; HARGA.Length = 5;
@@ -757,24 +787,39 @@ void InputPreparationDay (int inpt) {
 	Kata BUILD; BUILD.TabKata[0] = 'b'; BUILD.TabKata[1] = 'u'; BUILD.TabKata[2] = 'i';BUILD.TabKata[3] = 'l'; BUILD.TabKata[4] ='d'; BUILD.Length = 5;
 	Kata UPGRADE; UPGRADE.TabKata[0] = 'u';UPGRADE.TabKata[1] = 'p';UPGRADE.TabKata[2] = 'g';UPGRADE.TabKata[3] = 'r';UPGRADE.TabKata[4] = 'a';UPGRADE.TabKata[5] = 'd';UPGRADE.TabKata[6]= 'e'; UPGRADE.Length = 7;
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
-		Absis(playerpos) = Absis(playerpos) -1 ;
-		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,W)));
+		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,W))){
+			Absis(playerpos) = Absis(playerpos) -1 ;
+			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,W)));
+		} else {
+			printf("Waktu tidak mencukupi untuk bergerak!"); getchar();
+		}
 	} else if (inpt == INPUT_a && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)-1))) {
-		Ordinat(playerpos) = Ordinat(playerpos) -1 ;
-		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,A)));
+		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,A))){
+			Ordinat(playerpos) = Ordinat(playerpos) -1 ;
+			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,A)));
+		} else {
+			printf("Waktu tidak mencukupi untuk build!"); getchar();
+		}
 	} else if (inpt == INPUT_s && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)+1,Ordinat(playerpos)))) {
-		Absis(playerpos) = Absis(playerpos) + 1 ;
-		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,S)));
+		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,S))){
+			Absis(playerpos) = Absis(playerpos) + 1 ;
+			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,S)));
+		} else {
+			printf("Waktu tidak mencukupi untuk build!"); getchar();
+		}
 	} else if (inpt == INPUT_d && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)+1))) {
-		Ordinat(playerpos) = Ordinat(playerpos) +1 ;
-		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,D)));
+		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,D))){
+			Ordinat(playerpos) = Ordinat(playerpos) +1 ;
+			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,D)));
+		} else {
+			printf("Waktu tidak mencukupi untuk build!"); getchar();
+		}
+		
 	} else if (inpt == INPUT_i){
 		state = MAIN_DAY;
 		Hour(time) = 9 ;
 		Minute(time) = 0;
 		while(!IsEmptyStack(aksi)){
-			printf("A");
-			getchar();
 			HandleUndo();
 		}
 		PrepToMainDay();

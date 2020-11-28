@@ -77,6 +77,6 @@ void PrintStack(Stack S);
 void AkuisisiBuy(infotype S, int* N, char benda[100]);
 void AkuisisiBuild(infotype S, int* buildX, int* buildY, int* buildMap, char bangunan[100]);
 void AkuisisiBuyV2(infotype S, int* Nbenda, Kata* benda);
-void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* bangunan);
+void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* bangunan, int* sizeX, int* sizeY);
 void AkuisisiUpgrade(Kata K, char *idWahana, Kata *Nama_Upgrade);
 #endif
