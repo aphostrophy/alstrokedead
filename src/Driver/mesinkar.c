@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include "../Header/mesinkar.h"
-#include "string.h"
 
 char CC;
 boolean EOP;

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "string.h"
 #include "../Header/bintree.h"
 #include "../Header/wahana.h"
 #include "../Header/mesinkar.h"

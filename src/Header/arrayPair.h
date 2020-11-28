@@ -4,7 +4,7 @@
 /* Banyaknya elemen didefinisikan secara implisit, memori tabel statik */
 
 // ACTION / BARANG disimpan dalam pair
-// Contoh: [P1, P2, P3, ...] dengan misal P1.item = "makan" dan P1.cost = 5
+// Contoh: [P1, P2, P3, ...] dengan misal P1.item = "Amber" dan P1.cost = 5
 
 
 #ifndef ARRAYPOS_H

@@ -9,7 +9,6 @@
 #include "mesinkar.h"
 #include "mesinkata.h"
 #include <stdio.h>
-#include <string.h>
 
 #define Stack_Nil -1
 #define MaxEl_Stack 10

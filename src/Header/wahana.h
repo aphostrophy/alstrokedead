@@ -2,13 +2,11 @@
 #define _WAHANA_H_
 
 #include <stdio.h>
-#include <string.h>
 #include "mesinkata.h"
 #include "boolean.h"
 #include "../Header/linkedlist.h"
 #include "../Header/list_linkedlist.h"
 
-typedef char string[100];
 typedef struct {
     Kata id;
     Kata nama;
@@ -55,5 +53,6 @@ InfoWahana getWahanabyID(Wahana *W,char id);
 int GetIndex(Wahana *W, char id);
 int countBrokenWahana(Wahana *W);
 void printBrokenWahana(Wahana *W);
+InfoWahana getWahanabyID(Wahana *W,char id);
 
 #endif

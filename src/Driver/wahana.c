@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include "../Header/boolean.h"
 #include "../Header/wahana.h"
 #include "../Header/mesinkar.h"
@@ -47,15 +46,15 @@ void bacaWahana(Wahana *W, char* namaFile) {
                 break;
             case 3:
                 bil1 = copyKata(CKata);
-                harga = atoi(bil1.TabKata);
+                harga = KataToInt(bil1);
                 break;
             case 4:
                 bil2 = copyKata(CKata);
-                durasi = atoi(bil2.TabKata);
+                durasi = KataToInt(bil2);
                 break;
             case 5:
                 bil3 = copyKata(CKata);
-                kapasitas = atoi(bil3.TabKata);
+                kapasitas = KataToInt(bil3);
                 break;
             case 6:
                 deskripsi = copyKata(CKata);
