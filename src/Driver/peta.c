@@ -16,7 +16,6 @@
 #include "../Header/queue.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 // =======================================================================================================
 
 // ======================================Pendefinisian State di dalam Game================================
@@ -400,6 +399,7 @@ void PrintMainDay() {
 
 void HandleBuy() {
 	Kata Action, StackEl, Barang, Jumlah;
+	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
 	int jumlah_int;
 
 	printf("Selamat Datang ke Menu Pembelian\n");
@@ -445,7 +445,7 @@ void HandleBuy() {
 		if(pmoney>=jumlah_int*Pair_Cost(Materials,materialIndex)+need_money){
 			need_money = need_money + jumlah_int*Pair_Cost(Materials,materialIndex);
 			StackEl.Length=0; StackEl.TabKata[0] ='X';
-			StackEl = KataConcat(StackEl,Action);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Jumlah);strcat(StackEl.TabKata," ");StackEl.Length++;StackEl = KataConcat(StackEl,Barang);
+			StackEl = KataConcat(StackEl,Action);StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Jumlah);StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Barang);
 			// printf("%d",Jumlah.Length); printf("%s",Action.TabKata); printf("%s",Barang.TabKata); 
 			Push(&aksi,StackEl);
 			count_aksi = count_aksi + 1;
@@ -566,6 +566,7 @@ void HandleBuild(){
 				} else if (Pair_Cost(Inventory,materialIndex) < banyakAmberdibutuhkan){
 					printf("Bahan Bangunan Tidak Mencukupi!");getchar();
 				} else {
+					Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
 					Pair_Cost(need_material,materialIndex) = Pair_Cost(need_material,materialIndex) + banyakAmberdibutuhkan ;
 					need_money = need_money + Pair_Cost(HargaBuild,bangunanIndex);
 					for (int i = PbuildX; i < PbuildX + sizeBaris; i++) {
@@ -573,10 +574,10 @@ void HandleBuild(){
 							Elmt(map[PbuildMap],i,j) = Bangunan.TabKata[0]; 
 						}
 					}
-					IntToKataRei(PbuildX,&SbuildX); IntToKataRei(PbuildY,&SbuildY); IntToKataRei(PbuildMap,&SbuildMap); IntToKataRei(sizeBaris,&SsizeBaris); IntToKataRei(sizeKolom,&SsizeKolom);
+					SbuildX = IntToKata(PbuildX); SbuildY = IntToKata(PbuildY); SbuildMap = IntToKata(PbuildMap); SsizeBaris = IntToKata(sizeBaris); SsizeKolom = IntToKata(sizeKolom);
 					StackEl.Length=0; StackEl.TabKata[0]='X';
-					StackEl = KataConcat(StackEl,Method); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,Bangunan); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildX); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildY); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SbuildMap); strcat(StackEl.TabKata," "); StackEl.Length++;
-					StackEl = KataConcat(StackEl,SsizeBaris); strcat(StackEl.TabKata," "); StackEl.Length++; StackEl = KataConcat(StackEl,SsizeKolom);
+					StackEl = KataConcat(StackEl,Method); StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Bangunan); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildX); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildY); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildMap); StackEl = KataConcat(StackEl,SPASI);
+					StackEl = KataConcat(StackEl,SsizeBaris); StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,SsizeKolom);
 					// printf("%s",StackEl.TabKata); getchar();
 					Push(&aksi,StackEl);
 					count_aksi = count_aksi + 1;
@@ -641,7 +642,7 @@ void HandleUpgrade(){
 		if(IsKataSama(Action, UPGRADE)){
 			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
 			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
-			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length++;
+			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length=0;
 			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
 			IdxType idNeed = ArrayPair_SearchByItem(need_material,bahan);
 			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory

@@ -3,7 +3,6 @@
 #ifndef _TREE_
 #define _TREE_
 
-#include <string.h>
 #include "./boolean.h"
 #include "./mesinkata.h"
 #include "./list_linkedlist.h"

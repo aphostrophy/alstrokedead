@@ -118,13 +118,11 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
   }
   while (S.TabKata[i] != ' ' && i < S.Length) {
     cnt = cnt + 1;
-    (Xbuild).TabKata[j] = S.TabKata[i];
+    Xbuild.TabKata[j] = S.TabKata[i];
     i++; j++;
   }
-  (Xbuild).Length = cnt ;
-  printf("AAAAAAAAAAAAAA");printKata(Xbuild);getchar();
+  Xbuild.Length = cnt ;
   *buildX = KataToInt(Xbuild);
-  printf("%d",*buildX);printf("\n");
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -136,7 +134,6 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
   }
   (Ybuild).Length = cnt ;
   *buildY = KataToInt(Ybuild);
-  printf("%d",*buildY);printf("\n");
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -148,7 +145,6 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
   }
   (Mapbuild).Length = cnt ;
   *buildMap = KataToInt(Mapbuild);
-  printf("%d",*buildMap);printf("\n");
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -161,7 +157,6 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
 
   (SsizeX).Length = cnt ;
   *sizeX = KataToInt(SsizeX);
-  printf("%d",*buildX);printf("\n");
   cnt = 0 ; j = 0 ;
   while (S.TabKata[i] == ' ') {
     i++;
@@ -173,9 +168,7 @@ void AkuisisiBuildV2(infotype S, int* buildX, int* buildY, int* buildMap, Kata* 
   }
   (SsizeY).Length = cnt ;
   *sizeY = KataToInt(SsizeY);
-  printf("%d",*sizeY);printf("\n");
   cnt = 0 ; j = 0 ;
-
 }
 
 void AkuisisiUpgrade(Kata K, char *idWahana, Kata *Nama_Upgrade){

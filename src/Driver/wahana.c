@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include "../Header/boolean.h"
 #include "../Header/wahana.h"
 #include "../Header/mesinkar.h"

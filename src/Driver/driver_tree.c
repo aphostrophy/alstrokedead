@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "string.h"
 #include "bintree.c"
 #include "mesinkata.c"
 #include "mesinkar.c"

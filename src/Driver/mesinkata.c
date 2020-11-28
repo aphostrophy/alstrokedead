@@ -3,7 +3,6 @@
 #include "../Header/mesinkata.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 #define NMax 100
 #define BLANK ' '
@@ -108,21 +107,6 @@ void SalinKata()
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
-void AKUISISI_BUY(char *action, char* method, int* jumlah, char barang )
-{
-	char action2[100];
-	strcpy(action2,action);
-	char * token = strtok(action2, " ");
-	strcpy(method,token);
-	printf("HH");
-	printf("%s",method);
-	token = strtok(NULL, " ");
-	*jumlah = atoi(token);
-	token = strtok(NULL, " ");
-	barang = token[0];
-
-}
-
 boolean IsKataSama (Kata K1, Kata K2){
    int i=0;
    if(K1.Length!=K2.Length){
@@ -187,28 +171,37 @@ int KataToInt(Kata in){
     return hasil;
 }
   
-void IntToKataRei(int in, Kata* Nilai) {
-    char StringNilai[100];
-    sprintf(StringNilai, "%d", in);
-    (*Nilai).Length=0; strcpy((*Nilai).TabKata,"");
-    int len = 1;
-    while (in / 10 != 0) {
-        len = len +1 ;
-        in = in /10 ;
-    }
-    (*Nilai).Length = len;
+// void IntToKataRei(int in, Kata* Nilai) {
+//     char StringNilai[100];
+//     sprintf(StringNilai, "%d", in);
+//     (*Nilai).Length=0; strcpy((*Nilai).TabKata,"");
+//     int len = 1;
+//     while (in / 10 != 0) {
+//         len = len +1 ;
+//         in = in /10 ;
+//     }
+//     (*Nilai).Length = len;
     
-    for (int i = 0 ; i < len ; i++){
-        (*Nilai).TabKata[i] = StringNilai[i];
-    }
-}
+//     for (int i = 0 ; i < len ; i++){
+//         (*Nilai).TabKata[i] = StringNilai[i];
+//     }
+// }
 
 Kata IntToKata(int in){
+    int inLen=in; int len=0;
     Kata out;
     int countDigits=0;
+    if(in==0){
+        out.TabKata[0]='0';out.Length=1;
+        return out;
+    }
+    while(inLen!=0){
+        inLen /= 10;
+        len++;
+    }
     while(in!=0){
         int ascii = (in % 10)+48;
-        out.TabKata[countDigits] = (char)ascii;
+        out.TabKata[len-countDigits-1] = (char)ascii;
         countDigits++;
         in = in / 10;
     }
