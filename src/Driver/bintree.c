@@ -86,7 +86,8 @@ addrNode AlokNode(bintree_infotype X)
         Left(P) = bintree_Nil;
         Right(P) = bintree_Nil;
     }
-    return
+    return P;
+}
 
 void DealokNode(addrNode P)
 /* I.S. P terdefinisi */
