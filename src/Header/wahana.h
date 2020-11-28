@@ -30,10 +30,8 @@ typedef struct {
 } Wahana;
 
 /* KONSTUKTOR */
-void makeListWahana(Wahana *W);
-/* Fungsi untuk mengisi list Wahana W dengan data wahana */
-
 void bacaWahana(Wahana *W, char* namaFile);
+/* Fungsi untuk mengisi list Wahana W dengan data wahana */
 
 /* SELEKTOR */
 Kata getNama(Wahana *W, char id);
@@ -54,9 +52,5 @@ void printNotBuilded(Wahana *W);
 int GetIndex(Wahana *W, char id);
 int countBrokenWahana(Wahana *W);
 void printBrokenWahana(Wahana *W);
-Kata copyKata(Kata in);
-void makeEmpty(Kata* in);
-void printKata(Kata in);
-InfoWahana getWahanabyID(Wahana *W,char id);
 
 #endif

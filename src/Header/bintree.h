@@ -49,28 +49,18 @@ void DealokNode(addrNode P);
 /* F.S. P dikembalikan ke sistem */
 /* Melakukan dealokasi/pengembalian addrNode P */
 
-
 /* *** Predikat-Predikat Penting *** */
 boolean IsTreeEmpty(BinTree P);
 /* Mengirimkan true jika P adalah pohon biner kosong */
 boolean IsTreeOneElmt(BinTree P);
 /* Mengirimkan true jika P adalah pohon biner tidak kosong dan hanya memiliki 1 elemen */
-boolean IsUnerLeft(BinTree P);
-/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon unerleft: hanya mempunyai subpohon kiri */
-boolean IsUnerRight(BinTree P);
-/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon unerright: hanya mempunyai subpohon kanan*/
-boolean IsBiner(BinTree P);
-/* Mengirimkan true jika pohon biner tidak kosong P adalah pohon biner: mempunyai subpohon kiri dan subpohon kanan*/
-
-int bintree_findIndex(char id);
-
-/*fungsi untuk mengecek apakah ada suatu elemen x pada sebuah binary tree P*/
 boolean isElement(BinTree P, bintree_infotype X);
+/*fungsi untuk mengecek apakah ada suatu elemen x pada sebuah binary tree P*/
 
 /*fungsi untuk mengecek apakah X parent dari Y atau bukan */
 boolean isChild(BinTree parent, BinTree child);
 
-int findIndex(char id);
+int bintree_findIndex(char id);
 
 void PrintTree(BinTree P, int h);
 
@@ -79,7 +69,5 @@ void PrintUpgradeWahana(char id);
 void PrintAvailableUpgrade(char id, ListNode **head);
 
 void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head);
-
-void moveUpgrade(char id, Kata upgrade);
 
 #endif
