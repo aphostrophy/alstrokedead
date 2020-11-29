@@ -252,6 +252,7 @@ void SetZero(Wahana *W)
    F.S setiap jumlah pengunjung dan penghasilan harian wahana menjadi 0 */
 {
     for(int i=0;i<8;i++){
+        (*W).TI[i].inside=0;
         (*W).TI[i].pengunjung=0;
         (*W).TI[i].penghasilan=0;
     }
