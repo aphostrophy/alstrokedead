@@ -734,7 +734,7 @@ void HandleUpgrade(){
 				IdxType idNeed = ArrayPair_SearchByItem(need_material,bahan);
 				int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
 				int needMaterial = Pair_Cost(need_material,idNeed);
-				if(inventorySupply>=needMaterial){
+				if(inventorySupply >= needMaterial + Triplet_Cost(UpgradeCosts,id)){
 					addUpgrade(&link[indexWahana], Nama_Upgrade);
 					Pair_Cost(need_material,idNeed) = needMaterial + Triplet_Cost(UpgradeCosts,id);
 					StackEl.Length=0; StackEl.TabKata[0] ='X';
@@ -743,7 +743,7 @@ void HandleUpgrade(){
 					getchar();
 					Push(&aksi,StackEl);
 					return;
-				} else{
+				} else {
 					printf("Not enough materials");
 				}
 			} else{
