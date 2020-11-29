@@ -636,9 +636,10 @@ void HandleBuild(){
 				AMBER.Length = 5;
 				int materialIndex = ArrayPair_SearchByItem(Materials,AMBER);
 				int banyakAmberdibutuhkan = Pair_Cost(MaterialBuild,ArrayPair_SearchByItem(MaterialBuild,Bangunan));
+				int totalBanyakAmberdibutuhkan = Pair_Cost(need_material,ArrayPair_SearchByItem(need_material,AMBER));
 				if (pmoney < Pair_Cost(HargaBuild,bangunanIndex)+need_money){
 					printf("Uang Tidak Mencukupi!");getchar();
-				} else if (Pair_Cost(Inventory,materialIndex) < banyakAmberdibutuhkan){
+				} else if (Pair_Cost(Inventory,materialIndex) < banyakAmberdibutuhkan + totalBanyakAmberdibutuhkan){
 					printf("Bahan Bangunan Tidak Mencukupi!");getchar();
 				} else {
 					Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
@@ -722,11 +723,12 @@ void HandleUpgrade(){
 		// End of algoritma membosankan	
 		if(IsKataSama(Action, UPGRADE)){
 			arrKata arrChild;
-			findChild('S', &link[0], &arrChild);
+			findChild('S', &link[indexWahana], &arrChild);
+			printKata(Nama_Upgrade);printf(" ");printf("%d",Nama_Upgrade.Length);printf(" ");printKata(arrChild.TI[0]);printf(" ");printf("%d",arrChild.TI[0].Length);printf(" ");printKata(arrChild.TI[1]);printf(" ");printf("%d",arrChild.TI[1].Length);printf("\n");
 			if(IsKataSama(Nama_Upgrade,arrChild.TI[0]) || IsKataSama(Nama_Upgrade,arrChild.TI[1])){
 				IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
 				Kata bahan = Triplet_Bahan(UpgradeCosts,id);
-				Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length=0;
+				Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length=1;
 				IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
 				IdxType idNeed = ArrayPair_SearchByItem(need_material,bahan);
 				int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
@@ -736,6 +738,8 @@ void HandleUpgrade(){
 					Pair_Cost(need_material,idNeed) = needMaterial + Triplet_Cost(UpgradeCosts,id);
 					StackEl.Length=0; StackEl.TabKata[0] ='X';
 					StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
+					printf("Yang dipush ke stackel adalah: ");printKata(StackEl);printf("\n");
+					getchar();
 					Push(&aksi,StackEl);
 					return;
 				} else{
