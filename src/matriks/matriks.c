@@ -224,8 +224,8 @@ void Transpose(MATRIKS *M)
 	/* I.S. M terdefinisi dan IsBujursangkar(M) */
 	/* F.S. M "di-transpose", yaitu setiap elemen M(i,j) ditukar nilainya dengan elemen M(j,i) */
 	MATRIKS M3;
-	NBrsEff(M3) = NBrsEff(*M);
-	NKolEff(M3) = NKolEff(*M);
+	NBrsEff(M3) = NKolEff(*M);
+	NKolEff(M3) = NBrsEff(*M);
 	for (indeks i = 0; i <= GetLastIdxBrs(*M); i++)
 	{
 		for (indeks j = 0; j <= GetLastIdxKol(*M); j++)
