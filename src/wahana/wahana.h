@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include "../mesinkata/mesinkata.h"
 #include "../boolean.h"
-#include "../linkedlist/linkedlist.h"
 #include "../linkedlist/list_linkedlist.h"
 
 typedef struct {
@@ -20,7 +19,6 @@ typedef struct {
     int penghasilan;
     int total_pengunjung;
     int total_penghasilan;
-    List upgrade;
     int panjang;
     int lebar;
 } InfoWahana;
