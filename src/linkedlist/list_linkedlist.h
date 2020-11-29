@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "linkedlist.h"
 #include "../mesinkata/mesinkata.h"
 
 #ifndef ARRAYLIST_H
