@@ -5,15 +5,15 @@
 #include <time.h>
 
 boolean IsEmpty_Queue (Queue Q){
-    return (Tail(Q)==nil);
+    return (Q.TAIL==nil);
 }
 
 boolean IsFull_Queue (Queue Q){
-    return (Tail(Q)==MaxEl(Q)-1);
+    return (Q.TAIL==4);
 }
 
 int NBElmt_Queue (Queue Q){
-    return (Tail(Q)+1);
+    return (Q.TAIL+1);
 }
 
 void MakeEmpty_Queue (Queue * Q, int Max){
@@ -32,44 +32,78 @@ void Dealokasi_Queue (Queue *Q){
     free((*Q).P); 
 }
 
-void GenerateQueue (Queue * Q){
-    int i,j;
-    char wahana_que[9]={'S','P','T','C','H','F','B','G','-'};
-    MakeEmpty_Queue(Q,10);
-    // srand(time(0));
-    for (i=0;i<5;i++){
-        for (j=0;j<3;j++){
-            if (j==0){
-                (*Q).P[i].L[j]=wahana_que[rand() % 8];
-            }
-            else{
-                (*Q).P[i].L[j]=wahana_que[rand() % 9];
-            }
-        }
-        while((*Q).P[i].L[1]==(*Q).P[i].L[0] || (*Q).P[i].L[1]==(*Q).P[i].L[2]){
-            (*Q).P[i].L[1]=wahana_que[rand() % 9];
-        }
-        while((*Q).P[i].L[2]==(*Q).P[i].L[0]){
-            (*Q).P[i].L[2]=wahana_que[rand() % 9];
-        }
 
-        if ((*Q).P[i].L[1]=='-'){
-            (*Q).P[i].L[2]=='-';
+boolean IsDouble(char W, char L[3]){
+    int count=0;
+    for(int i=0;i<3;i++){
+        if (L[i]==W){
+            return true;
         }
-        (*Q).P[i].S = 10;
-        (*Q).P[i].X = (i+1);
-        (*Q).P[i].T = 0;
-        (*Q).P[i].ID = (i+1); 
-        (*Q).P[i].W = '-';
-        Tail(*Q)=Tail(*Q)+1;
+    }
+    return false;
+}
+
+
+
+void GenerateQueue (Queue * Q, Wahana LW){
+    int i,j;
+    int idx=0;
+    char wahana_queue[9];
+    for(int i=0;i<9;i++){
+        wahana_queue[i]='-';
+    }
+    
+    for(int i=0;i<8;i++){
+        if (LW.TI[i].status=='G'){
+            wahana_queue[idx]=LW.TI[i].id.TabKata[0];
+            idx=idx+1;
+        }
+    }
+
+    idx = idx-1;
+    MakeEmpty_Queue(Q,10);
+    if (idx !=-1){ 
+        // srand(time(0));
+        for (i=0;i<5;i++){
+            for (j=0;j<3;j++){
+                if (j==0){
+                    (*Q).P[i].L[j]=wahana_queue[rand() % (idx + 1 - 0) + 0];
+                }
+                else{
+                    char W = wahana_queue[rand() % ((idx+1) + 1 - 0) + 0];
+                    if(IsDouble(W,(*Q).P[i].L)){
+                        (*Q).P[i].L[j]= '-';
+                    }
+                    else{
+                        (*Q).P[i].L[j]= W;
+                    }                
+                }
+            }
+
+            if ((*Q).P[i].L[1]=='-'){
+                (*Q).P[i].L[2]='-';
+            }
+            (*Q).P[i].S = 5;
+            (*Q).P[i].X = (i+1);
+            (*Q).P[i].T = 0;
+            (*Q).P[i].ID = (i+1); 
+            (*Q).P[i].W = '-';
+            Tail(*Q)=Tail(*Q)+1;
+        }
+    }
+    else{
+        printf("Belum ada wahana yang dibangun\n");
     }
 }
 
-void GeneratePengunjung(pengunjung *P,int ID){
+
+void GeneratePengunjung(pengunjung *P,int ID,int prio, Wahana LW){
     Queue Q;
-    GenerateQueue(&Q);
+    GenerateQueue(&Q,LW);
     *P = Q.P[0];
     (*P).ID=ID;
+    (*P).S=10;
+    (*P).X=prio;
 }
 
 void Dequeue (Queue * Q, pengunjung * X){
@@ -84,7 +118,7 @@ void Dequeue (Queue * Q, pengunjung * X){
 }
 
 //print queue
-void PrintQueue (Queue Q){
+void PrintQueue (Queue Q, int n){
     int j=0;
     printf("[%d/5]\n",(Q.TAIL+1));
     while (j<=Q.TAIL){
@@ -99,10 +133,10 @@ void PrintQueue (Queue Q){
         while (Q.P[j].L[i] != '-' && i<3){
             switch (Q.P[j].L[i]){
                 case 'S':
-                    printf("Sky Coaster");
+                    printf("SkyCoaster");
                     break;
                 case 'P':
-                    printf("Pirate Ship");
+                    printf("PirateShip");
                     break;
                 case 'T':
                     printf("Tornado");
@@ -111,16 +145,16 @@ void PrintQueue (Queue Q){
                     printf("Carousel");
                     break;
                 case 'H':
-                    printf("Haunted House");
+                    printf("HauntedHouse");
                     break;
                 case 'F':
-                    printf("Ferris Wheel");
+                    printf("FerrisWheel");
                     break;
                 case 'B':
-                    printf("Bumper Car");
+                    printf("BumperCars");
                     break;
                 case 'G':
-                    printf("Gyro Drop");
+                    printf("GyroDrop");
                     break;
                 default:
                     printf("ya gamungkin sih");  
@@ -133,7 +167,13 @@ void PrintQueue (Queue Q){
         }
         printf(")");
         printf(", ");
-        printf("kesabaran : %d  prio : %d //customer %d\n", Q.P[j].S,Q.P[j].X,Q.P[j].ID);
+        if (n==1){
+            printf("kesabaran : %d , prio : %d //customer %d\n", Q.P[j].S, Q.P[j].X, Q.P[j].ID);
+        }
+        else if (n==2){
+            printf("Kesabaran : %d , Prio : %d , ID wahana yang sedang dinaiki : %c , Waktu bermain tersisa : %d  //customer %d\n", Q.P[j].S,Q.P[j].X,  Q.P[j].W, Q.P[j].T, Q.P[j].ID);
+        }
+        
         j=j+1;
     }
 }
@@ -218,10 +258,13 @@ void ReduceKesabaran(Queue *Q){
     }
 }
 
-void ReduceTime(Queue *Q,int Time){
+void ReduceTime(Queue *Q,int Time,Wahana LW){
     if(!IsEmpty_Queue(*Q)){
         for(int i=0;i<=(*Q).TAIL;i++){
-            (*Q).P[i].T = (*Q).P[i].T - Time;
+            InfoWahana WahanaQ = getWahanabyID(&LW,(*Q).P[i].W);
+            if (WahanaQ.status == 'G'){
+                (*Q).P[i].T = (*Q).P[i].T - Time;
+            }   
         }
     }  
 }
@@ -253,10 +296,52 @@ void LeaveQueueT(Queue *M, Queue *Q, Wahana W){
     }
 }
 
+int getLastIdxListW(char L[3]){
+    int idx=-1;
+    for(int i=0;i<3;i++){
+        if (L[i] != '-'){
+            idx = i;
+            break;
+        }
+    }
+    return idx;
+}
+
+void LeaveWahanaBroke(Queue *M, Queue *Q, Wahana W){
+    int idx[5];
+    int lastidx=0;
+    for (int i=0;i<=(*M).TAIL;i++){
+        InfoWahana NaikWahana = getWahanabyID(&W,(*M).P[i].W);
+        if (NaikWahana.status=='B'){
+            idx[lastidx]=i;
+            lastidx++;
+        }
+    }
+    lastidx=lastidx-1;
+    for(int i=0;i<=lastidx;i++){
+        pengunjung X;
+        X = (*M).P[idx[i]];
+        int idxL = getLastIdxListW(X.L);
+        X.L[idxL+1] = X.W;
+        X.X=X.X-1; //masukin ke queue main
+        if(!IsFull_Queue(*Q)){
+            Enqueue(Q,X);
+        }
+        for(int j=idx[i];j<=(*M).TAIL;j++){
+            (*M).P[j]=(*M).P[j+1];
+        }
+        for(int k=i;k<=lastidx;k++){
+            idx[k]=idx[k]-1;
+        }
+        (*M).TAIL=(*M).TAIL-1;
+    }
+}
+
 //mengecek queue lalu me-remove pengunjung pada queue yang sudah memiliki kesabaran negatif
 void LeaveQueueS(Queue *Q){
     int idx[5];
     int lastidx=0;
+
     for (int i=0;i<=(*Q).TAIL;i++){
         if ((*Q).P[i].S <= 0){
             idx[lastidx]=i;
@@ -273,35 +358,77 @@ void LeaveQueueS(Queue *Q){
         }
         (*Q).TAIL=(*Q).TAIL-1;
     }
+
+    if(lastidx>=0){
+        printf("\nOh no! the customer(s) are leaving! Hurry up and serve them!\n\n");
+    }
 }
 
-void Serve(Queue *Q, Queue *M, char W,Wahana LW, int pmoney){
-    if (getStatus(&LW,W)!='B' && (getInside(&LW,W)!=getKapasitas(&LW,W))){
-        pengunjung X;
-        //Dequeue
-        Dequeue(Q,&X);
-        DequeueWahana(&X,W);
+boolean IsWahanaInList(char W, Queue Q){
+    boolean isTrue=false;
+    int i=0;
+    while (isTrue==false && i<3){
+        if(W==Q.P[0].L[i]){
+            isTrue=true;
+        }
+        else{
+            i=i+1;
+        }
+    }
+    return isTrue;
+}
 
-        //set durasi bermain pengunjung
-        X.T=getDurasi(&LW,W);
+void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
 
-        //masukin pengunjung ke array bermain global
-        Enqueue(M,X);
-    
-        //increment inside wahana
-        InfoWahana N= getWahanabyID(&LW,W);
-        N.inside=N.inside+1;
+    InfoWahana Swahana=getWahanabyID(LW,W);
+    if (Swahana.status=='G' && (Swahana.inside <= Swahana.kapasitas)){
+        if (IsWahanaInList(W,*Q)){
+            pengunjung X;
+            
+            // //Dequeue
+            Dequeue(Q,&X);
+            DequeueWahana(&X,W);
 
-        //kurangi kesabaran & naikin prioritas orang di antrian
-        ReduceKesabaran(Q);
+            X.W=W;
+            //set durasi bermain pengunjung
+            X.T=getDurasi(LW,W);
 
-        //tambah duit
-        pmoney=pmoney+getHarga(&LW,W);
+            //masukin pengunjung ke array bermain global
+            Enqueue(M,X);
+        
+            //increment inside wahana
+            InfoWahana N= getWahanabyID(LW,W);
+            N.inside++;
+            N.total_pengunjung++;
+            N.total_penghasilan=N.total_penghasilan+N.harga;
+            N.penghasilan=N.penghasilan+N.harga;
+            N.pengunjung++;
+
+            //kurangi kesabaran & naikin prioritas orang di antrian
+            ReduceKesabaran(Q);
+
+            //tambah duit
+            *pmoney=*pmoney+getHarga(LW,W);
+        }
+        else{
+            printf("Masukan wahana salah! Tekan apapun untuk melanjutkan\n");
+            getchar();	
+        }
     }
     else{
-        printf("Maaf wahana rusak atau kapasitasnya sudah penuh");
-        //kurangi kesabaran orang di antrian
-        ReduceKesabaran(Q);    
+        printf("Wahana sedang rusak atau telah memenuhi kapasitas, tekan apapun untuk melanjutkan");
+        ReduceKesabaran(Q);
+        getchar();
     }
 }
+
+void ManageTime(int time, Queue *Q, Queue *M,Wahana LW){
+    ReduceTime(M,time,LW);
+    LeaveQueueS(Q);
+    LeaveQueueT(M,Q,LW);
+}
+
+
+
+//============================BATAS SUCI=================================================
 
