@@ -6,14 +6,14 @@
 
 int main(){
     arrKata arrChild;
-    bacaUpgrade("../Saves/Upgrade.txt");
+    bacaUpgrade("../file/Upgrade.txt");
     BuildTree();
     ListNode *link[20] = { 0 };
     // for(int i=0;i<20;i++){
     //     link[20] = NULL;
     // }
-    PrintAvailableUpgrade('S', &link[0]);
-    printUpgrades(&link[0]);printf("\n");
+    PrintAvailableUpgrade('T', &link[2]);
+    printUpgrades(&link[2]);printf("\n");
     STARTBUY();
     while(!EOL){
         int i=0;
@@ -27,11 +27,11 @@ int main(){
         if(CC=='\n') break;
         ADV();
     }
-    addUpgrade(&link[0], CKata);
-    printUpgrades(&link[0]);printf("\n");
-    findChild('S', &link[0], &arrChild);
+    addUpgrade(&link[2], CKata);
+    printUpgrades(&link[2]);printf("\n");
+    findChild('T', &link[2], &arrChild);
     printKata(arrChild.TI[0]); printf(" "); printKata(arrChild.TI[1]); printf("\n");
-    PrintAvailableUpgrade('S', &link[0]);
+    PrintAvailableUpgrade('T', &link[2]);
 
     STARTBUY();
     while(!EOL){
@@ -47,16 +47,16 @@ int main(){
         ADV();
     }
 
-    addUpgrade(&link[0], CKata);
-    findChild('S', &link[0], &arrChild);
+    addUpgrade(&link[2], CKata);
+    findChild('T', &link[2], &arrChild);
     printKata(arrChild.TI[0]); printf(" "); printKata(arrChild.TI[1]); printf("\n");
-    PrintAvailableUpgrade('S', &link[0]);
+    PrintAvailableUpgrade('T', &link[2]);
     // removeUpgrade(&link[0]);
-    printUpgrades(&link[0]);printf("\n");
-    printUpgrades(&link[1]);printf("\n");
-    removeUpgrade(&link[0]);
-    printUpgrades(&link[0]);printf("\n");
-    removeUpgrade(&link[0]);
-    printUpgrades(&link[0]);printf("\n");
+    printUpgrades(&link[2]);printf("\n");
+    printUpgrades(&link[2]);printf("\n");
+    removeUpgrade(&link[2]);
+    printUpgrades(&link[2]);printf("\n");
+    removeUpgrade(&link[2]);
+    printUpgrades(&link[2]);printf("\n");
     return 0;
 }

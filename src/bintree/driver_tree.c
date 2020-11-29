@@ -5,7 +5,7 @@
 #include "../mesinkata/mesinkar.h"
 
 int main() {
-    bacaUpgrade("../Saves/Upgrade.txt");
+    bacaUpgrade("../file/Upgrade.txt");
     BuildTree();
     // for(int i = 0; i < 8; i++) {
     //     PrintTree(listUpgrade[i], 2);
