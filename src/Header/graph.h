@@ -43,14 +43,11 @@ void BacaGraph(Graph* G, char* sumber);
 
 /* ----- MANAJEMEN MEMORI ----- */
 adrPeta AlokPetaGraph(infotypePeta X); 
-void DeAlokPetaGraph(adrPeta P); 
 adrTerowongan AlokSuccPeta(adrPeta P); 
-void DealokSuccPeta(adrTerowongan T); 
 
 /* ----- OPERASI GRAF ----- */
 boolean isPetaEqual(adrPeta P, infotypePeta X); 
 adrPeta SearchPeta(Graph G, infotypePeta X); 
-adrTerowongan SearchTerowongan(Graph G, infotypePeta prec, infotypePeta succ); 
 void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn); 
 void InsertTerowongan(Graph* G, infotypePeta prec, infotypePeta succ); 
 

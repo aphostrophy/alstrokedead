@@ -4,8 +4,8 @@
 
 int main() {
     Graph G;
-    InitGraph(&G,"./file/graph.txt");
-    if (First(G) != Nil) {
+    BacaGraph(&G,"../file/graph.txt");
+    if (Graph_First(G) != Nil) {
         printf("Berhasil!");
     }
     else {
