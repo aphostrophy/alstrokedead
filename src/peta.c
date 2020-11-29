@@ -817,7 +817,6 @@ void HandleUndo(){
 void HandleExecution(){
 	infotype x;
 	count_aksi = 0 ;
-	need_time = 0;
 	pmoney = pmoney - need_money; // Kurangi uang dengan uang yang dibutuhkan
 	need_money = 0 ;
 	for (int i = ArrayPair_GetFirstIdx(Inventory) ; i <= ArrayPair_GetLastIdx(Inventory) ; i ++){ 
@@ -861,6 +860,7 @@ void HandleExecution(){
 		}
 	}
 	UpdateWaktu(need_time);
+	need_time = 0;
 }
 
 void InputPreparationDay (int inpt) {
