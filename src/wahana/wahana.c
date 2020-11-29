@@ -203,8 +203,8 @@ void printDetailWahana(Wahana *W, char id, ListNode **head)
             printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
             printf("Status Wahana : %c\n", (*W).TI[i].status);
             printf("Ukuran Wahana : ( %d x %d ) \n", (*W).TI[i].lebar,(*W).TI[i].panjang);
-            printKata((*W).TI[i].deskripsi); printf("\n");
-            printUpgrades(head);printf("\n");
+            printf("Deskripsi : ");printKata((*W).TI[i].deskripsi); printf("\n");
+            printf("Upgrade : ");printUpgrades(head);printf("\n");
             break;
         }
     }
