@@ -248,8 +248,8 @@ int countBrokenWahana(Wahana *W)
 
 void SetZero(Wahana *W)
 /* Prosedur untuk mengubah jumlah penghasilan dan pengunjung tiap wahana menjadi 0 setiap hari baru
-   I.S setiap jumlah pengunjung dan penghasilan harian wahana bebas, bisa 0 atau sembarang int 
-   F.S setiap jumlah pengunjung dan penghasilan harian wahana menjadi 0 */
+   I.S setiap jumlah pengunjung, penghasilan, dan inside harian wahana bebas, bisa 0 atau sembarang int 
+   F.S setiap jumlah pengunjung, penghasilan, dan inside harian wahana menjadi 0 */
 {
     for(int i=0;i<8;i++){
         (*W).TI[i].inside=0;
