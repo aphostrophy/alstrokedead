@@ -13,7 +13,13 @@ Kata idWahanaUpgrade[8];
 Kata arrUpgrade[10];
 int levelWahana[10] = {1, 1, 1, 1, 1, 1, 1, 1};
 
-void bacaUpgrade(char* namaFile) {
+void bacaUpgrade(char* namaFile) 
+/* 
+Prosedur untuk menginisialisasi array global dengan informasi upgrade tiap wahana yang disimpan di Upgrades.txt 
+I.S arrNamaWahanaUpgrade, idWahanaUpgrade, dan  ArrUpgrade kosong
+F.S arrNamaWahanaUpgrade, idWahanaUpgrade, dan  ArrUpgrade terisi dengan informasi dari Upgrades.txt
+*/
+{
     int idx = 0;
     START(namaFile);
     while(!EOP) {
@@ -40,14 +46,20 @@ void bacaUpgrade(char* namaFile) {
     }
 }
 
-void buatTree(BinTree parent,BinTree l, BinTree r){
+void buatTree(BinTree parent,BinTree l, BinTree r)
+/*
+    Prosedur untuk mengisi left dan right sebuah node tree
+    I.S Left(parent) == Nil && Right(Parent) == Nil
+    F.S Left(parent) = l dan Right(parent) = r
+*/
+{
     Left(parent) = l;
     Right(parent) = r;
 }
 
 void BuildTree()
-/* I.S P adalah tree kosong */
-/* F.S P adalah tree berisi wahana willy wangky*/
+/* I.S listUpgrade adalah list of tree yang kosong */
+/* F.S listUpgrade adalah list of tree yang berisi informasi pohon upgrade wahana willy wangky*/
 {
     for (int i = 0; i < 8; i++) {
         listUpgrade[i] = AlokNode(i);
@@ -95,7 +107,6 @@ void DealokNode(addrNode P)
     free(P);
 }
 
-
 /* *** Predikat-Predikat Penting *** */
 boolean IsTreeEmpty(BinTree P)
 /* Mengirimkan true jika P adalah pohon biner kosong */
@@ -114,7 +125,11 @@ boolean IsTreeOneElmt(BinTree P)
     }
 }
 
-int bintree_findIndex(char id){
+int bintree_findIndex(char id)
+/*
+    Mengirimkan nilai index listUpgrade tempat pohon upgrade wahana dengan char id disimpan
+*/
+{
     int ret = -1;
     for (int i = 0; i < 8 && ret == -1; i++){
         if (id == idWahanaUpgrade[i].TabKata[0]){
@@ -124,7 +139,11 @@ int bintree_findIndex(char id){
     return ret;
 }
 
-boolean isElement(BinTree P,bintree_infotype X){
+boolean isElement(BinTree P,bintree_infotype X)
+/*
+    Mengembalikan true jika X adalah elemen P, false jika tidak
+*/
+{
     if (IsTreeEmpty(P)){
         return false;
     }else{
@@ -134,7 +153,11 @@ boolean isElement(BinTree P,bintree_infotype X){
     }
 }
 
-boolean isChild(BinTree parent, BinTree child){
+boolean isChild(BinTree parent, BinTree child)
+/*
+    Mengembalikan true jika child adalah leaf / subpohon dari parent
+*/
+{
     if(IsTreeOneElmt(parent)) {
         return false;
     } else {
@@ -146,7 +169,11 @@ boolean isChild(BinTree parent, BinTree child){
     }
 }
 
-void PrintTreeUtil(BinTree P, int h, int level){
+void PrintTreeUtil(BinTree P, int h, int level)
+/*
+    Prosedur untuk mencetak tree P dengan indentasi sebanyak h spasi di setiap levelnya
+*/
+{
     if(IsTreeEmpty(P)) return;
 
     if(level == 1) {
@@ -191,7 +218,11 @@ A
   PrintTreeUtil(P, h, 1);
 }
 
-void PrintUpgradeWahana(char id) {
+void PrintUpgradeWahana(char id) 
+/*
+    Mencetak pohon upgrade lengkap dari wahana dengan char id
+*/
+{
     int res;
     for(int i = 0; i < 8; i++) {
         if(id == idWahanaUpgrade[i].TabKata[0]) {
@@ -206,7 +237,12 @@ void PrintUpgradeWahana(char id) {
     }
 }
 
-void PrintAvailableUpgrade(char id, ListNode **head) {
+void PrintAvailableUpgrade(char id, ListNode **head) 
+/*
+    Mencetak upgrade yang bisa dilakukan pada wahana dengan char id, memanfaatkan linked list
+    untuk mengetahui history upgrade agar bisa memperoleh available upgrade dengan tepat
+*/
+{
     BinTree P;
     for(int i = 0; i < 8; i++) {
         if(id == idWahanaUpgrade[i].TabKata[0]) {
@@ -231,7 +267,12 @@ void PrintAvailableUpgrade(char id, ListNode **head) {
     
 }
 
-void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head) {
+void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head) 
+/*
+    Implementasi rekursif dari prosedur PrintAvailableUpgrade, dibuat agar bisa 
+    meng-traverse dalam tree upgrade wahana dengan char id.
+*/
+{
     if(IsTreeOneElmt(P)) {
         printf("Tidak ada upgrade lagi!!\n");
     } else {
@@ -251,7 +292,12 @@ void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head) {
     }
 }
 
-void findChild(char id, ListNode **head, arrKata *arrChild) {
+void findChild(char id, ListNode **head, arrKata *arrChild) 
+/*
+    Prosedur untuk mencari kemungkinan upgrade yang mungkin dilakukan pada wahana
+    dengan char id, lalu mengembalikannya dalam sebuah list of Kata
+*/
+{
     BinTree P;
     for(int i = 0; i < 8; i++) {
         if(id == idWahanaUpgrade[i].TabKata[0]) {
@@ -275,7 +321,12 @@ void findChild(char id, ListNode **head, arrKata *arrChild) {
     
 }
 
-void findChildRecursion(BinTree P, ListNode **head, arrKata *arrChild) {
+void findChildRecursion(BinTree P, ListNode **head, arrKata *arrChild) 
+/*
+    Implementasi rekursif dari prosedur findChild, dibuat agar bisa 
+    meng-traverse dalam tree upgrade wahana dengan char id.
+*/
+{
     if(IsTreeOneElmt(P)) {
         (*arrChild).TI[0].Length = 0;
         (*arrChild).TI[1].Length = 0;
