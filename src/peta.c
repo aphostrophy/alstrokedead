@@ -243,10 +243,10 @@ void UpdateWaktu(int n){
 					getchar();
 				}
 			}
-			LeaveWahanaBroke(&MGLOBAL,&QGLOBAL,wahana);
+			LeaveWahanaBroke(&MGLOBAL,&QGLOBAL,&wahana);
 			ReduceTime(&MGLOBAL,n,wahana);
 			LeaveQueueS(&QGLOBAL);
-			LeaveQueueT(&MGLOBAL,&QGLOBAL,wahana);
+			LeaveQueueT(&MGLOBAL,&QGLOBAL,&wahana);
 			int pengunjungDatang = rand() % 100;
 			if (pengunjungDatang >= 80 && QGLOBAL.TAIL<3 && IsAdaWahanaGood(wahana)){
 				pengunjung P;
