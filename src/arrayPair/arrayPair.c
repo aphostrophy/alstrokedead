@@ -5,6 +5,9 @@
 #include "../mesinkata/mesinkar.h"
 #include "../mesinkata/mesinkata.h"
 
+/*
+    Versi IsKataSama yang case sensitive ( di mesin kata dibuat case insensitive)
+*/
 boolean ArrayPair_IsKataSama (Kata K1, Kata K2) {
     if(K1.Length != K2.Length) {
         return false;

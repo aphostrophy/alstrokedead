@@ -193,8 +193,8 @@ void ArrayTriplet_TulisIsiTabNumbering (Triplet_TabInt T){
    di tengah, atau di belakang, termasuk spasi dan enter */
 /* I.S. T boleh kosong */
 /* F.S. Jika T tidak kosong: [e1,e2,char* namafile...,en] */
-/* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
-/* Jika tabel kosong : menulis [] */
+
+/* Jika tabel kosong : menulis empty */
 
 /* ********** SEARCHING ********** */
 /* ***  Perhatian : Tabel boleh kosong!! *** */

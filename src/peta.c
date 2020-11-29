@@ -80,8 +80,6 @@ void SetupSaveGame (FILE *savefile){
 	TempSave.aksi = aksi;
 	TempSave.time = time;
 	for( int i = 0; i < 20;i++){
-		printf("Save File");printf("\n");
-		printKata(saveUpgrade(&link[i]));printf("\n");
 		TempSave.link[i] = saveUpgrade(&link[i]);
 	}
 	TempSave.need_material = need_material;
@@ -725,7 +723,6 @@ void HandleUpgrade(){
 		if(IsKataSama(Action, UPGRADE)){
 			arrKata arrChild;
 			findChild(bangunan, &link[indexWahana], &arrChild);
-			printKata(Nama_Upgrade);printf(" ");printf("%d",Nama_Upgrade.Length);printf(" ");printKata(arrChild.TI[0]);printf(" ");printf("%d",arrChild.TI[0].Length);printf(" ");printKata(arrChild.TI[1]);printf(" ");printf("%d",arrChild.TI[1].Length);printf("\n");
 			if(IsKataSama(Nama_Upgrade,arrChild.TI[0]) || IsKataSama(Nama_Upgrade,arrChild.TI[1])){
 				IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
 				Kata bahan = Triplet_Bahan(UpgradeCosts,id);
@@ -739,7 +736,6 @@ void HandleUpgrade(){
 					Pair_Cost(need_material,idNeed) = needMaterial + Triplet_Cost(UpgradeCosts,id);
 					StackEl.Length=0; StackEl.TabKata[0] ='X';
 					StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
-					printf("Yang dipush ke stackel adalah: ");printKata(StackEl);printf("\n");
 					getchar();
 					Push(&aksi,StackEl);
 					return;
@@ -853,20 +849,14 @@ void HandleExecution(){
 			int idxTripletBahan = ArrayTriplet_SearchByNama(UpgradeEffect, Nama_Upgrade);
 
 			if(IsKataSama(Triplet_Bahan(UpgradeEffect,idxTripletBahan),HARGA)){
-				printf("Harga");
 				int idxTripletEffect = ArrayTriplet_SearchByNama(UpgradeEffect,Nama_Upgrade);
 				wahana.TI[GetIndex(&wahana, idWahana)].harga += Triplet_Cost(UpgradeEffect,idxTripletEffect);
-				printf("%d",Triplet_Cost(UpgradeEffect,idxTripletEffect));
 			} else if(IsKataSama(Triplet_Bahan(UpgradeEffect,idxTripletBahan),KAPASITAS)){
-				printf("Kapasitas");
 				int idxTripletEffect = ArrayTriplet_SearchByNama(UpgradeEffect,Nama_Upgrade);
 				wahana.TI[GetIndex(&wahana, idWahana)].kapasitas += Triplet_Cost(UpgradeEffect,idxTripletEffect);
-				printf("%d",Triplet_Cost(UpgradeEffect,idxTripletEffect));
 			} else if(IsKataSama(Triplet_Bahan(UpgradeEffect,idxTripletBahan),DURASI)){
-				printf("Durasi");
 				int idxTripletEffect = ArrayTriplet_SearchByNama(UpgradeEffect,Nama_Upgrade);
 				wahana.TI[GetIndex(&wahana, idWahana)].durasi -= Triplet_Cost(UpgradeEffect,idxTripletEffect);
-				printf("%d",Triplet_Cost(UpgradeEffect,idxTripletEffect));
 			}
 		}
 	}

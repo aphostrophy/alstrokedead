@@ -46,6 +46,9 @@ typedef struct {
 #define Pair_Item(T,i) (T).TI[(i)].item // Kata
 #define Pair_ItemLength(T,i) (T).TI[(i)].item.Length // Int dari Kata
 
+
+boolean ArrayPair_IsKataSama (Kata K1, Kata K2);
+
 /* ********** KONSTRUKTOR ********** */
 /* Konstruktor : create tabel kosong  */
 void ArrayPair_MakeEmpty (TabInt * T);
