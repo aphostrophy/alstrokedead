@@ -329,7 +329,7 @@ void LeaveWahanaBroke(Queue *M, Queue *Q, Wahana *W){
     int idx[5];
     int lastidx=0;
     for (int i=0;i<=(*M).TAIL;i++){
-        InfoWahana NaikWahana = getWahanabyID(&W,(*M).P[i].W);
+        InfoWahana NaikWahana = getWahanabyID(W,(*M).P[i].W);
         if (NaikWahana.status=='B'){
             idx[lastidx]=i;
             lastidx++;
@@ -339,7 +339,7 @@ void LeaveWahanaBroke(Queue *M, Queue *Q, Wahana *W){
     for(int i=0;i<=lastidx;i++){
         pengunjung X;
         X = (*M).P[idx[i]];
-        
+
         int idxW = GetIndex(W,X.W);
         (*W).TI[idxW].inside--;
 
