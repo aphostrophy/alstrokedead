@@ -215,7 +215,7 @@ void printReportWahana(Wahana *W, char id) {
             printf("Jumlah Pengunjung Wahana hari ini : %d\n", (*W).TI[i].pengunjung);
             printf("Jumlah Penghasilan Wahana hari ini : %d\n", (*W).TI[i].penghasilan);
             printf("Jumlah Total Pengunjung Wahana : %d\n", (*W).TI[i].total_pengunjung);
-            printf("Jumlah Total Pengunjung Wahana : %d\n", (*W).TI[i].total_penghasilan);
+            printf("Jumlah Total Penghasilan Wahana : %d\n", (*W).TI[i].total_penghasilan);
             break;
         }
     }

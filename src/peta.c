@@ -173,7 +173,7 @@ void SetupNewGame (){
 	// Pembacaan data-data newgame
  	NewPengunjung =1;
 	ArrayPair_MakeEmpty(&need_material);
-	ArrayPair_BacaIsi(&need_material, "../Saves/Inventory.txt");
+	ArrayPair_BacaIsi(&need_material, "../file/Inventory.txt");
 	cmap = 0;
 	state = MAIN_DAY;
 	GenerateQueue(&QGLOBAL,wahana);
@@ -182,7 +182,7 @@ void SetupNewGame (){
 	pmoney = 10000 ;
 	bacaWahana(&wahana, "../file/wahana.txt");
 	count_aksi = 0 ; need_money = 0 ;
-	ArrayPair_MakeEmpty(&Inventory); ArrayPair_BacaIsi(&Inventory, "../Saves/Inventory.txt");
+	ArrayPair_MakeEmpty(&Inventory); ArrayPair_BacaIsi(&Inventory, "../file/Inventory.txt");
 	CreateEmpty(&aksi);	
 	Hour(time) = 9 ; Minute(time) = 0 ;
 	CopyMATRIKS(map[cmap], &mapRoom);
@@ -195,7 +195,7 @@ void PrepToMainDay(){
 	// Fungsi ini akan melakukan perubahan variabel global dari preparation day ke main day
 
 	// Uang ,Waktu, Aksi, dan material dibutuhkan jadi 0. Queue pengunjung mulai di generate
-  
+  SetZero(&wahana);
   NewPengunjung = 1;
 	need_money = 0;
 	need_time = 0;
@@ -1051,14 +1051,14 @@ void SetupMainMenu(){
 	BacaMATRIKS(&map[0], "../file/0.txt");
 	BacaMATRIKS(&map[2], "../file/2.txt");
 	BacaMATRIKS(&map[3], "../file/3.txt");
-	ArrayPair_BacaIsi(&Materials, "../Saves/Materials.txt");
-	ArrayPair_BacaIsi(&HargaBuild, "../Saves/HargaBuild.txt");
-	ArrayPair_BacaIsi(&MaterialBuild, "../Saves/MaterialBuild.txt");
-	ArrayPair_BacaIsi(&ActionTime, "../Saves/ActionPrice.txt");
-	ArrayTriplet_BacaIsi(&UpgradeEffect, "../Saves/UpgradeEffect.txt");
-	ArrayTriplet_BacaIsi(&UpgradeCosts, "../Saves/HargaUpgrade.txt");
+	ArrayPair_BacaIsi(&Materials, "../file/Materials.txt");
+	ArrayPair_BacaIsi(&HargaBuild, "../file/HargaBuild.txt");
+	ArrayPair_BacaIsi(&MaterialBuild, "../file/MaterialBuild.txt");
+	ArrayPair_BacaIsi(&ActionTime, "../file/ActionPrice.txt");
+	ArrayTriplet_BacaIsi(&UpgradeEffect, "../file/UpgradeEffect.txt");
+	ArrayTriplet_BacaIsi(&UpgradeCosts, "../file/HargaUpgrade.txt");
 	BuildTree();
-	bacaUpgrade("../Saves/Upgrade.txt");
+	bacaUpgrade("../file/Upgrade.txt");
 	BacaGraph(&denah,"../file/graph.txt");
 	state = MAIN_MENU;
 }

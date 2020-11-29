@@ -397,12 +397,12 @@ void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
             Enqueue(M,X);
         
             //increment inside wahana
-            InfoWahana N= getWahanabyID(LW,W);
-            N.inside++;
-            N.total_pengunjung++;
-            N.total_penghasilan=N.total_penghasilan+N.harga;
-            N.penghasilan=N.penghasilan+N.harga;
-            N.pengunjung++;
+            int N= GetIndex(LW,W);
+            LW->TI[N].inside++;
+            LW->TI[N].total_pengunjung++;
+            LW->TI[N].total_penghasilan=LW->TI[N].total_penghasilan+LW->TI[N].harga;
+            LW->TI[N].penghasilan=LW->TI[N].penghasilan+LW->TI[N].harga;
+            LW->TI[N].pengunjung++;
 
             //kurangi kesabaran & naikin prioritas orang di antrian
             ReduceKesabaran(Q);
