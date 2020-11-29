@@ -724,7 +724,7 @@ void HandleUpgrade(){
 		// End of algoritma membosankan	
 		if(IsKataSama(Action, UPGRADE)){
 			arrKata arrChild;
-			findChild('S', &link[indexWahana], &arrChild);
+			findChild(bangunan, &link[indexWahana], &arrChild);
 			printKata(Nama_Upgrade);printf(" ");printf("%d",Nama_Upgrade.Length);printf(" ");printKata(arrChild.TI[0]);printf(" ");printf("%d",arrChild.TI[0].Length);printf(" ");printKata(arrChild.TI[1]);printf(" ");printf("%d",arrChild.TI[1].Length);printf("\n");
 			if(IsKataSama(Nama_Upgrade,arrChild.TI[0]) || IsKataSama(Nama_Upgrade,arrChild.TI[1])){
 				IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
