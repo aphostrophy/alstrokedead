@@ -29,4 +29,4 @@ $ ./run_linux
 [Denilsen Axel Candiasa](https://id.linkedin.com/in/denilsen-axel-candiasa-7a3772130)\
 [Jesson Gosal Yo](https://www.instagram.com/jessonyoo/)\
 [Hera Shafira](https://id.linkedin.com/in/hera-shafira-3789a91ab)\
-[Rafidika Samekto](www.linkedin.com/in/rafidika)\
+[Rafidika Samekto](www.linkedin.com/in/rafidika)
