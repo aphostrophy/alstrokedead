@@ -2,6 +2,7 @@
 #include "arrayTriplet.h"
 #include "../boolean.h"
 #include "triplet.h"
+#include "../mesinkata/mesinkar.h"
 #include "../mesinkata/mesinkata.h"
 
 boolean ArrayTriplet_IsKataSama (Kata K1, Kata K2) {

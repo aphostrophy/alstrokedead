@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "../bintree/bintree.h"
 #include "../mesinkata/mesinkar.h"
-#include "../mesinkata/mesinkar.h"
 #include "../mesinkata/mesinkata.h"
 #include "../linkedlist/list_linkedlist.h"
 
