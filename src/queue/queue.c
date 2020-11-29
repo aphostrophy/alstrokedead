@@ -63,7 +63,7 @@ void GenerateQueue (Queue * Q, Wahana LW){
     idx = idx-1;
     MakeEmpty_Queue(Q,10);
     if (idx !=-1){ 
-        // srand(time(0));
+        srand(time(0));
         for (i=0;i<5;i++){
             for (j=0;j<3;j++){
                 if (j==0){
