@@ -243,10 +243,10 @@ void UpdateWaktu(int n){
 					getchar();
 				}
 			}
-			LeaveWahanaBroke(&MGLOBAL,&QGLOBAL,wahana);
+			LeaveWahanaBroke(&MGLOBAL,&QGLOBAL,&wahana);
 			ReduceTime(&MGLOBAL,n,wahana);
 			LeaveQueueS(&QGLOBAL);
-			LeaveQueueT(&MGLOBAL,&QGLOBAL,wahana);
+			LeaveQueueT(&MGLOBAL,&QGLOBAL,&wahana);
 			int pengunjungDatang = rand() % 100;
 			if (pengunjungDatang >= 80 && QGLOBAL.TAIL<3 && IsAdaWahanaGood(wahana)){
 				pengunjung P;
@@ -734,7 +734,7 @@ void HandleUpgrade(){
 				IdxType idNeed = ArrayPair_SearchByItem(need_material,bahan);
 				int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
 				int needMaterial = Pair_Cost(need_material,idNeed);
-				if(inventorySupply>=needMaterial){
+				if(inventorySupply >= needMaterial + Triplet_Cost(UpgradeCosts,id)){
 					addUpgrade(&link[indexWahana], Nama_Upgrade);
 					Pair_Cost(need_material,idNeed) = needMaterial + Triplet_Cost(UpgradeCosts,id);
 					StackEl.Length=0; StackEl.TabKata[0] ='X';
@@ -743,7 +743,7 @@ void HandleUpgrade(){
 					getchar();
 					Push(&aksi,StackEl);
 					return;
-				} else{
+				} else {
 					printf("Not enough materials");
 				}
 			} else{
@@ -1065,19 +1065,6 @@ void SetupMainMenu(){
 
 
 void PrintJudul (){
-	// printf("%s\n","==================================================================");
-	// printf("%s\n","==================================================================");  
-	// printf("%s\n","*     __    __ _ _ _         __    __                  _          ");
-	// printf("%s\n","*    / / /\\ \\ (_| | |_   _  / / /\\ \\ \\__ _ _ __   __ _| | ___   _ ");   
-	// printf("%s\n","*    \\ \\/  \\/ | | | | | | | \\ \\/  \\/ / _` | '_ \\ / _` | |/ | | | |");   
-	// printf("%s\n","*     \\  /\\  /| | | | |_| |  \\  /\\  | (_| | | | | (_| |   <| |_| |");   
-	// printf("%s\n","*      \\/  \\/ |_|_|_|\\__, |   \\/  \\/ \\__,_|_| |_|\\__, |_|\\_ \\__, |");   
-	// printf("%s\n","*               __   |___/         _     _       |___/      |___/ ");   
-	// printf("%s\n","*              / / /\\ \\ \\___  _ __| | __| |                       ");   
-	// printf("%s\n","*              \\ \\/  \\/ / _ \\| '__| |/ _` |                       ");   
-	// printf("%s\n","*               \\  /\\  | (_) | |  | | (_| |                       ");   
-	// printf("%s\n","*                \\/  \\/ \\___/|_|  |_|\\__,_|                       ");   
-	// printf("%s\n","*                                                                 ");
 	printf("%s\n","====================================================================================");
 	printf("\t\t\t\t%s\n","Willy Wangky World");
 	printf("%s\n","====================================================================================");                                 

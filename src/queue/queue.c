@@ -44,7 +44,7 @@ boolean IsDouble(char W, char L[3]){
 }
 
 
-
+//inisialisasi antrean pada program utama
 void GenerateQueue (Queue * Q, Wahana LW){
     int i,j;
     int idx=0;
@@ -97,6 +97,7 @@ void GenerateQueue (Queue * Q, Wahana LW){
 }
 
 
+//Generate pengunjung baru yang bisa masuk ke queue di tengah permainan
 void GeneratePengunjung(pengunjung *P,int ID,int prio, Wahana LW){
     Queue Q;
     GenerateQueue(&Q,LW);
@@ -106,6 +107,8 @@ void GeneratePengunjung(pengunjung *P,int ID,int prio, Wahana LW){
     (*P).X=prio;
 }
 
+
+//'Melepas' head Queue dari Queue
 void Dequeue (Queue * Q, pengunjung * X){
     if (!IsEmpty_Queue(*Q)){
         int i;
@@ -120,7 +123,9 @@ void Dequeue (Queue * Q, pengunjung * X){
 //print queue
 void PrintQueue (Queue Q, int n){
     int j=0;
-    printf("[%d/5]\n",(Q.TAIL+1));
+    if(n==1){
+        printf("[%d/5]\n",(Q.TAIL+1));
+    }
     while (j<=Q.TAIL){
         int i=0;
         int count=0;
@@ -217,6 +222,8 @@ void EmptyQueue(Queue *Q){
     Dealokasi_Queue(Q);
 }
 
+
+//Memasukan pengunjung ke Queue
 void Enqueue(Queue *Q, pengunjung P){
     boolean found=false;
     int i=0;
@@ -249,6 +256,7 @@ void Enqueue(Queue *Q, pengunjung P){
     (*Q).TAIL=(*Q).TAIL+1;
 }
 
+//Mengurangi kesabaran untuk seluruh pengunjung pada queue
 void ReduceKesabaran(Queue *Q){
     if(!IsEmpty_Queue(*Q)){
         for(int i=0;i<=(*Q).TAIL;i++){
@@ -258,6 +266,7 @@ void ReduceKesabaran(Queue *Q){
     }
 }
 
+//Mengurangi durasi bermain untuk seluruh pengunjung pada queue bermain
 void ReduceTime(Queue *Q,int Time,Wahana LW){
     if(!IsEmpty_Queue(*Q)){
         for(int i=0;i<=(*Q).TAIL;i++){
@@ -269,7 +278,9 @@ void ReduceTime(Queue *Q,int Time,Wahana LW){
     }  
 }
 
-void LeaveQueueT(Queue *M, Queue *Q, Wahana W){
+//Prosedur untuk mengeluarkan pengunjung yang sudah habis sisa waktu bermainnya dari queue bermain
+//Apabila pengunjung masih memiliki wahana yang ingin dinaiki maka pengunjung akan dikembalikan ke queue utama
+void LeaveQueueT(Queue *M, Queue *Q, Wahana *LW){
     int idx[5];
     int lastidx=0;
     for (int i=0;i<=(*M).TAIL;i++){
@@ -282,6 +293,10 @@ void LeaveQueueT(Queue *M, Queue *Q, Wahana W){
     for(int i=0;i<=lastidx;i++){
         pengunjung X;
         X = (*M).P[idx[i]];
+
+        int idxW = GetIndex(LW,X.W);
+        (*LW).TI[idxW].inside--;
+
         if(isListWahanaEmpty(X.L)==false){
             X.X=X.X-1; //masukin ke queue main
             Enqueue(Q,X);
@@ -296,6 +311,7 @@ void LeaveQueueT(Queue *M, Queue *Q, Wahana W){
     }
 }
 
+//Mendapatkan indeks terakhir dari list wahana yang ingin dinaiki pengunjung
 int getLastIdxListW(char L[3]){
     int idx=-1;
     for(int i=0;i<3;i++){
@@ -307,11 +323,13 @@ int getLastIdxListW(char L[3]){
     return idx;
 }
 
-void LeaveWahanaBroke(Queue *M, Queue *Q, Wahana W){
+
+//Prosedur untuk memaksa keluar pengunjung yang tengah menaiki wahana rusak, pengunjung akan dikembalikan ke queue utama
+void LeaveWahanaBroke(Queue *M, Queue *Q, Wahana *W){
     int idx[5];
     int lastidx=0;
     for (int i=0;i<=(*M).TAIL;i++){
-        InfoWahana NaikWahana = getWahanabyID(&W,(*M).P[i].W);
+        InfoWahana NaikWahana = getWahanabyID(W,(*M).P[i].W);
         if (NaikWahana.status=='B'){
             idx[lastidx]=i;
             lastidx++;
@@ -321,9 +339,13 @@ void LeaveWahanaBroke(Queue *M, Queue *Q, Wahana W){
     for(int i=0;i<=lastidx;i++){
         pengunjung X;
         X = (*M).P[idx[i]];
+
+        int idxW = GetIndex(W,X.W);
+        (*W).TI[idxW].inside--;
+
         int idxL = getLastIdxListW(X.L);
         X.L[idxL+1] = X.W;
-        X.X=X.X-1; //masukin ke queue main
+        X.X=X.X-1; //masukin ke queue utama
         if(!IsFull_Queue(*Q)){
             Enqueue(Q,X);
         }
@@ -358,12 +380,9 @@ void LeaveQueueS(Queue *Q){
         }
         (*Q).TAIL=(*Q).TAIL-1;
     }
-
-    if(lastidx>=0){
-        printf("\nOh no! the customer(s) are leaving! Hurry up and serve them!\n\n");
-    }
 }
 
+//Mengecek apakah suatu ID wahana ada pada list wahana pengunjung
 boolean IsWahanaInList(char W, Queue Q){
     boolean isTrue=false;
     int i=0;
@@ -378,6 +397,7 @@ boolean IsWahanaInList(char W, Queue Q){
     return isTrue;
 }
 
+//Prosedur melakukan serve
 void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
 
     InfoWahana Swahana=getWahanabyID(LW,W);
@@ -425,10 +445,5 @@ void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
 void ManageTime(int time, Queue *Q, Queue *M,Wahana LW){
     ReduceTime(M,time,LW);
     LeaveQueueS(Q);
-    LeaveQueueT(M,Q,LW);
+    LeaveQueueT(M,Q,&LW);
 }
-
-
-
-//============================BATAS SUCI=================================================
-
