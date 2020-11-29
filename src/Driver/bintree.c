@@ -252,3 +252,47 @@ void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head) {
         }
     }
 }
+
+void findChild(char id, ListNode **head, arrKata *arrChild) {
+    BinTree P;
+    for(int i = 0; i < 8; i++) {
+        if(id == idWahanaUpgrade[i].TabKata[0]) {
+            P = listUpgrade[i];
+            break;
+        }
+    }
+
+    ListNode *current=*head;
+    if(current==NULL){
+        (*arrChild).TI[0] = copyKata(arrUpgrade[Akar(Left(P))]);
+        (*arrChild).TI[1] = copyKata(arrUpgrade[Akar(Right(P))]);
+    } else {
+        // printKata(current->data);
+        if(IsKataSama(current->data, arrUpgrade[Akar(Left(P))])) {
+            findChildRecursion(Left(P), (&current->next), arrChild);
+        } else if(IsKataSama(current->data, arrUpgrade[Akar(Right(P))])) {
+            findChildRecursion(Right(P), (&current->next), arrChild);
+        }
+    }
+    
+}
+
+void findChildRecursion(BinTree P, ListNode **head, arrKata *arrChild) {
+    if(IsTreeOneElmt(P)) {
+        (*arrChild).TI[0].Length = 0;
+        (*arrChild).TI[1].Length = 0;
+    } else {
+        ListNode *current=*head;
+        if(current==NULL){
+            (*arrChild).TI[0] = copyKata(arrUpgrade[Akar(Left(P))]);
+            (*arrChild).TI[1] = copyKata(arrUpgrade[Akar(Right(P))]);
+        } else {
+            // printKata(current->data);
+            if(IsKataSama(current->data, arrUpgrade[Akar(Left(P))])) {
+                findChildRecursion(Left(P), (&current->next), arrChild);
+            } else if(IsKataSama(current->data, arrUpgrade[Akar(Right(P))])) {
+                findChildRecursion(Right(P), (&current->next), arrChild);
+            }
+        }
+    }
+}
