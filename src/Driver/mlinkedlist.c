@@ -5,6 +5,7 @@
 #include "../Header/bintree.h"
 
 int main(){
+    arrKata arrChild;
     bacaUpgrade("../Saves/Upgrade.txt");
     BuildTree();
     ListNode *link[20] = { 0 };
@@ -28,6 +29,8 @@ int main(){
     }
     addUpgrade(&link[0], CKata);
     printUpgrades(&link[0]);printf("\n");
+    findChild('S', &link[0], &arrChild);
+    printKata(arrChild.TI[0]); printf(" "); printKata(arrChild.TI[1]); printf("\n");
     PrintAvailableUpgrade('S', &link[0]);
 
     STARTBUY();
@@ -45,6 +48,8 @@ int main(){
     }
 
     addUpgrade(&link[0], CKata);
+    findChild('S', &link[0], &arrChild);
+    printKata(arrChild.TI[0]); printf(" "); printKata(arrChild.TI[1]); printf("\n");
     PrintAvailableUpgrade('S', &link[0]);
     // removeUpgrade(&link[0]);
     printUpgrades(&link[0]);printf("\n");
