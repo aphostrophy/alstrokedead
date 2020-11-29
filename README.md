@@ -17,7 +17,7 @@ $ run_windows
   3. ❤️ Enjoy the game! ❤️
 ##### 💻 For Linux 💻
 To run from the terminal:
-  1. Channge directory (cd) to src/file
+  1. Change directory (cd) to src/file
   2. Type the following code
 ```shell
 $ chmod +x run_linux.sh
