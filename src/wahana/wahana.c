@@ -5,8 +5,6 @@
 #include "../mesinkata/mesinkata.h"
 #include "../linkedlist/list_linkedlist.h"
 
-Kata arrWahanaGood[8];
-
 void bacaWahana(Wahana *W, char* namaFile) {
     /* I.S. List Wahana valid dan namafile valid
 	/* F.S. W terdefinisi nilai */
@@ -91,7 +89,8 @@ void bacaWahana(Wahana *W, char* namaFile) {
 	}
 }
 
-/* SELEKTOR */
+/* Selektor - Selektor Penting */
+/* Selektor properti wahana, representatif sesuai namanya */
 Kata getNama(Wahana *W, char id) {
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id.TabKata[0] == id) {
@@ -190,9 +189,11 @@ int getTotalPenghasilan(Wahana *W, char id) {
 }
 
 
-/* FUNGSIONALITAS */
-void printDetailWahana(Wahana *W, char id, ListNode **head) {
-
+/* Primitif - Primitif Penting */
+void printDetailWahana(Wahana *W, char id, ListNode **head) 
+/* Prosedur untuk mencetak detail wahana berdasarkan char id nya, 
+   menggunakan linked list untuk mencetak history upgradenya */
+{
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id.TabKata[0] == id) {
             printKata((*W).TI[i].id); printf("\n");
@@ -202,14 +203,17 @@ void printDetailWahana(Wahana *W, char id, ListNode **head) {
             printf("Kapasitas Wahana : %d\n", (*W).TI[i].kapasitas);
             printf("Status Wahana : %c\n", (*W).TI[i].status);
             printf("Ukuran Wahana : ( %d x %d ) \n", (*W).TI[i].lebar,(*W).TI[i].panjang);
-            printKata((*W).TI[i].deskripsi); printf("\n");
-            printUpgrades(head);printf("\n");
+            printf("Deskripsi : ");printKata((*W).TI[i].deskripsi); printf("\n");
+            printf("Upgrade : ");printUpgrades(head);printf("\n");
             break;
         }
     }
 }
 
-void printReportWahana(Wahana *W, char id) {
+void printReportWahana(Wahana *W, char id) 
+/* Prosedur untuk mencetak laporan wahana berupa pengunjung dan penghasilan wahana hari ini,
+   serta total pengunjung dan penghasilan wahana selama bermain */
+{
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id.TabKata[0] == id) {
             printf("Jumlah Pengunjung Wahana hari ini : %d\n", (*W).TI[i].pengunjung);
@@ -221,14 +225,18 @@ void printReportWahana(Wahana *W, char id) {
     }
 }
 
-void printListWahana(Wahana *W) {
+void printListWahana(Wahana *W) 
+/* Prosedur untuk mencetak list wahana beserta id nya */
+{
     for(int i = 0; i < 8; i++) {
         printKata((*W).TI[i].nama); printf(" ");
         printKata((*W).TI[i].id); printf("\n");
     }
 }
 
-int countBrokenWahana(Wahana *W) {
+int countBrokenWahana(Wahana *W) 
+/* Fungsi yang mengembalikan jumlah wahana yang sedang rusak */
+{
     int res = 0;
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].status == 'B') {
@@ -238,36 +246,20 @@ int countBrokenWahana(Wahana *W) {
     return res;
 }
 
-int countWahanaGood(Wahana *W) {
-    int count = 0;
-    int i;
-    for(i = 0; i < 8; i++) {
-        if((*W).TI[i].status == 'G') {
-            count++;
-        }
-    }
-    return count;
-}
-
-void SetZero(Wahana *W){
+void SetZero(Wahana *W)
+/* Prosedur untuk mengubah jumlah penghasilan dan pengunjung tiap wahana menjadi 0 setiap hari baru
+   I.S setiap jumlah pengunjung dan penghasilan harian wahana bebas, bisa 0 atau sembarang int 
+   F.S setiap jumlah pengunjung dan penghasilan harian wahana menjadi 0 */
+{
     for(int i=0;i<8;i++){
         (*W).TI[i].pengunjung=0;
         (*W).TI[i].penghasilan=0;
     }
 }
 
-void makeListWahanaGood(Wahana *W) {
-    int idx = 0;
-    int i;
-    for(i = 0; i < 8; i++) {
-        if((*W).TI[i].status == 'G') {
-            arrWahanaGood[idx] = copyKata((*W).TI[i].id);
-            idx++;
-        }
-    }
-}
-
-void printBrokenWahana(Wahana *W) {
+void printBrokenWahana(Wahana *W) 
+/* Prosedur untuk menetak list wahana yang sedang rusak */
+{
     if(countBrokenWahana(W) == 0) {
         printf("Tidak ada wahana yang sedang rusak.\n");
     } else {
@@ -282,7 +274,9 @@ void printBrokenWahana(Wahana *W) {
     }
 }
 
-boolean IsAdaWahanaGood(Wahana W){
+boolean IsAdaWahanaGood(Wahana W)
+/* Fungsi yang mengembalikan true jika W berada dalam kondisi baik dan tidak rusak */
+{
     for(int i=0;i<8;i++){
        if (W.TI[i].status=='G'){
            return true;
@@ -291,7 +285,9 @@ boolean IsAdaWahanaGood(Wahana W){
     return false;
 }
 
-void printNotBuilded(Wahana *W){
+void printNotBuilded(Wahana *W)
+/* Prosedur untuk mencetak list wahana yang belum dibangun */
+{
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].status == 'N'){
             printKata((*W).TI[i].nama); printf("\n");
@@ -299,7 +295,9 @@ void printNotBuilded(Wahana *W){
     }
 }
 
-int GetIndex(Wahana *W, char id ){
+int GetIndex(Wahana *W, char id )
+/* Fungsi yang mengembalikan indeks dari wahana dengan char id */
+{
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].id.TabKata[0] == id) {
             return i;
@@ -307,7 +305,9 @@ int GetIndex(Wahana *W, char id ){
     }
 }
 
-boolean IsWahanaBenar(Kata W, Wahana LW){
+boolean IsWahanaBenar(Kata W, Wahana LW)
+/* Fungsi yang mengembalikan true jika W terdapat dalam list wahana LW */
+{
     boolean benar = false;
     int i=0;
     while (benar==false && i<8){
