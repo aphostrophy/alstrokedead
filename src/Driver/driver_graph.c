@@ -15,6 +15,14 @@ int main() {
             printf("\n");
             P = Graph_Next(P);
         }
+        infotypePeta X;
+        X.map = 1;
+        Absis(X.p) = 1;
+        Ordinat(X.p) = 1;
+        adrPeta Q = SearchPeta(G,X);
+        printf("%d ", idPeta(Q).map);
+        printf("%d ", Absis(idPeta(Q).p));
+        printf("%d ", Ordinat(idPeta(Q).p));
     }
     else {
         printf("lol no\n");
