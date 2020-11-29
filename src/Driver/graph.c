@@ -9,7 +9,8 @@ void BacaGraph(Graph* G, char* sumber){
     int tampunganPrec[3];
     int tampunganSucc[3];
     int X = fscanf(file_graph,"%d",&tampunganPrec[0]);
-    infotypePeta PrecAwal, SuccAwal;
+    infotypePeta Prec1, Succ1;
+    adrPeta Prec; adrPeta Succ;
     while (X == 1) {
         for (int i = 1; i < 3; i++) {
             fscanf(file_graph,"%d",&tampunganPrec[i]);
@@ -17,13 +18,21 @@ void BacaGraph(Graph* G, char* sumber){
         for (int i = 3; i < 6; i++) {
             fscanf(file_graph,"%d",&tampunganSucc[i-3]);
         }
-        PrecAwal.map = tampunganPrec[0];
-        Absis(PrecAwal.p) = tampunganPrec[1];
-        Ordinat(PrecAwal.p) = tampunganPrec[2];
-        SuccAwal.map = tampunganSucc[0];
-        Absis(SuccAwal.p) = tampunganSucc[1];
-        Ordinat(SuccAwal.p) = tampunganSucc[2];
-        InsertTerowongan(G,PrecAwal,SuccAwal);
+        Prec1.map = tampunganPrec[0];
+        Absis(Prec1.p) = tampunganPrec[1];
+        Ordinat(Prec1.p) = tampunganPrec[2];
+        if (Graph_First(*G) == Nil) {
+            Prec = AlokPetaGraph(Prec1);
+            Graph_First(*G) = Prec;
+        }
+        else {
+            InsertPeta(G,Prec1,&Prec);
+        }
+        Succ1.map = tampunganSucc[0];
+        Absis(Succ1.p) = tampunganSucc[1];
+        Ordinat(Succ1.p) = tampunganSucc[2];
+        InsertPeta(G,Succ1,&Succ);
+        InsertTerowongan(G,Prec,Succ);
         X = fscanf(file_graph,"%d",&tampunganPrec[0]);
     }
     fclose(file_graph);
@@ -59,9 +68,10 @@ boolean isPetaEqual(adrPeta P, infotypePeta X){
 } 
 adrPeta SearchPeta(Graph G, infotypePeta X){
     adrPeta P = Graph_First(G);
-    while (P != Nil) {
+    boolean found = false;
+    while (P != Nil && !found) {
         if (isPetaEqual(P,X)) {
-            return P;
+            found = true;
         }
         else {
             P = Graph_Next(P);
@@ -72,34 +82,23 @@ adrPeta SearchPeta(Graph G, infotypePeta X){
 void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn){
     adrPeta NewPeta = AlokPetaGraph(X);
     *Pn = NewPeta;
-    adrPeta P = Graph_First(*G);
-    if (P != Nil && NewPeta != Nil) {
+    if (NewPeta != Nil) {
+        adrPeta P = Graph_First(*G);
         while (Graph_Next(P) != Nil) {
             P = Graph_Next(P);
         }
         Graph_Next(P) = *Pn;
     }
-    else {
-        Graph_First(*G) = *Pn;
-    }
 } 
-void InsertTerowongan(Graph* G, infotypePeta prec, infotypePeta Graph_Succ){
-    adrPeta P1 = SearchPeta(*G,prec);
-    adrPeta P2 = SearchPeta(*G,Graph_Succ);
-    if (P1 == Nil) {
-        InsertPeta(G,prec,&P1);
-    }
-    if (P2 == Nil) {
-        InsertPeta(G,Graph_Succ,&P2);
-    }
-    adrTerowongan T = Gerbang(P1);
+void InsertTerowongan(Graph* G, adrPeta prec, adrPeta succ){
+    adrTerowongan T = Gerbang(prec);
     if (T == Nil) {
-        Gerbang(P1) = AlokSuccPeta(P2);
+        Gerbang(prec) = AlokSuccPeta(succ);
     }
     else {
         while (Graph_Next(T) != Nil) {
             T = Graph_Next(T);
         }
-        Graph_Next(Gerbang(P1)) = AlokSuccPeta(P2);
+        Graph_Next(Gerbang(prec)) = AlokSuccPeta(succ);
     }
 } 

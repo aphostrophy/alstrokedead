@@ -49,6 +49,6 @@ adrTerowongan AlokSuccPeta(adrPeta P);
 boolean isPetaEqual(adrPeta P, infotypePeta X); 
 adrPeta SearchPeta(Graph G, infotypePeta X); 
 void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn); 
-void InsertTerowongan(Graph* G, infotypePeta prec, infotypePeta succ); 
+void InsertTerowongan(Graph* G, adrPeta prec, adrPeta succ); 
 
 #endif
