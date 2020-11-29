@@ -1,13 +1,11 @@
 // ADT INPUT_1
 // ADT Input1 digunakan untuk membaca masukan yang berupa char seperti WASD dan beberapa input lain.
 // Input lain yang berupa string akan memanfaatkan mesinkar dan mesinkata
-// Memanfaatkan header conio.h
 
 #ifndef input_H
 #define input_H
 
 // WINDOWS / MS-DOS
-// #include <conio.h>
 // #include <stdio.h>
 // #include <stdlib.h>
 // #define clrscr() system("cls")
@@ -15,7 +13,6 @@
 // UNCOMMENT ALL OF THE ABOVE IF YOU ARE IN MS-DOS BASED OS
 
 // LINUX (DEBIAN BASED)
-// #include <termios.h>
 #include <stdio.h>
 #include <stdlib.h>
 #define clrscr() printf("\033c")
