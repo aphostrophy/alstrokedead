@@ -1323,6 +1323,6 @@ int main(){
     printf("\t\t13519043\tReihan Andhika Putra\n");
     printf("\t\t13519059\tDenilsen Axel Candiasa\n");
     printf("\t\t13519079\tJesson Gosal Yo\n");
-    printf("\t\t13519131\tHera ShafiraJofiandy Leonata\n");
+    printf("\t\t13519131\tHera Shafira\n");
     printf("\t\t13519207\tRafidika Samekto\n");
 }
