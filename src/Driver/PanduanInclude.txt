@@ -1,3 +1,0 @@
-**** INI FOLDER YANG ISINYA DRIVER DARI SETIAP FUNGSI ADT ***
-Untuk include headernya bisa mengikuti format :
-#include "-I../Header/<nama_header>.h"
