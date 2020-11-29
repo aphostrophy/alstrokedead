@@ -4,6 +4,8 @@
 
 /* ----- KONSTRUKTOR ----- */
 void BacaGraph(Graph* G, char* sumber){
+    /* I.S. G sembarang
+       F.S. G terdefinisi dengan membaca file eksternal dan di asssign ke G */
     FILE *file_graph = fopen(sumber, "r");
     Graph_First(*G) = Nil;
     int tampunganPrec[3];
@@ -40,6 +42,11 @@ void BacaGraph(Graph* G, char* sumber){
 
 /* ----- MANAJEMEN MEMORI ----- */
 adrPeta AlokPetaGraph(infotypePeta X){
+    /* Mengembalikan address hasil alokasi infotypePeta X
+        Jika alokasi berhasil, maka address tidak Nil, misalnya
+        menghasilkan P, maka idPeta(P)=X, Gerbang(P)=Nil,
+        dan Graph_Next(P)=Nil. Jika alokasi gagal, mengembalikan Nil.
+    */
     adrPeta P = (adrPeta) malloc(sizeof(Peta));
     if (P != Nil) {
         idPeta(P) = X;
@@ -49,6 +56,11 @@ adrPeta AlokPetaGraph(infotypePeta X){
     return P;
 } 
 adrTerowongan AlokSuccPeta(adrPeta P){
+    /* Mengembalikan address hasil alokasi.
+    Jika alokasi berhasil, maka address tidak Nil, misalnya
+    menghasilkan Pt, maka Graph_Succ(Pt)=P dan Graph_Next(Pt)=Nil. Jika
+    alokasi gagal, mengembalikan Nil.
+    */
     adrTerowongan T = (adrTerowongan) malloc(sizeof(Terowongan));
     if (T != Nil) {
         Graph_Succ(T) = P;
@@ -59,6 +71,7 @@ adrTerowongan AlokSuccPeta(adrPeta P){
 
 /* ----- OPERASI GRAF ----- */
 boolean isPetaEqual(adrPeta P, infotypePeta X){
+    /* Mengembalikan true jika idPeta(P) = X. */
     if (idPeta(P).map == X.map && Absis(idPeta(P).p) == Absis(X.p) && Ordinat(idPeta(P).p) == Ordinat(X.p)) {
         return true;
     }
@@ -67,6 +80,8 @@ boolean isPetaEqual(adrPeta P, infotypePeta X){
     }
 } 
 adrPeta SearchPeta(Graph G, infotypePeta X){
+    /* mengembalikan address simpul dengan idPeta=X jika sudah ada pada graph G,
+    Nil jika belum */
     adrPeta P = Graph_First(G);
     boolean found = false;
     while (P != Nil && !found) {
@@ -80,6 +95,11 @@ adrPeta SearchPeta(Graph G, infotypePeta X){
     return P;
 } 
 void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn){
+    /* Menambahkan simpul X ke dalam graph, jika alokasi X berhasil.
+    I.S. G terdefinisi, X terdefinisi dan belum ada pada G.
+    F.S. Jika alokasi berhasil, X menjadi elemen terakhir G, Pn berisi address simpul X. 
+            Jika alokasi gagal, G tetap, Pn berisi Nil
+    */
     adrPeta NewPeta = AlokPetaGraph(X);
     *Pn = NewPeta;
     if (NewPeta != Nil) {
@@ -91,6 +111,11 @@ void InsertPeta(Graph* G, infotypePeta X, adrPeta* Pn){
     }
 } 
 void InsertTerowongan(Graph* G, adrPeta prec, adrPeta succ){
+    /* Menambahkan busur dari prec menuju succ ke dalam G
+    I.S. G, prec, succ terdefinisi.
+    F.S. Jika belum ada busur (prec,succ) di G, maka tambahkan busur
+            (prec,succ) ke G.
+    */
     adrTerowongan T = Gerbang(prec);
     if (T == Nil) {
         Gerbang(prec) = AlokSuccPeta(succ);
