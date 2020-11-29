@@ -269,7 +269,7 @@ void ReduceTime(Queue *Q,int Time,Wahana LW){
     }  
 }
 
-void LeaveQueueT(Queue *M, Queue *Q, Wahana W){
+void LeaveQueueT(Queue *M, Queue *Q, Wahana *LW){
     int idx[5];
     int lastidx=0;
     for (int i=0;i<=(*M).TAIL;i++){
@@ -282,6 +282,8 @@ void LeaveQueueT(Queue *M, Queue *Q, Wahana W){
     for(int i=0;i<=lastidx;i++){
         pengunjung X;
         X = (*M).P[idx[i]];
+        int idxW = GetIndex(LW,X.W);
+        (*LW).TI[idxW].inside--;
         if(isListWahanaEmpty(X.L)==false){
             X.X=X.X-1; //masukin ke queue main
             Enqueue(Q,X);
@@ -425,7 +427,7 @@ void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
 void ManageTime(int time, Queue *Q, Queue *M,Wahana LW){
     ReduceTime(M,time,LW);
     LeaveQueueS(Q);
-    LeaveQueueT(M,Q,LW);
+    LeaveQueueT(M,Q,&LW);
 }
 
 
