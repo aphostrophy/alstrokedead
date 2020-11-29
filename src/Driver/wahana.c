@@ -249,6 +249,13 @@ int countWahanaGood(Wahana *W) {
     return count;
 }
 
+void SetZero(Wahana *W){
+    for(int i=0;i<8;i++){
+        (*W).TI[i].pengunjung=0;
+        (*W).TI[i].penghasilan=0;
+    }
+}
+
 void makeListWahanaGood(Wahana *W) {
     int idx = 0;
     int i;
@@ -275,6 +282,15 @@ void printBrokenWahana(Wahana *W) {
     }
 }
 
+boolean IsAdaWahanaGood(Wahana W){
+    for(int i=0;i<8;i++){
+       if (W.TI[i].status=='G'){
+           return true;
+       }
+    }
+    return false;
+}
+
 void printNotBuilded(Wahana *W){
     for(int i = 0; i < 8; i++) {
         if((*W).TI[i].status == 'N'){
@@ -289,4 +305,18 @@ int GetIndex(Wahana *W, char id ){
             return i;
         }
     }
+}
+
+boolean IsWahanaBenar(Kata W, Wahana LW){
+    boolean benar = false;
+    int i=0;
+    while (benar==false && i<8){
+        if (IsKataSama(W,LW.TI[i].nama)){
+            benar = true;
+        }
+        else{
+            i=i+1;
+        }
+    }
+    return benar;
 }
