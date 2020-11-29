@@ -40,6 +40,8 @@
 #define INPUT_J 74
 #define INPUT_K 75
 #define INPUT_L 76
+#define INPUT_e 101
+#define INPUT_E 69
 #define INPUT_1 49
 #define INPUT_2 50
 #define INPUT_3 51

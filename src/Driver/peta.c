@@ -29,28 +29,24 @@
 #define OFFICE_REPORT 7
 #define DETAIL_WAHANA 8
 #define INVENTORY 9
+#define EXIT_GAME 10
 // =======================================================================================================
 
 // =========================Pendefinisian global variabel yang akan dipakai===============================
-Kata namaPlayer;
-int cmap;
-int state;
+Kata namaPlayer; Kata CKata; Kata NamaSaveFile, NamaLoadFile;
+int cmap; int state; int pmoney; int count_aksi, need_money, need_time;
 MATRIKS map[5], mapRoom;
 POINT playerpos ;
-int pmoney;
 Stack aksi;
-int count_aksi, need_money, need_time;
 TabInt Materials, Inventory, need_material, HargaBuild, MaterialBuild, ActionTime;
 Triplet_TabInt UpgradeCosts, UpgradeEffect;
 JAM time ;
 Wahana wahana;
-Kata CKata,EXIT;
 boolean EndKata;
 ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk load game bisa dilakukan add upgrade manual
 char ChoosenWahana;
-Kata NamaSaveFile; Kata NamaLoadFile;
-Queue MGLOBAL;
-Queue QGLOBAL; 
+Queue MGLOBAL, QGLOBAL; 
+Graph denah;
 struct SaveDat {
     int cmap;
 	int state;
@@ -62,19 +58,16 @@ struct SaveDat {
 	TabInt Inventory, need_material;
 	Stack aksi;
 	Kata link[20]; 
-	Queue MGLOBAL;
-	Queue QGLOBAL;
 	MATRIKS map[5];
-	// Dan Masih banyak lagi menunggu yang belum
 };
-Graph denah;
-
-// Dan masih banyak variabel lain , sambil menunggu adt jadi
 // =======================================================================================================
 
 
-// ==================================== Fungsi Main Menu  ================================================
+// ==================================== Fungsi Save dan Load  =============================================
 void SetupSaveGame (FILE *savefile){
+	// Data - Data dinamis yang akan di save dan dimasukkan kedalam file akan di handle melalui fungsi ini
+	
+	// Pengisian Struct 
 	struct SaveDat TempSave;
 	TempSave.cmap = cmap;
 	TempSave.state = state;
@@ -90,11 +83,10 @@ void SetupSaveGame (FILE *savefile){
 		printKata(saveUpgrade(&link[i]));printf("\n");
 		TempSave.link[i] = saveUpgrade(&link[i]);
 	}
-	TempSave.QGLOBAL = QGLOBAL;
-	TempSave.MGLOBAL = MGLOBAL;
 	TempSave.need_material = need_material;
 	for (int i = 0; i < 5; i++) TempSave.map[i] = map[i];
 	
+	// Penulisan struct kedalam file
 	fwrite(&TempSave, sizeof(struct SaveDat), 1, savefile);
 	if(fwrite != 0){
 		printf("Contents to file written successfully!"); getchar();
@@ -105,12 +97,15 @@ void SetupSaveGame (FILE *savefile){
 }
 
 void HandleSaveGame (){
-	Kata FILEPATH;
-	FILEPATH.Length = 9;
-	FILEPATH.TabKata[0] = '.'; FILEPATH.TabKata[1] = '.'; FILEPATH.TabKata[2] ='/';  FILEPATH.TabKata[3] ='S';  FILEPATH.TabKata[4] ='a';  FILEPATH.TabKata[5] = 'v'; FILEPATH.TabKata[6] ='e';  FILEPATH.TabKata[7] ='s';  FILEPATH.TabKata[8] ='/'; 
+	// Saat player akan mengesave-file maka fungsi ini akan melakukan prepare yang dibutuhkan seperti 
+	// memasukkan nama file dll dan dilanjutkan dengan setupSaveGame
 
+	// Deklarasi Kata
+	Kata FILEPATH; FILEPATH.Length = 9; FILEPATH.TabKata[0] = '.'; FILEPATH.TabKata[1] = '.'; FILEPATH.TabKata[2] ='/';  FILEPATH.TabKata[3] ='S';  FILEPATH.TabKata[4] ='a';  FILEPATH.TabKata[5] = 'v'; FILEPATH.TabKata[6] ='e';  FILEPATH.TabKata[7] ='s';  FILEPATH.TabKata[8] ='/'; 
 	NamaSaveFile.Length = 0;NamaSaveFile.TabKata[0]='X'; //Pengganti strcpy;
 	NamaSaveFile = KataConcat(NamaSaveFile,FILEPATH); NamaSaveFile = KataConcat(NamaSaveFile,namaPlayer);
+	
+	// Membuka file dan memvalidasi apakah filenya tidak error
 	FILE *savefile;
 	savefile = fopen(NamaSaveFile.TabKata, "w");
 	if (savefile){
@@ -129,6 +124,9 @@ void HandleSaveGame (){
 
 
 void SetupLoadGame (FILE *loadfile){
+	// Data - Data dinamis yang akan di load dan dimasukkan kedalam game akan di handle melalui fungsi ini
+
+	// Pengisian Global Variable dengan Struct
 	struct SaveDat TempSave;
 	fread(&TempSave, sizeof(struct SaveDat), 1, loadfile);
 	cmap = TempSave.cmap; 	
@@ -140,7 +138,7 @@ void SetupLoadGame (FILE *loadfile){
 	Inventory = TempSave.Inventory;
 	aksi = TempSave.aksi;
 	time = TempSave.time;
-	
+	// Akuisisi Upgrade dari struct
 	for(int i=0;i<20;i++){
 		Kata SENTINEL; SENTINEL.TabKata[0]='X';SENTINEL.Length=1;
 		int y=10;
@@ -161,16 +159,16 @@ void SetupLoadGame (FILE *loadfile){
 			}
 		}
 	}
-
 	need_material = TempSave.need_material;
 	for (int i = 0; i < 5; i++) map[i] = TempSave.map[i];
-	QGLOBAL = TempSave.QGLOBAL;
-	MGLOBAL = TempSave.MGLOBAL;
 	fclose(loadfile);
 	CopyMATRIKS(map[cmap], &mapRoom);
 }
 
 void SetupNewGame (){
+	// Data - Data dinamis sebagai data starter saat player melakukan new game akan di inisialisasi di sini
+
+	// Pembacaan data-data newgame
 	ArrayPair_MakeEmpty(&need_material);
 	ArrayPair_BacaIsi(&need_material, "../Saves/Inventory.txt");
 	cmap = 0;
@@ -190,7 +188,9 @@ void SetupNewGame (){
 
 // =================================Fungsi Transisi Day ==================================================
 void PrepToMainDay(){
-	
+	// Fungsi ini akan melakukan perubahan variabel global dari preparation day ke main day
+
+	// Uang ,Waktu, Aksi, dan material dibutuhkan jadi 0. Queue pengunjung mulai di generate
 	need_money = 0;
 	need_time = 0;
 	for (int i = ArrayPair_GetFirstIdx(Inventory) ; i <= ArrayPair_GetLastIdx(Inventory) ; i ++){ 
@@ -201,15 +201,16 @@ void PrepToMainDay(){
 	MakeEmpty_Queue(&MGLOBAL,10);
 }
 void MaintoPrepDay(){
-	// Prepare Everything
+	// Fungsi ini akan melakukan perubahan variabel global dari main day ke preparation day
+
+	// Rubah semua wahana yang rusak menjadi bagus
 	for (int i = 0 ; i < 8 ; i++){
 		if(wahana.TI[i].status == 'B') {
 			wahana.TI[i].status = 'G';
 		}
 	}
-	// Kosongkan Antrian , nunggu Hera
+	// Kosongkan Antrian dan Kosongkan Array orang sedang naik Wahana
 	EmptyQueue(&QGLOBAL);
-	// // Kosongkan Array orang sedang naik Wahana
 	EmptyQueue(&MGLOBAL);
 }
 // =======================================================================================================
@@ -217,7 +218,10 @@ void MaintoPrepDay(){
 // =========================================Fungsi MainDay================================================
 
 void UpdateWaktu(int n){
+	// Fungsi ini akan melakukan perubahan waktu akibat suatu aksi dan melakukan standar pengecekan saat waktu berubah
+
 	time = NextNMenit(time,n);
+	// Standar pengecekan main-day : validasi waktu tutup, generate broken wahana, validasi dan kurangi waktu pengunjung
 	if (state == MAIN_DAY) {
 		if (JAMToMenit(time) >= 1260){
 			state = PREPARATION_DAY;
@@ -238,7 +242,7 @@ void UpdateWaktu(int n){
 			LeaveQueueT(&MGLOBAL,&QGLOBAL,wahana);
 		}
 	}
-	
+	// Standar pengecekan preparation-day : validasi waktu buka
 	if (state == PREPARATION_DAY && JAMToMenit(time) >= 540 && JAMToMenit(time) <= 580){
 		PrepToMainDay();
 		state = MAIN_DAY;
@@ -251,6 +255,9 @@ boolean IsBisaDilewati(char c){
 }
 
 boolean IsBisaDibangun (int PbuildX, int PbuildY, int sizeX, int sizeY ){
+	// Return true apabila player bisa membangun bangunan seukuran sizeX baris dan sizeY kolom  dengan titik (Pbuildx,PbuildY) sebagai titik(0,0)
+	
+	// Algoritma pengecekan
 	if (PbuildX + sizeX > GetLastIdxBrs(mapRoom) || (PbuildY + sizeY > GetLastIdxKol(mapRoom))){
 		return false;
 	} else {
@@ -269,6 +276,7 @@ boolean IsBisaDibangun (int PbuildX, int PbuildY, int sizeX, int sizeY ){
 }
 
 char getBangunanSekitar(){
+	// Mereturn char dari bangunan yang ada di atas atau kanan atau kiri atau bawah player (hanya return salah satu). Jika tidak ada bangunan maka return *
 	if (Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='*' && Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='O' &&Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos))!='-'){
 		return Elmt(mapRoom, Absis(playerpos)+1, Ordinat(playerpos));
 	} else if (Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='*' && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='O' &&Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)+1)!='-'){
@@ -283,6 +291,7 @@ char getBangunanSekitar(){
 }
 
 void RepairWahana(Wahana *W, char id) {
+	// Membetulkan wahana di sekitar yang statusnya 'b' yaitu broke jika tidak ada wahana yang rusak atau tidak ada wahana maka tidak terjadi apa apa namun waktu akan tetap berjalan
     char status = getStatus(W,id);
     if (status == 'B') {
         (*W).TI[GetIndex(W,id)].status = 'G';
@@ -291,12 +300,15 @@ void RepairWahana(Wahana *W, char id) {
 
 void InputMainDay (int inpt) {
 	// Mengelola input yang diterima konsol saat main day dan tindakan yang dilakukan setelah input itu
+
+	// Algortima menerima input
 	Kata W; W.TabKata[0] = 'w'; W.Length = 1;
 	Kata A; A.TabKata[0] = 'a'; A.Length = 1;
 	Kata S; S.TabKata[0] = 's'; S.Length = 1;
 	Kata D; D.TabKata[0] = 'd'; D.Length = 1;
 	Kata Detail; Detail.TabKata[0] = 'd'; Detail.TabKata[1] = 'e'; Detail.TabKata[2] = 't'; Detail.TabKata[3] = 'a'; Detail.TabKata[4] = 'i'; Detail.TabKata[5] = 'l'; Detail.Length = 6;
 	Kata Repair; Repair.TabKata[0] = 'r'; Repair.TabKata[1] = 'e'; Repair.TabKata[2] = 'p'; Repair.TabKata[3] = 'a'; Repair.TabKata[4] = 'i'; Repair.TabKata[5] = 'r'; Repair.Length = 6;
+	// Jika input command bergerak maka validasi dan ubah posisi player jika validasi sukses
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
 		Absis(playerpos) = Absis(playerpos) -1 ;
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,W)));
@@ -309,6 +321,8 @@ void InputMainDay (int inpt) {
 	} else if (inpt == INPUT_d && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)+1))) {
 		Ordinat(playerpos) = Ordinat(playerpos) +1 ;
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,D)));
+	// Jika input pindah phase maka lakukan prosedur pindah phase
+	// Jika input adalah tindakan untuk aksi lain maka lakukan tindakan itu
 	} else if (inpt == INPUT_i){
 		state = PREPARATION_DAY;
 		Hour(time) = 21 ;
@@ -316,6 +330,8 @@ void InputMainDay (int inpt) {
 		MaintoPrepDay();
 	} else if (inpt == INPUT_1 && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)) == 'O') {
 		state = OFFICE;
+	} else if (inpt == INPUT_e) {
+		state = EXIT_GAME;
 	} else if (inpt == INPUT_2 && getBangunanSekitar() != 'A' && getBangunanSekitar() != '*') {
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,Detail)));
 		ChoosenWahana = getBangunanSekitar();
@@ -358,6 +374,7 @@ void InputMainDay (int inpt) {
 }
 
 void PrintMainDay() {
+	// Ini adalah fungsi untuk menampilkan user interface sisi tengah saat state adalah MAIN_DAY
 	JAM tutup;
 	Hour(tutup) = 21;
 	Minute(tutup) = 0;
@@ -383,11 +400,10 @@ void PrintMainDay() {
 	printf("\n");
 	printBrokenWahana(&wahana);
 	printf("\n");
-	printf("=======================Queue antrian pengunjung===================================\n\n");
+	printf("=================================Queue antrian pengunjung===========================");printf("\n");
 	PrintQueue(QGLOBAL);
-	printf("=====================Queue pengunjung yang sedang naik wahana=====================\n\n");
+	printf("==========================Pengunjung yang sedang menaiki wahana=====================");printf("\n");
 	PrintQueue(MGLOBAL);
-	// Masih harus ngeprint data data seperti queue , broken wahana dll
 }
 
 // =======================================================================================================
@@ -398,6 +414,9 @@ void PrintMainDay() {
 
 
 void HandleBuy() {
+	// Ini adalah fungsi untuk melakukan prosedur buy dan validasi di dalamnya, prosedur ini dilakukan jika waktunya cukup
+
+	// Deklarasi variabel lokal
 	Kata Action, StackEl, Barang, Jumlah;
 	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
 	int jumlah_int;
@@ -406,7 +425,7 @@ void HandleBuy() {
 	printf("Daftar Barang yang dapat dibeli: \n");
     ArrayPair_TulisIsiTabNumbering(Materials);printf("\n");
 	printf("Masukkan Barang yang ingin dibeli: ");
-
+	// Akuisisi dengan mesinkata, algoritma membosankan
    	int kata_ke = 1;
 	Kata BUY; BUY.TabKata[0] = 'b'; BUY.TabKata[1] = 'u'; BUY.TabKata[2] = 'y'; BUY.Length = 3;
     STARTBUY();
@@ -439,6 +458,10 @@ void HandleBuy() {
 		kata_ke++;
 		IgnoreBlank();
     }
+	// End of algortima membosankan
+
+	// Validasi apakah yang diketik benar benar "buy", apakah uang masih cukup dan validasi apakah waktu cukup.
+	// Kalau memang valid maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, kalo tidak keluarkan pesan error
 	jumlah_int = KataToInt(Jumlah);
 	int materialIndex = ArrayPair_SearchByItem(Materials,Barang);
 	if(IsKataSama(Action,BUY) && materialIndex != IdxUndef){
@@ -446,7 +469,6 @@ void HandleBuy() {
 			need_money = need_money + jumlah_int*Pair_Cost(Materials,materialIndex);
 			StackEl.Length=0; StackEl.TabKata[0] ='X';
 			StackEl = KataConcat(StackEl,Action);StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Jumlah);StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Barang);
-			// printf("%d",Jumlah.Length); printf("%s",Action.TabKata); printf("%s",Barang.TabKata); 
 			Push(&aksi,StackEl);
 			count_aksi = count_aksi + 1;
 			need_time = need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
@@ -460,14 +482,13 @@ void HandleBuy() {
 		printf("Command salah! Tekan apapun untuk melanjutkan\n");
 		getchar();
 	}
-	// End of Parser
 
-	// Validasi apakah yang diketik benar benar "buy"
-	// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , kalau ada validasi lain jg sabi
-	// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, kalo tidak keluarkan pesan error
 }
 
 void HandleBuild(){
+	// Ini adalah fungsi untuk melakukan prosedur build dan validasi di dalamnya, prosedur ini dilakukan jika waktunya cukup
+
+	// Deklarasi variabel lokal
 	Kata SbuildX; Kata SbuildY; Kata SbuildMap; Kata SsizeBaris; Kata SsizeKolom;
 	int PbuildX = 0; int PbuildY = 0; int PbuildMap = cmap; int sizeBaris; int sizeKolom;  //Membangun di koordinat (PbuildX,Pbuildy) di peta PbuildMap
 	printf("Selamat Datang ke Menu Pembangunan\n");
@@ -476,6 +497,8 @@ void HandleBuild(){
    	int kata_ke = 1;
     BUILD.TabKata[0] = 'b'; BUILD.TabKata[1] = 'u'; BUILD.TabKata[2] = 'i';BUILD.TabKata[3] = 'l'; BUILD.TabKata[4] ='d';
     BUILD.Length = 5;
+	
+	// Algoritma akuisisi dengan mesinkata, algoritma membosankan
 	STARTBUY();
 	while(!EOP && !EOL){
 		int i = 0;
@@ -501,7 +524,8 @@ void HandleBuild(){
 		kata_ke++;
 		IgnoreBlank();
 	}
-	// Mendapatkan lokasi mau dibangun dimana
+	// End of algoritma membosankan
+	// Mendapatkan lokasi mau dibangun dimana beserta ukurannnya lalu divalidasi
 	if(Choice.TabKata[0]=='w' || Choice.TabKata[0]=='a' || Choice.TabKata[0]=='s' || Choice.TabKata[0]=='d'){
 		if (Choice.TabKata[0] == 'w') { PbuildX = Absis(playerpos) -1 ; PbuildY = Ordinat(playerpos) ;} 
 		else if (Choice.TabKata[0] == 'a' ){ PbuildX = Absis(playerpos) ; PbuildY = Ordinat(playerpos)-1 ;} 
@@ -515,6 +539,7 @@ void HandleBuild(){
 			printNotBuilded(&wahana);
 			printf("Masukkan Bangunan yang ingin dibangun: ");
 			Kata Method, Bangunan;
+			// Algoritma akuisisi dengan mesinkata, algoritma membosankan
 			STARTBUY();
 			while(!EOP && !EOL){
 				int i = 0;
@@ -554,6 +579,10 @@ void HandleBuild(){
 				kata_ke++;
 				IgnoreBlank();
 			}
+			// End of algoritma membosankan
+
+			// Validasi apakah yang diketik benar benar "build", apakah uang masih cukup, waktu cukup, dan bahan bangunan cukup.
+			// Kalau memang valid maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, dan tambah bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
 			if(IsKataSama(Method,BUILD)){
 				int bangunanIndex = ArrayPair_SearchByItem(HargaBuild,Bangunan);
 				Kata AMBER;
@@ -578,13 +607,10 @@ void HandleBuild(){
 					StackEl.Length=0; StackEl.TabKata[0]='X';
 					StackEl = KataConcat(StackEl,Method); StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,Bangunan); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildX); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildY); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,SbuildMap); StackEl = KataConcat(StackEl,SPASI);
 					StackEl = KataConcat(StackEl,SsizeBaris); StackEl = KataConcat(StackEl,SPASI);StackEl = KataConcat(StackEl,SsizeKolom);
-					// printf("%s",StackEl.TabKata); getchar();
 					Push(&aksi,StackEl);
 					count_aksi = count_aksi + 1;
 					(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].status ='O';
 					need_time = need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUILD));
-					// Validasi apakah waktu cukup 
-					// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
 				}
 			} else{
 				printf("Invalid Command!");getchar();
@@ -593,16 +619,23 @@ void HandleBuild(){
 			printf("Tidak Bisa Membangun disitu");getchar();
 		}
 	} else{
-		printf("Invalid location!");getchar();
+		printf("Masukan yang diterima hanya w/a/s/d!");getchar();
 		
 	}
 
 }
 
 void HandleUpgrade(){
-	// char action[100] ; char method[100] ; char upgrade[100]; 
+	// Ini adalah fungsi untuk melakukan prosedur upgrade dan validasi di dalamnya, prosedur ini dilakukan jika waktunya cukup
+
+	// Deklarasi variabel lokal
 	Kata Action, Nama_Upgrade, StackEl;
 	Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
+	// Dapatkan bangunan di sekitar, jika tidak ada beri pesan kesalahan, jika ada lanjukan prosedur
+	// Validasi apakah yang diketik benar benar "upgrade"
+	// Validasi apakah uang validasi apakah waktu cukup, validasi apakah bahan bangunan cukup untuk upgrade
+	// Validasi juga apakah masih punya upgrade dan jika punya validasi upgrade yang diketik adalah hal yang benar
+	// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
 	char bangunan = getBangunanSekitar();
 	if (bangunan != '*'){
 		int indexWahana = bintree_findIndex(bangunan);
@@ -615,6 +648,7 @@ void HandleUpgrade(){
 		int kata_ke = 1;
 		UPGRADE.TabKata[0] = 'u';UPGRADE.TabKata[1] = 'p';UPGRADE.TabKata[2] = 'g';UPGRADE.TabKata[3] = 'r';UPGRADE.TabKata[4] = 'a';UPGRADE.TabKata[5] = 'd';UPGRADE.TabKata[6]= 'e';
 		UPGRADE.Length = 7;
+		// Akuisisi dengan mesinkata , algoritma membosankan	
 		STARTBUY();
 		while(!EOP){
 			int i = 0;
@@ -639,6 +673,7 @@ void HandleUpgrade(){
 			kata_ke++;
 			IgnoreBlank();
 		}
+		// End of algoritma membosankan	
 		if(IsKataSama(Action, UPGRADE)){
 			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
 			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
@@ -660,9 +695,6 @@ void HandleUpgrade(){
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
 			getchar();
 		}
-		// Validasi apakah yang diketik benar benar "upgrade"
-		// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup untuk upgrade
-		// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
 	} else{
 		printf("Tidak ada wahana di sekitar Anda");
 		getchar();
@@ -670,13 +702,19 @@ void HandleUpgrade(){
 }
 
 void HandleUndo(){
+	// Ini adalah fungsi untuk melakukan prosedur undo dan validasi di dalamnya, prosedur ini dilakukan jika waktunya cukup
+
+	// Deklarasi variabel lokal
 	Kata BUY; BUY.TabKata[0] = 'b'; BUY.TabKata[1] = 'u'; BUY.TabKata[2] = 'y'; BUY.Length = 3;
 	Kata BUILD; BUILD.TabKata[0] = 'b'; BUILD.TabKata[1] = 'u'; BUILD.TabKata[2] = 'i';BUILD.TabKata[3] = 'l'; BUILD.TabKata[4] ='d'; BUILD.Length = 5;
 	Kata UPGRADE; UPGRADE.TabKata[0] = 'u';UPGRADE.TabKata[1] = 'p';UPGRADE.TabKata[2] = 'g';UPGRADE.TabKata[3] = 'r';UPGRADE.TabKata[4] = 'a';UPGRADE.TabKata[5] = 'd';UPGRADE.TabKata[6]= 'e'; UPGRADE.Length = 7;
+	
+	// Jika stack tidak kosong maka undo elemen top, jika stack kosong maka tidak melakukan apa apa
 	if(!IsEmptyStack(aksi)){
 		infotype x ;
 		Pop(&aksi,&x);
 		if (x.TabKata[0] == 'b' && x.TabKata[2] == 'y'){
+			// Jika yang di undo adalah buy maka kuraNGI item di inventory kurangi uang dan waktu yang dibutuhkan yang bersesuaian
 			int n; Kata Benda;
 			AkuisisiBuyV2(x,&n,&Benda);
 			int materialIndex = ArrayPair_SearchByItem(Materials,Benda);
@@ -684,11 +722,10 @@ void HandleUndo(){
 			count_aksi = count_aksi - 1;
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY));
 			Pair_Cost(Inventory,materialIndex) -= n;
-			// printf("%c %d", benda[0] , n); getchar(); // Ini gw tes dengan ngeprint wkwk
 		} else if (x.TabKata[0] == 'b' && x.TabKata[2] == 'i') {
+			// Jika yang di undo adalah build maka kurangi uang, waktu, dan material yang dibutuhkan yang bersesuaian, ubah kembali petak wahana menjadi '-' dan ubah status ke n
 			int PbuildX; int PbuildY; int PbuildMap; Kata Bangunan; int sizeBaris; int sizeKolom;
 			AkuisisiBuildV2(x,&PbuildX,&PbuildY,&PbuildMap,&Bangunan,&sizeBaris,&sizeKolom);
-			// printf("%d %d %d %c", PbuildX,PbuildY,PbuildMap,bangunan[0]); getchar(); // Ini gw tes dengan ngeprint wkwk
 			// Kurangi waktu yang dibutuhkan dari buy
 			Kata AMBER;
 			AMBER.TabKata[0] = 'A'; AMBER.TabKata[1] = 'm'; AMBER.TabKata[2] = 'b'; AMBER.TabKata[3] = 'e'; AMBER.TabKata[4] = 'r';
@@ -700,7 +737,7 @@ void HandleUndo(){
 			Pair_Cost(need_material,materialIndex)= Pair_Cost(need_material,materialIndex) - n;
 			count_aksi = count_aksi - 1;
 			(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].status ='N';
-			printf("%d %d %d %d %d",PbuildX, PbuildY, PbuildMap, sizeBaris, sizeKolom); getchar();
+			printf("Bangunan di (%d,%d) pada peta-%d dengan ukuran(%dx%d) akan di undo",PbuildX, PbuildY, PbuildMap, sizeBaris, sizeKolom); getchar();
 			for (int i = PbuildX; i < PbuildX + sizeBaris; i++) {
 				for (int j = PbuildY; j < PbuildY + sizeKolom; j++){
 					Elmt(map[PbuildMap],i,j) = '-'; 
@@ -709,6 +746,7 @@ void HandleUndo(){
 			need_time = need_time - Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUILD));
 			
 		} else if (x.TabKata[0] == 'u'){
+			// Jika yang di undo adalah upgrade maka kurangi uang, waktu, dan material yang dibutuhkan yang bersesuaian, ubah kembali isi upgradenya
 			char idWahana;Kata Nama_Upgrade;
 			AkuisisiUpgrade(x, &idWahana, &Nama_Upgrade);
 			int idxNode = bintree_findIndex(idWahana);
@@ -836,6 +874,8 @@ void InputPreparationDay (int inpt) {
 		}
 	} else if (inpt == INPUT_1){
 		state = INVENTORY;
+	} else if (inpt == INPUT_e) {
+		state = EXIT_GAME;
 	} else if (inpt == INPUT_l) {
 		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUILD))){
 			HandleBuild();
@@ -884,10 +924,11 @@ void PrintPreparationDay() {
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, need_time);
 	printf("Jam : ");
 	TulisJAM(time);
-	printf("\n");printf("==================================================================");
+	printf("\n");printf("====================================================================================");
 	printf("\n");printf("Stack of Your Action");
 	printf("\n");PrintStack(aksi);
-	printf("==================================================================");printf("\n");
+	printf("====================================================================================");printf("\n");
+	
 }
 
 void InputOffice() {
@@ -897,6 +938,7 @@ void InputOffice() {
 	Kata REPORT; REPORT.TabKata[0] = 'R'; REPORT.TabKata[1] = 'E'; REPORT.TabKata[2] = 'P'; REPORT.TabKata[3] = 'O'; REPORT.TabKata[4] = 'R'; REPORT.TabKata[5] = 'T'; REPORT.Length = 6;
 	Kata DETAILS; DETAILS.TabKata[0] = 'D'; DETAILS.TabKata[1] = 'E'; DETAILS.TabKata[2] = 'T'; DETAILS.TabKata[3] = 'A'; DETAILS.TabKata[4] = 'I'; DETAILS.TabKata[5] = 'L'; DETAILS.TabKata[6] = 'S'; DETAILS.Length=7;
 	Kata Office; Office.TabKata[0] = 'o'; Office.TabKata[1] = 'f'; Office.TabKata[2] = 'f'; Office.TabKata[3] = 'i'; Office.TabKata[4] = 'c'; Office.TabKata[5] = 'e'; Office.Length = 6;
+	// Akuisisi dengan mesinkata , algoritma membosankan
 	STARTBUY();
 	while(!EOL){
 		IgnoreBlank();
@@ -933,6 +975,7 @@ void InputOffice() {
 	} else if (IsKataSama(EXIT,INPUT)) {
 		state = MAIN_DAY;
 	}
+	// End of algoritma membosankan
 }
 
 // =======================================================================================================
@@ -978,9 +1021,9 @@ void PrintJudul (){
 	// printf("%s\n","*               \\  /\\  | (_) | |  | | (_| |                       ");   
 	// printf("%s\n","*                \\/  \\/ \\___/|_|  |_|\\__,_|                       ");   
 	// printf("%s\n","*                                                                 ");
-	printf("%s\n","==================================================================");
-	printf("%s\n","			Willy Wangky World						 ");
-	printf("%s\n","==================================================================");                                 
+	printf("%s\n","====================================================================================");
+	printf("\t\t\t\t%s\n","Willy Wangky World");
+	printf("%s\n","====================================================================================");                                 
 }
 
 void PrintMain(){
@@ -1041,6 +1084,7 @@ void BacaInput(){
 		Kata NEWGAME; Kata LOADGAME; Kata INPUT;
 		NEWGAME.TabKata[0]='N';	NEWGAME.TabKata[1]='E';	NEWGAME.TabKata[2]='W';	NEWGAME.TabKata[3]=' ';	NEWGAME.TabKata[4]='G';	NEWGAME.TabKata[5]='A';	NEWGAME.TabKata[6]='M';	NEWGAME.TabKata[7]='E'; NEWGAME.Length=8;
 		LOADGAME.TabKata[0]='L'; LOADGAME.TabKata[1]='O'; LOADGAME.TabKata[2]='A'; LOADGAME.TabKata[3]='D'; LOADGAME.TabKata[4]=' '; LOADGAME.TabKata[5]='G'; LOADGAME.TabKata[6]='A'; LOADGAME.TabKata[7]='M'; LOADGAME.TabKata[8]='E'; LOADGAME.Length=9;
+		// Akuisisi dengan mesinkata , algoritma membosankan
 		STARTBUY();
 		while(!EOL){
 			IgnoreBlank();
@@ -1056,8 +1100,7 @@ void BacaInput(){
 			INPUT.Length = i;
 			break;
 		}
-		// scanf("%s", &input);
-		// getchar();
+		// End of algoritma membosankan
 		if(IsKataSama(INPUT,NEWGAME)) {
 			state = NEW_GAME;
 		} else if (IsKataSama(INPUT,LOADGAME)) {
@@ -1069,6 +1112,7 @@ void BacaInput(){
 		break;
 	case NEW_GAME: ; //Semicolon for Label Handling
 		Kata NAMA;
+		// Akuisisi dengan mesinkata , algoritma membosankan
 		STARTBUY();
 		while(!EOL){
 			IgnoreBlank();
@@ -1084,8 +1128,7 @@ void BacaInput(){
 			NAMA.Length = i;
 			break;
 		}
-		// scanf("%s", &name);
-		// getchar();
+		// End of algoritma membosankan
 		if(IsKataSama(EXIT,NAMA)) {
 			state = MAIN_MENU;
 		} else {
@@ -1181,51 +1224,46 @@ void BacaInput(){
 void PrintFooter(){
 	switch (state) {
 	case MAIN_MENU:
-		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","		Ketik menu yang ingin dipilih");
+		printf("\t\t\t\t%s\n","Command Main Menu");
+		printf("\t%s\n","Ketik menu yang ingin dipilih");
 		break;
 	case MAIN_DAY:
-		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","	Main Day");
-		printf("%s\n","	w : Atas   a : kiri   s : bawah   d: kanan   i: masuk ke preparation day");
-		printf("%s\n","	1 : Enter Office  2: Lihat Detail Wahana  3: Repair Wahana");
+		printf("\t\t\t\t%s\n","Command Main Day");
+		printf("%s\n","w : Atas\ta : Kiri\ts : Bawah\td : Kanan\ti : Preparation Day");
+		printf("%s\n","1 : Enter Office\t2 : Lihat Detail Wahana\t\t3 : Repair Wahana");
+		printf("%s\n","e : Exit");
 		break;
 	case PREPARATION_DAY:
-		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","Preparation Day");
-		printf("%s\n","w : atas a : kiri  s : bawah  d: kanan i: masuk ke main day");
-		printf("%s\n","b: buy l : build k : upgrade j : undo 2 : execute 1 : inventory" ); 
+		printf("\t\t\t\t%s\n","Command Preparation Day");
+		printf("%s\n","w : Atas\ta : Kiri\ts : Bawah\td: Kanan\ti: Main Day");
+		printf("%s\n","b : Buy\t\tl : Build\tk : Upgrade\tj : Undo\te : Exit");
+		printf("%s\n","1 : Inventory\t2 : Execute\t7 : Save");   
 		break;
 	case INVENTORY:
-		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","	Inventory ");
-		printf("%s\n","	Tekan apapun untuk kembali ke Preparation Phase");
+		printf("\t\t\t\t%s\n","Command Inventory");
+		printf("\t%s\n","Tekan apapun untuk kembali ke Preparation Phase");
 		break;
 	case DETAIL_WAHANA:
-		printf("%s\n","				Tombol aksi						 	 ");
-		printf("%s\n","	Detail Wahana");
-		printf("%s\n","	Tekan apapun untuk kembali ke Main Phase");
+		printf("\t\t\t\t%s\n","Command Detail Wahana");
+		printf("\t%s\n","Tekan apapun untuk kembali ke main day");
 		break;
 	case NEW_GAME:
-		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");
+		printf("\t%s\n","Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar");
 		break;
 	case LOAD_GAME:
-		printf("%s\n","			Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar	");
+		printf("\t%s\n","Masukkan Nama Tanpa Spasi, Ketikkan 'Exit' untuk keluar");
 		break;
 	case OFFICE:
-		printf("%s\n","		           Tombol aksi				 ");
-		printf("%s\n","	Menu Office");
-		printf("\n%s\n","Details : Lihat Detail Wahana, Report : Melihat Report Wahana, \nExit : Keluar dari Office");
+		printf("\t\t\t\t%s","Command Office");
+		printf("\n%s\n","\tDetails : Lihat Detail Wahana\tReport : Melihat Report Wahana, \n\tExit : Keluar dari Office");
 		break;
 	case OFFICE_REPORT:
-		printf("%s\n","		           Tombol aksi				 ");
-		printf("%s\n","	Report Office");
-		printf("%s\n","	Tekan apapun untuk kembali ke Menu Office");
+		printf("\t\t\t\t%s","Command Office Report");
+		printf("\t%s\n","	Tekan apapun untuk kembali ke Menu Office");
 		break;
 	case OFFICE_DETAIL:
-		printf("%s\n","		           Tombol aksi				 ");
-		printf("%s\n","	Detail Office");
-		printf("%s\n","	Tekan apapun untuk kembali ke Menu Office");
+		printf("\t\t\t\t%s","Command Office Detail");
+		printf("\t%s\n","Tekan apapun untuk kembali ke Menu Office");
 		break;
 	default:
 		printf("\n");
@@ -1235,17 +1273,25 @@ void PrintFooter(){
 void UserInterface(){
 	clrscr();
 	PrintJudul();
-	printf("%s\n","		Have fun working with this!!				");
+	printf("\t\t\t\t%s\n","Selamat bermain!!");
 	PrintMain();
-	printf("%s\n","==================================================================");
+	printf("%s\n","===================================================================================="); 
 	PrintFooter();
-	printf("%s\n","=================================================================="); 
-	BacaInput();
-	UserInterface();
+	printf("%s\n","===================================================================================="); 
 }
 // =======================================================================================================
 
 int main(){
 	SetupMainMenu();
-	UserInterface();
+	while (state != EXIT_GAME){
+		UserInterface();
+		BacaInput();
+	}
+	printf("\t\t\t\tTerimakasih telah bermain\n\n");
+	printf("\t\tAuthor:\n");
+    printf("\t\t13519043\tReihan Andhika Putra\n");
+    printf("\t\t13519059\tDenilsen Axel Candiasa\n");
+    printf("\t\t13519079\tJesson Gosal Yo\n");
+    printf("\t\t13519131\tHera ShafiraJofiandy Leonata\n");
+    printf("\t\t13519207\tRafidika Samekto\n");
 }

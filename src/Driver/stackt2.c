@@ -89,7 +89,7 @@ void PrintStack(Stack S){
 			char idWahana;Kata Nama_Upgrade;
 			AkuisisiUpgrade(X, &idWahana, &Nama_Upgrade);
       printf("Mengupgrade "); printKata(Nama_Upgrade);
-      printf(" di wahana dengan id %c",Nama_Upgrade,idWahana);
+      printf(" di wahana dengan id %c",idWahana);
 	  }
     printf("\n");
   }
@@ -193,6 +193,7 @@ void AkuisisiUpgrade(Kata K, char *idWahana, Kata *Nama_Upgrade){
   }
   i++;
   *idWahana = K.TabKata[i];
+  // printf("%c",idWahana); getchar();
   i++;
   while(K.TabKata[i]==' '){ //Pengaman
     i++;
