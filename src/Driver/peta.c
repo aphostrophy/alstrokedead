@@ -640,33 +640,39 @@ void HandleUpgrade(){
 			IgnoreBlank();
 		}
 		if(IsKataSama(Action, UPGRADE)){
-			IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
-			Kata bahan = Triplet_Bahan(UpgradeCosts,id);
-			Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length=0;
-			IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
-			IdxType idNeed = ArrayPair_SearchByItem(need_material,bahan);
-			int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
-			int needMaterial = Pair_Cost(need_material,idNeed);
-			if(inventorySupply>=needMaterial){
-				addUpgrade(&link[indexWahana], Nama_Upgrade);
-				Pair_Cost(need_material,idNeed) = needMaterial + Triplet_Cost(UpgradeCosts,id);
-				StackEl.Length=0; StackEl.TabKata[0] ='X';
-				StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
-				Push(&aksi,StackEl);
+			arrKata arrChild;
+			findChild('S', &link[0], &arrChild);
+			if(IsKataSama(Nama_Upgrade,arrChild.TI[0]) || IsKataSama(Nama_Upgrade,arrChild.TI[1])){
+				IdxType id = ArrayTriplet_SearchByNama(UpgradeCosts, Nama_Upgrade);
+				Kata bahan = Triplet_Bahan(UpgradeCosts,id);
+				Kata IDBANGUNAN; IDBANGUNAN.TabKata[0] = bangunan; IDBANGUNAN.Length=0;
+				IdxType idInventory = ArrayPair_SearchByItem(Inventory,bahan);
+				IdxType idNeed = ArrayPair_SearchByItem(need_material,bahan);
+				int inventorySupply = Pair_Cost(Inventory,idInventory); //Mendapatkan jumlah di inventory
+				int needMaterial = Pair_Cost(need_material,idNeed);
+				if(inventorySupply>=needMaterial){
+					addUpgrade(&link[indexWahana], Nama_Upgrade);
+					Pair_Cost(need_material,idNeed) = needMaterial + Triplet_Cost(UpgradeCosts,id);
+					StackEl.Length=0; StackEl.TabKata[0] ='X';
+					StackEl = KataConcat(StackEl,lowerCaseKata(Action)); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl, IDBANGUNAN); StackEl = KataConcat(StackEl,SPASI); StackEl = KataConcat(StackEl,Nama_Upgrade);
+					Push(&aksi,StackEl);
+					return;
+				} else{
+					printf("Not enough materials");
+				}
 			} else{
-				printf("Not enough materials");
+				printf("Upgrade tidak ditemukan");
 			}
 		} else{
 			printf("Command salah! Tekan apapun untuk melanjutkan\n");
-			getchar();
 		}
 		// Validasi apakah yang diketik benar benar "upgrade"
 		// Validasi apakah uang masih cukup dan validasi apakah waktu cukup , validasi apakah bahan bangunan cukup untuk upgrade
 		// Kalo memang sabi maka push ke stack, tambah waktu yang dibtuhkan , tambah uang yang dibutuhkan, tambah bahan bangunan yang dibutuhkan, kalo tidak keluarkan pesan error
 	} else{
 		printf("Tidak ada wahana di sekitar Anda");
-		getchar();
 	}
+	getchar();
 }
 
 void HandleUndo(){
