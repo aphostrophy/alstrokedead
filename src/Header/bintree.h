@@ -69,4 +69,8 @@ void PrintAvailableUpgrade(char id, ListNode **head);
 
 void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head);
 
+void findChild(char id, ListNode **head, arrKata *arrChild);
+
+void findChildRecursion(BinTree P, ListNode **head, arrKata *arrChild);
+
 #endif

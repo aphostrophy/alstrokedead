@@ -16,6 +16,10 @@ typedef struct {
    int Length;
 } Kata;
 
+typedef struct {
+   Kata TI[2];
+} arrKata;
+
 /* State Mesin Kata */
 extern boolean EndKata;
 extern Kata CKata;
