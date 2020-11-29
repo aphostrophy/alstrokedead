@@ -821,7 +821,6 @@ void HandleUndo(){
 void HandleExecution(){
 	infotype x;
 	count_aksi = 0 ;
-	UpdateWaktu(need_time);
 	need_time = 0;
 	pmoney = pmoney - need_money; // Kurangi uang dengan uang yang dibutuhkan
 	need_money = 0 ;
@@ -869,11 +868,9 @@ void HandleExecution(){
 				wahana.TI[GetIndex(&wahana, idWahana)].durasi -= Triplet_Cost(UpgradeEffect,idxTripletEffect);
 				printf("%d",Triplet_Cost(UpgradeEffect,idxTripletEffect));
 			}
-
-
-			printf("upgrade"); getchar();
 		}
 	}
+	UpdateWaktu(need_time);
 }
 
 void InputPreparationDay (int inpt) {
