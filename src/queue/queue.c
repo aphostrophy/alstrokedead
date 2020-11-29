@@ -102,7 +102,7 @@ void GeneratePengunjung(pengunjung *P,int ID,int prio, Wahana LW){
     GenerateQueue(&Q,LW);
     *P = Q.P[0];
     (*P).ID=ID;
-    (*P).S=10;
+    (*P).S=5;
     (*P).X=prio;
 }
 
@@ -381,7 +381,7 @@ boolean IsWahanaInList(char W, Queue Q){
 void Serve(Queue *Q, Queue *M, char W, Wahana *LW, int *pmoney){
 
     InfoWahana Swahana=getWahanabyID(LW,W);
-    if (Swahana.status=='G' && (Swahana.inside <= Swahana.kapasitas)){
+    if (Swahana.status=='G' && (Swahana.inside < Swahana.kapasitas)){
         if (IsWahanaInList(W,*Q)){
             pengunjung X;
             

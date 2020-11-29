@@ -1,8 +1,8 @@
-S SkyCoaster 100 30 8 SkyCoaster-Asik
-P PirateShip 150 30 6 Kapal-Bajak-Laut
-T Tornado 500 20 4 Angin-Topan
-C Carousel 400 30 8 Putar-Putar-Horizontal
-H HauntedHouse 200 20 2 Rumah-Berhantu
-F FerrisWheel 100 30 6 Muter-Muter-Vertikal
-B BumperCars 300 20 4 Der-Nabrak
-G GyroDrop 500 30 8 Jatoh-lo.
+S SkyCoaster 50 30 1 SkyCoaster-Asik
+P PirateShip 75 30 2 Kapal-Bajak-Laut
+T Tornado 250 20 1 Angin-Topan
+C Carousel 200 30 3 Putar-Putar-Horizontal
+H HauntedHouse 100 20 2 Rumah-Berhantu
+F FerrisWheel 50 30 3 Muter-Muter-Vertikal
+B BumperCars 150 20 2 Der-Nabrak
+G GyroDrop 250 30 1 Jatoh-lo.

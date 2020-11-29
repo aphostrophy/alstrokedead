@@ -17,7 +17,7 @@ office
 detail
 10
 serve 
-10
+5
 repair
 20
 .

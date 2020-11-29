@@ -845,7 +845,7 @@ void HandleExecution(){
 			(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].panjang = sizeBaris;
 			(wahana).TI[GetIndex(&wahana, Bangunan.TabKata[0])].lebar =sizeKolom;
 		} else if (x.TabKata[0] == 'u'){
-			Kata KAPASITAS; KAPASITAS.TabKata[0] = 'K';KAPASITAS.TabKata[1] = 'A';KAPASITAS.TabKata[2] = 'P';KAPASITAS.TabKata[3] = 'A';KAPASITAS.TabKata[4] = 'S';KAPASITAS.TabKata[5] = 'I';KAPASITAS.TabKata[6] = 'T';KAPASITAS.TabKata[8] = 'A';KAPASITAS.TabKata[9] = 'S'; KAPASITAS.Length = 9;
+			Kata KAPASITAS; KAPASITAS.TabKata[0] = 'K';KAPASITAS.TabKata[1] = 'A';KAPASITAS.TabKata[2] = 'P';KAPASITAS.TabKata[3] = 'A';KAPASITAS.TabKata[4] = 'S';KAPASITAS.TabKata[5] = 'I';KAPASITAS.TabKata[6] = 'T';KAPASITAS.TabKata[7] = 'A';KAPASITAS.TabKata[8] = 'S'; KAPASITAS.Length = 9;
 			Kata HARGA; HARGA.TabKata[0] = 'H'; HARGA.TabKata[1] = 'A'; HARGA.TabKata[2] = 'R' ; HARGA.TabKata[3] = 'G'; HARGA.TabKata[4] = 'A'; HARGA.Length = 5;
 			Kata DURASI; DURASI.TabKata[0] = 'D'; DURASI.TabKata[1] = 'U'; DURASI.TabKata[2] = 'R' ; DURASI.TabKata[3] = 'A'; DURASI.TabKata[4] = 'S'; DURASI.TabKata[5] = 'I'; DURASI.Length = 6;
 			char idWahana;Kata Nama_Upgrade;
