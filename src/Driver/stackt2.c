@@ -191,9 +191,10 @@ void AkuisisiUpgrade(Kata K, char *idWahana, Kata *Nama_Upgrade){
   while(K.TabKata[i]!=' '){
     i++;
   }
-  i++;
+  while(K.TabKata[i]==' '){
+    i++;
+  }
   *idWahana = K.TabKata[i];
-  // printf("%c",idWahana); getchar();
   i++;
   while(K.TabKata[i]==' '){ //Pengaman
     i++;
