@@ -55,22 +55,45 @@ boolean IsTreeOneElmt(BinTree P);
 /* Mengirimkan true jika P adalah pohon biner tidak kosong dan hanya memiliki 1 elemen */
 boolean isElement(BinTree P, bintree_infotype X);
 /*fungsi untuk mengecek apakah ada suatu elemen x pada sebuah binary tree P*/
-
-/*fungsi untuk mengecek apakah X parent dari Y atau bukan */
 boolean isChild(BinTree parent, BinTree child);
+/*Mengembalikan true jika child adalah leaf / subpohon dari parent*/
 
+/* *** Primitif - Primitif Penting *** */
 int bintree_findIndex(char id);
-
+/*Mengembalikan true jika child adalah leaf / subpohon dari parent*/
+void PrintTreeUtil(BinTree P, int h, int level);
+/*Prosedur untuk mencetak tree P dengan indentasi sebanyak h spasi di setiap levelnya*/
 void PrintTree(BinTree P, int h);
-
+/* I.S. P terdefinisi, h adalah jarak indentasi (spasi) */
+/* F.S. Semua simpul P sudah ditulis dengan indentasi (spasi) */
+/* Penulisan akar selalu pada baris baru (diakhiri newline) */
+/* Contoh, jika h = 2: 
+1) Pohon preorder: (A()()) akan ditulis sbb:
+A
+2) Pohon preorder: (A(B()())(C()())) akan ditulis sbb:
+A
+  B
+  C
+3) Pohon preorder: (A(B(D()())())(C()(E()()))) akan ditulis sbb:
+A
+  B
+    D
+  C
+    E
+*/
 void PrintUpgradeWahana(char id);
-
+/*Mencetak pohon upgrade lengkap dari wahana dengan char id*/
 void PrintAvailableUpgrade(char id, ListNode **head);
-
+/*Mencetak upgrade yang bisa dilakukan pada wahana dengan char id, memanfaatkan linked list
+  untuk mengetahui history upgrade agar bisa memperoleh available upgrade dengan tepat*/
 void PrintAvailableUpgradeRecursion(BinTree P, ListNode **head);
-
+/*Implementasi rekursif dari prosedur PrintAvailableUpgrade, dibuat agar bisa 
+  meng-traverse dalam tree upgrade wahana dengan char id.*/
 void findChild(char id, ListNode **head, arrKata *arrChild);
-
+/*Prosedur untuk mencari kemungkinan upgrade yang mungkin dilakukan pada wahana
+  dengan char id, lalu mengembalikannya dalam sebuah list of Kata*/
 void findChildRecursion(BinTree P, ListNode **head, arrKata *arrChild);
-
+/*Implementasi rekursif dari prosedur findChild, dibuat agar bisa 
+  meng-traverse dalam tree upgrade wahana dengan char id.*/
+  
 #endif

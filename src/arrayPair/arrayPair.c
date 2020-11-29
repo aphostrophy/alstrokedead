@@ -2,6 +2,7 @@
 #include "arrayPair.h"
 #include "../boolean.h"
 #include "pair.h"
+#include "../mesinkata/mesinkar.h"
 #include "../mesinkata/mesinkata.h"
 
 boolean ArrayPair_IsKataSama (Kata K1, Kata K2) {
