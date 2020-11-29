@@ -590,9 +590,10 @@ void HandleBuild(){
 				AMBER.Length = 5;
 				int materialIndex = ArrayPair_SearchByItem(Materials,AMBER);
 				int banyakAmberdibutuhkan = Pair_Cost(MaterialBuild,ArrayPair_SearchByItem(MaterialBuild,Bangunan));
+				int totalBanyakAmberdibutuhkan = Pair_Cost(need_material,ArrayPair_SearchByItem(need_material,AMBER));
 				if (pmoney < Pair_Cost(HargaBuild,bangunanIndex)+need_money){
 					printf("Uang Tidak Mencukupi!");getchar();
-				} else if (Pair_Cost(Inventory,materialIndex) < banyakAmberdibutuhkan){
+				} else if (Pair_Cost(Inventory,materialIndex) < banyakAmberdibutuhkan + totalBanyakAmberdibutuhkan){
 					printf("Bahan Bangunan Tidak Mencukupi!");getchar();
 				} else {
 					Kata SPASI; SPASI.TabKata[0] = ' ' ; SPASI.Length = 1;
