@@ -41,7 +41,7 @@ POINT playerpos ;
 Stack aksi;
 TabInt Materials, Inventory, need_material, HargaBuild, MaterialBuild, ActionTime;
 Triplet_TabInt UpgradeCosts, UpgradeEffect;
-JAM time ;
+JAM timeX ;
 Wahana wahana;
 boolean EndKata;
 ListNode *link[20] = { 0 }; // Inisialisasi semua linked list dengan null, untuk load game bisa dilakukan add upgrade manual
@@ -53,7 +53,7 @@ struct SaveDat {
 	int state;
 	POINT playerpos;
 	int pmoney;
-	JAM time;
+	JAM timeX;
 	Wahana wahana;
 	int count_aksi, need_money, need_time;
 	TabInt Inventory, need_material;
@@ -78,7 +78,7 @@ void SetupSaveGame (FILE *savefile){
 	TempSave.count_aksi = count_aksi ; TempSave.need_money = need_money; TempSave.need_time = need_time;
 	TempSave.Inventory = Inventory;
 	TempSave.aksi = aksi;
-	TempSave.time = time;
+	TempSave.timeX = timeX;
 	for( int i = 0; i < 20;i++){
 		TempSave.link[i] = saveUpgrade(&link[i]);
 	}
@@ -136,7 +136,7 @@ void SetupLoadGame (FILE *loadfile){
 	count_aksi = TempSave.count_aksi; need_money = TempSave.need_money; need_time = TempSave.need_time;
 	Inventory = TempSave.Inventory;
 	aksi = TempSave.aksi;
-	time = TempSave.time;
+	timeX = TempSave.timeX;
 	// Akuisisi Upgrade dari struct
 	for(int i=0;i<20;i++){
 		Kata SENTINEL; SENTINEL.TabKata[0]='X';SENTINEL.Length=1;
@@ -182,7 +182,7 @@ void SetupNewGame (){
 	count_aksi = 0 ; need_money = 0 ;
 	ArrayPair_MakeEmpty(&Inventory); ArrayPair_BacaIsi(&Inventory, "../file/Inventory.txt");
 	CreateEmpty(&aksi);	
-	Hour(time) = 9 ; Minute(time) = 0 ;
+	Hour(timeX) = 9 ; Minute(timeX) = 0 ;
 	CopyMATRIKS(map[cmap], &mapRoom);
 }
 // =======================================================================================================
@@ -224,10 +224,10 @@ void MaintoPrepDay(){
 void UpdateWaktu(int n){
 	// Fungsi ini akan melakukan perubahan waktu akibat suatu aksi dan melakukan standar pengecekan saat waktu berubah
 
-	time = NextNMenit(time,n);
+	timeX = NextNMenit(timeX,n);
 	// Standar pengecekan main-day : validasi waktu tutup, generate broken wahana, validasi dan kurangi waktu pengunjung
 	if (state == MAIN_DAY) {
-		if (JAMToMenit(time) >= 1260){
+		if (JAMToMenit(timeX) >= 1260){
 			state = PREPARATION_DAY;
 			MaintoPrepDay();
 		} else {
@@ -255,7 +255,7 @@ void UpdateWaktu(int n){
 		}
 	}
 	// Standar pengecekan preparation-day : validasi waktu buka
-	if (state == PREPARATION_DAY && JAMToMenit(time) >= 540 && JAMToMenit(time) <= 580){
+	if (state == PREPARATION_DAY && JAMToMenit(timeX) >= 540 && JAMToMenit(timeX) <= 580){
 		PrepToMainDay();
 		state = MAIN_DAY;
 	}
@@ -393,8 +393,8 @@ void InputMainDay (int inpt) {
 	// Jika input adalah tindakan untuk aksi lain maka lakukan tindakan itu
 	} else if (inpt == INPUT_i){
 		state = PREPARATION_DAY;
-		Hour(time) = 21 ;
-		Minute(time) = 0;
+		Hour(timeX) = 21 ;
+		Minute(timeX) = 0;
 		MaintoPrepDay();
 	} else if (inpt == INPUT_1 && Elmt(mapRoom, Absis(playerpos), Ordinat(playerpos)) == 'O') {
 		state = OFFICE;
@@ -409,7 +409,7 @@ void InputMainDay (int inpt) {
 		RepairWahana(&wahana, id);
 		UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,Repair)));
 	} else if (inpt == INPUT_4){
-		if (Durasi(time, tutup) >= Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,SERVE))){
+		if (Durasi(timeX, tutup) >= Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,SERVE))){
 			HandleServe();
 		} else {
 			printf("Waktu tidak mencukupi untuk serve!"); getchar();
@@ -438,9 +438,9 @@ void PrintMainDay() {
 	CopyMATRIKS(map[cmap], &mapRoom);
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("\n");
-	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer.TabKata, pmoney, Durasi(time, tutup));
+	printf("Nama : %s 	Uang: %d	Waktu tersisa: %d menit\n ", namaPlayer.TabKata, pmoney, Durasi(timeX, tutup));
 	printf("Jam : ");
-	TulisJAM(time);
+	TulisJAM(timeX);
 	printf("\n");
 	printBrokenWahana(&wahana);
 	printf("\n");
@@ -817,7 +817,6 @@ void HandleUndo(){
 void HandleExecution(){
 	infotype x;
 	count_aksi = 0 ;
-	need_time = 0;
 	pmoney = pmoney - need_money; // Kurangi uang dengan uang yang dibutuhkan
 	need_money = 0 ;
 	for (int i = ArrayPair_GetFirstIdx(Inventory) ; i <= ArrayPair_GetLastIdx(Inventory) ; i ++){ 
@@ -861,6 +860,7 @@ void HandleExecution(){
 		}
 	}
 	UpdateWaktu(need_time);
+	need_time = 0;
 }
 
 void InputPreparationDay (int inpt) {
@@ -874,28 +874,28 @@ void InputPreparationDay (int inpt) {
 	Kata BUILD; BUILD.TabKata[0] = 'b'; BUILD.TabKata[1] = 'u'; BUILD.TabKata[2] = 'i';BUILD.TabKata[3] = 'l'; BUILD.TabKata[4] ='d'; BUILD.Length = 5;
 	Kata UPGRADE; UPGRADE.TabKata[0] = 'u';UPGRADE.TabKata[1] = 'p';UPGRADE.TabKata[2] = 'g';UPGRADE.TabKata[3] = 'r';UPGRADE.TabKata[4] = 'a';UPGRADE.TabKata[5] = 'd';UPGRADE.TabKata[6]= 'e'; UPGRADE.Length = 7;
 	if (inpt == INPUT_w && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)-1,Ordinat(playerpos)))) {
-		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,W))){
+		if (Durasi(timeX, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,W))){
 			Absis(playerpos) = Absis(playerpos) -1 ;
 			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,W)));
 		} else {
 			printf("Waktu tidak mencukupi untuk bergerak!"); getchar();
 		}
 	} else if (inpt == INPUT_a && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)-1))) {
-		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,A))){
+		if (Durasi(timeX, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,A))){
 			Ordinat(playerpos) = Ordinat(playerpos) -1 ;
 			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,A)));
 		} else {
 			printf("Waktu tidak mencukupi untuk build!"); getchar();
 		}
 	} else if (inpt == INPUT_s && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos)+1,Ordinat(playerpos)))) {
-		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,S))){
+		if (Durasi(timeX, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,S))){
 			Absis(playerpos) = Absis(playerpos) + 1 ;
 			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,S)));
 		} else {
 			printf("Waktu tidak mencukupi untuk build!"); getchar();
 		}
 	} else if (inpt == INPUT_d && IsBisaDilewati(Elmt(mapRoom,Absis(playerpos),Ordinat(playerpos)+1))) {
-		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,D))){
+		if (Durasi(timeX, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,D))){
 			Ordinat(playerpos) = Ordinat(playerpos) +1 ;
 			UpdateWaktu(Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,D)));
 		} else {
@@ -904,14 +904,14 @@ void InputPreparationDay (int inpt) {
 		
 	} else if (inpt == INPUT_i){
 		state = MAIN_DAY;
-		Hour(time) = 9 ;
-		Minute(time) = 0;
+		Hour(timeX) = 9 ;
+		Minute(timeX) = 0;
 		while(!IsEmptyStack(aksi)){
 			HandleUndo();
 		}
 		PrepToMainDay();
 	} else if (inpt == INPUT_b){
-		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY))){
+		if (Durasi(timeX, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUY))){
 			HandleBuy();
 		} else {
 			printf("Waktu tidak mencukupi untuk buy!"); getchar();
@@ -921,13 +921,13 @@ void InputPreparationDay (int inpt) {
 	} else if (inpt == INPUT_e) {
 		state = EXIT_GAME;
 	} else if (inpt == INPUT_l) {
-		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUILD))){
+		if (Durasi(timeX, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,BUILD))){
 			HandleBuild();
 		} else {
 			printf("Waktu tidak mencukupi untuk build!"); getchar();
 		}
 	} else if(inpt == INPUT_k) { 
-		if (Durasi(time, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,UPGRADE))){
+		if (Durasi(timeX, buka) >= need_time + Pair_Cost(ActionTime,ArrayPair_SearchByItem(ActionTime,UPGRADE))){
 			HandleUpgrade();
 		} else {
 			printf("Waktu tidak mencukupi untuk build!"); getchar();
@@ -963,11 +963,11 @@ void PrintPreparationDay() {
 	TulisMATRIKS(mapRoom,Absis(playerpos),Ordinat(playerpos));
 	printf("\n");
 
-	printf("Nama : %s		Uang: %d		Waktu sebelum buka: %d menit\n", namaPlayer.TabKata, pmoney, Durasi(time, buka));
+	printf("Nama : %s		Uang: %d		Waktu sebelum buka: %d menit\n", namaPlayer.TabKata, pmoney, Durasi(timeX, buka));
 	printf("Material yang dibutuhkan: ");ArrayPair_TulisIsiTab(need_material);printf("\n");
 	printf("Aksi yang akan dilakukan : %d		Uang yang dibutuhkan: %d		Waktu yang dibutuhkan: %d\n", count_aksi, need_money, need_time);
 	printf("Jam : ");
-	TulisJAM(time);
+	TulisJAM(timeX);
 	printf("\n");printf("====================================================================================");
 	printf("\n");printf("Stack of Your Action");
 	printf("\n");PrintStack(aksi);
