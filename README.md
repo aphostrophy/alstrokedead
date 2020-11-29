@@ -25,8 +25,8 @@ $ ./run_linux
 ```
   3. 💙 Enjoy the game! 💙 
 ### Made with 💛 by
-[Reihan Andhika Putra  ](https://id.linkedin.com/in/reihan-andhika-2568a9180)
-[Denilsen Axel Candiasa  ](https://id.linkedin.com/in/denilsen-axel-candiasa-7a3772130)
-[Jesson Gosal Yo  ](https://www.instagram.com/jessonyoo/)
-[Hera Shafira  ](https://id.linkedin.com/in/hera-shafira-3789a91ab)
-[Rafidika Samekto  ](www.linkedin.com/in/rafidika)
+[Reihan Andhika Putra\](https://id.linkedin.com/in/reihan-andhika-2568a9180)
+[Denilsen Axel Candiasa\](https://id.linkedin.com/in/denilsen-axel-candiasa-7a3772130)
+[Jesson Gosal Yo\](https://www.instagram.com/jessonyoo/)
+[Hera Shafira\](https://id.linkedin.com/in/hera-shafira-3789a91ab)
+[Rafidika Samekto\](www.linkedin.com/in/rafidika)
